@@ -7,14 +7,15 @@
 
 #include <avr/io.h>
 #include "uart-henrik.h"
+#include "functions.h"
 
 int main(void) {
 
-    initUart()
+    initUart();
 
     /* Replace with your application code */
-    while (1) {
-        
-    }
+    while(1){
+		transmitByte(0x1);
+	}
 }
 

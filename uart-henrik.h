@@ -10,5 +10,5 @@
 
 void initUart();
 
-void transmitByte(uint_8 byte);
-uint_8 recieveByte();
+void transmitByte(uint8_t byte);
+uint8_t receiveByte();
