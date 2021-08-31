@@ -8,11 +8,13 @@
 #include <avr/io.h>
 #include "test.h"
 
-int main(void)
-{
+int main(void) {
+
+    initUart()
+
     /* Replace with your application code */
-    while (1) 
-    {
+    while (1) {
+        
     }
 }
 

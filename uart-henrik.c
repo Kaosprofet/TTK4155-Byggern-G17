@@ -7,15 +7,24 @@
 #endif
 
 #include <avr/io.h>
-#include <util/setbaud.h>
+#include "functions.h"
 #include "uart-henrik.h"
 
 
+void initUart() {
+
+    UBRR0H = UBRRH_VALUE;
+    UBRR0L = UBRRL_VALUE;
+
+    UCSR0A |= (1 << U2X0);
+}
+
 void transmitByte(uint_8 byte) {
-    loop_until_bit_is_set(UCSR0A, UDRE0)
-        UDR0 = byte;
+    whaitBitIsSet(UCSR0A, UDRE0)
+    UDR0 = byte;
 }
 
 uint8_t recieveByte() {
-
+    whaitBitIsSet(UCSR0A, RXC0)
+    return UDR0;
 }
