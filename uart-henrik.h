@@ -7,6 +7,7 @@
 #endif
 
 #include <avr/io.h>
+#include "functions.h"
 
 void initUart();
 
