@@ -20,7 +20,20 @@
 int main(void) {
 	initUart();
 	
-	exercise1();
+	exercise2();
+}
+
+int exercise2(void){
+	setBit(MCUCR, SRE); //Enabeling external memory interface
+	setBit(DDRE, PE1); //Enabling PE1 for output
+	setBit(DDRA, PA0);
+	setBit(DDRA, PA1);
+	while(1){
+		toggleBit(PORTA, PA0);
+		toggleBit(PORTA, PA0);
+		unsigned char data = receiveByte(); //Recives the inputted characters
+		transmitByte(data); //Transmits the inputted characters and moves it 5 characters down
+	}
 }
 
 int exercise1(void) {
@@ -29,3 +42,4 @@ int exercise1(void) {
 		transmitByte(data+5); //Transmits the inputted characters and moves it 5 characters down
 	}
 }
+
