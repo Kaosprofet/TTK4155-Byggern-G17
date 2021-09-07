@@ -9,6 +9,8 @@
 #define F_CPU 4915200 // 4.9152 MHz
 #endif
 
+#define BAUD 9600
+
 #include <avr/io.h>
 #include "uart.h"
 #include "functions.h"
@@ -16,7 +18,7 @@
 void ex1() {
 	initUart();
 	while(1) {
-		transmitByte(0b11100001);
+		transmitByte('a');
 	}
 }
 
