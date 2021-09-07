@@ -1,6 +1,12 @@
 #include "sram.h"
-
+#include <avr/io.h>
 #include <stdlib.h>
+#include "functions.h"
+
+void enableEMI(void){setBit(MCUCR, SRE);}
+
+
+
 void SRAM_test(void)
 {
 	volatile char *ext_ram = (char *) 0x1800; // Start address for the SRAM

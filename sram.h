@@ -1,4 +1,4 @@
-
-void enableEMI(void){setBit(MCUCR, SRE);}
+#include "functions.h"
+void enableEMI(void);
 	
 void SRAM_test(void);

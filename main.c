@@ -14,6 +14,7 @@
 #include <avr/io.h>
 #include "uart.h"
 #include "functions.h"
+#include "sram.h"
 
 
 
@@ -21,6 +22,7 @@ int main(void) {
 	initUart();
 	
 	exercise2();
+	SRAM_test();
 }
 
 int exercise2(void){
