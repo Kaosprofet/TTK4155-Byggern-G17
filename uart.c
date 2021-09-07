@@ -6,7 +6,7 @@
 #define F_CPU 4915200 // 4.9152 MHz
 #endif
 
-#define BAUD_PRESCALE (((F_CPU / (BAUD * 16UL))) - 1)	//Sjekk om 16 eller 8 er rett
+#define BAUD_PRESCALE F_CPU / (BAUD * 16UL) - 1
 
 #include <avr/io.h>
 #include "functions.h"
@@ -18,8 +18,10 @@ void initUart() {
     UBRR0H = (BAUD_PRESCALE >> 8);
     UBRR0L = BAUD_PRESCALE;
 
-    UCSR0B = (1 << TXEN0) | (1 << RXEN0);  // Recieve and transmit enabled
-    UCSR0C = (1 << UCSZ11) | (1 << UCSZ10);  // 8bit data recieve
+    
+    UCSR0B = (1 << TXEN0) | (1 << RXEN0);   // Recieve and transmit enabled
+    UCSR0C = (1 << UCSZ01) | (1 << UCSZ00); // 8bit data recieve
+    UCSR0C = (1 << USBS0)                   // 2 stop bits
 }
 
 void transmitByte(uint8_t byte) {
