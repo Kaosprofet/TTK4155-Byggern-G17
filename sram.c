@@ -5,7 +5,7 @@
 
 void enableEMI(void){setBit(MCUCR, SRE);} //Enabeling external memory interface
 
-void initSRAM(void){
+void SRAM_init(void){
 	enableEMI();
 	
 }
