@@ -24,6 +24,10 @@ void initUart() {
     UCSR0C = (1 << USBS0) | (1 << URSEL0);  // 2 stop bits
 }
 
+void initUart2() {
+	
+}
+
 void transmitByte(unsigned char byte) {
     waitUntilBitIsSet(UCSR0A, UDRE0);
     UDR0 = byte;
