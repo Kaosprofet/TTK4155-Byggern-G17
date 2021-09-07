@@ -1,9 +1,10 @@
 #ifndef ADC_H_
 #define ADC_H_
 
-void initADC(void);
-void selectChannel(void);
-char ADCRead(void);
+typedef enum {channel1, channel2, channel3, channel4} channel_t;
 
+void initADC(void);
+void selectADCChannel(void);
+char ADCRead(void);
 
 #endif
