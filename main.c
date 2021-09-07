@@ -15,24 +15,17 @@
 #include "uart.h"
 #include "functions.h"
 
-void ex1() {
-	initUart();
-	while(1) {
-		transmitByte('a');
-	}
-}
 
-void ex2() {
-	
-}
-
-void ex3() {
-	
-}
 
 int main(void) {
-	ex1();
-	ex2();
-	ex3();    
+	initUart();
+	
+	exercise1();
 }
 
+int exercise1(void) {
+	while(1){
+		unsigned char data = receiveByte(); //Recives the inputted characters
+		transmitByte(data+5); //Transmits the inputted characters and moves it 5 characters down
+	}
+}
