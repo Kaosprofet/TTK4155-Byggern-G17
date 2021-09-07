@@ -24,13 +24,14 @@ int main(void) {
 }
 
 int exercise2(void){
-	setBit(MCUCR, SRE); //Enabeling external memory interface
+	//setBit(MCUCR, SRE); //Enabeling external memory interface
 	setBit(DDRE, PE1); //Enabling PE1 for output
 	setBit(DDRA, PA0);
 	setBit(DDRA, PA1);
 	while(1){
+		setBit(PORTE,PE1);
 		toggleBit(PORTA, PA0);
-		toggleBit(PORTA, PA0);
+		setBit(PORTA, PA1);
 		unsigned char data = receiveByte(); //Recives the inputted characters
 		transmitByte(data); //Transmits the inputted characters and moves it 5 characters down
 	}
