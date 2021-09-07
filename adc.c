@@ -1,10 +1,10 @@
 #include "adc.h"
 #include "functions.h"
 #include <avr/io.h>
-#include <avr/interupt.h>
+#include <avr/interrupt.h>
 
 #ifndef adcAddress
-#define adcAddress = 0x1400
+#define adcAddress 0x1400
 #endif
 
 volatile char* adcChannel = adcAddress; // Starts by pointing to the first ADC channel
@@ -24,9 +24,9 @@ void initADC(void) {
     
     sei(); // Re-enables global interupts
 }
-
+/*
 void selectADCChannel(channel_t channel) {
-    channelAdress = 0x00;
+    char channelAdress = 0x00;
 
     switch (channel) {
     case channel1:
@@ -38,16 +38,16 @@ void selectADCChannel(channel_t channel) {
     case channel3:
         channelAdress = 0x06;
         break;
-    case channel1:
-        channelAdress = 0x04;
+    case channel4:
+        channelAdress = 0x07;
         break;
     default:
-        return
+        return 0;
     }
 
     adcChannel[0x00] = channelAdress;
 }
-
+*/
 ISR(INT1_vect) {
     adcData = adcChannel[0x00];
 }
