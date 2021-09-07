@@ -18,10 +18,9 @@ void initUart() {
     UBRR0H = (BAUD_PRESCALE >> 8);
     UBRR0L = BAUD_PRESCALE;
 
-    
+    UCSR0C = (3 << UCSZ00);                 // 8 bit data recieve (UCSZ10)
+    UCSR0C = (1 << USBS0) | (1 << URSEL0);  // 2 stop bits
     UCSR0B = (1 << TXEN0) | (1 << RXEN0);   // Recieve and transmit enabled
-    UCSR0C = (1 << UCSZ00) | (1 << 3); // 8 bit data recieve (UCSZ10)
-    UCSR0C = (1 << USBS0) | (1 << URSEL0);   // 2 stop bits
 }
 
 void transmitByte(uint8_t byte) {
