@@ -20,8 +20,7 @@
 
 int main(void) {
 	initUart();
-	
-	exercise2();
+	SRAM_init();
 	SRAM_test();
 }
 
