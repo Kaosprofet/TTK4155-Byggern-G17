@@ -3,9 +3,12 @@
 #include <stdlib.h>
 #include "functions.h"
 
-void enableEMI(void){setBit(MCUCR, SRE);}
+void enableEMI(void){setBit(MCUCR, SRE);} //Enabeling external memory interface
 
-
+void initSRAM(void){
+	enableEMI();
+	
+}
 
 void SRAM_test(void)
 {
