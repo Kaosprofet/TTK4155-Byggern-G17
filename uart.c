@@ -10,7 +10,7 @@
 
 #include <avr/io.h>
 #include "functions.h"
-#include "uart-henrik.h"
+#include "uart.h"
 
 
 void initUart() {

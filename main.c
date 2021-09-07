@@ -6,7 +6,7 @@
  */ 
 
 #include <avr/io.h>
-#include "uart-henrik.h"
+#include "uart.h"
 #include "functions.h"
 
 int main(void) {
