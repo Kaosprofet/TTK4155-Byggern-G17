@@ -19,7 +19,7 @@ int main(void) {
 
     /* Replace with your application code */
     while(1){
-		transmitByte(0x1);
+		transmitByte(0b00000001);
 	}
 }
 
