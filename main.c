@@ -14,16 +14,23 @@
 #include "functions.h"
 
 void ex1() {
-  initUart();
-  while(1){
-		transmitByte(0b00000001);
-  }
+	initUart();
+	while(1) {
+		transmitByte(0b11110111);
+	}
+}
+
+void ex2() {
+	
+}
+
+void ex3() {
+	
 }
 
 int main(void) {
-
-  ex1();
-    
-	}
+	ex1();
+	ex2();
+	ex3();    
 }
 
