@@ -8,8 +8,11 @@
 
 #define BAUD_PRESCALE ((F_CPU / (BAUD * 16UL)) - 1)
 
+#ifndef FUNCTIONS_H
+#define FUNCTIONS_H
+#endif
+
 #include <avr/io.h>
-#include "functions.h"
 #include "uart.h"
 
 

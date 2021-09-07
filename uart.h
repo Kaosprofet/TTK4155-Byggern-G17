@@ -6,7 +6,6 @@
 #define F_CPU 4915200 // 4.9152 MHz
 #endif
 
-#include <avr/io.h>
 #include "functions.h"
 
 void initUart();

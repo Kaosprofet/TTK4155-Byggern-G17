@@ -13,13 +13,17 @@
 #include "uart.h"
 #include "functions.h"
 
+void ex1() {
+  initUart();
+  while(1){
+		transmitByte(0b00000001);
+  }
+}
+
 int main(void) {
 
-    initUart();
-
-    /* Replace with your application code */
-    while(1){
-		transmitByte(0b00000001);
+  ex1();
+    
 	}
 }
 
