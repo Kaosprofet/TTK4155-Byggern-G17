@@ -16,7 +16,7 @@
 void ex1() {
 	initUart();
 	while(1) {
-		transmitByte(0b11110111);
+		transmitByte(0b01000000);
 	}
 }
 
