@@ -1,6 +1,5 @@
 #include <avr/io.h>
 
-uint8_t bitIsSet(uint8_t reg, uint8_t bit);
-uint8_t bitIsClear(uint8_t reg, uint8_t bit);
-void waitBitIsSet(uint8_t reg, uint8_t bit);
-void waitBitIsClear(uint8_t reg, uint8_t bit);
+#define bitIsSet(reg, bit) (reg & (1<<bit))
+#define waitBitIsSet(reg, bit) while(!bitIsSet(reg,bit))
+#define waitBitIsClear(reg, bit) while(bitIsSet(reg,bit))

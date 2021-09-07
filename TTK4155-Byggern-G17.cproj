@@ -129,10 +129,13 @@
     <Compile Include="uart.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="functions.c">
+    <Compile Include="functions.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="functions.h">
+    <Compile Include="sram.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="sram.c">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
