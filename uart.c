@@ -6,7 +6,7 @@
 #define F_CPU 4915200 // 4.9152 MHz
 #endif
 
-#define BAUD_PRESCALE F_CPU / (BAUD * 16UL) - 1
+#define BAUD_PRESCALE ((F_CPU / (BAUD * 16UL)) - 1)
 
 #include <avr/io.h>
 #include "functions.h"
