@@ -7,7 +7,7 @@
 #define adcAddress 0x1400
 #endif
 
-volatile char* adcChannel = adcAddress; // Starts by pointing to the first ADC channel
+volatile char* adcChannel = (char*)adcAddress; // Starts by pointing to the first ADC channel
 volatile char adcData;                  // Storage for read ADC values
 
 
@@ -31,16 +31,16 @@ void selectADCChannel(uint8_t channel) {
 
     switch (channel) {
     case 1:
-        channelAdress = 0x04;
+        channelAdress = 0x00;
         break;
     case 2:
-        channelAdress = 0x05;
+        channelAdress = 0x01;
         break;
     case 3:
-        channelAdress = 0x06;
+        channelAdress = 0x02;
         break;
     case 4:
-        channelAdress = 0x07;
+        channelAdress = 0x03;
         break;
     default:
         return 0;//EXIT_FAILURE;
