@@ -7,7 +7,7 @@
 #define adcAddress 0x1400
 #endif
 
-volatile char* adcChannel = (char*)adcAddress; // Starts by pointing to the first ADC channel
+volatile char *adcChannel = (char *)adcAddress; // Starts by pointing to the first ADC channel
 volatile char adcData;                  // Storage for read ADC values
 
 
