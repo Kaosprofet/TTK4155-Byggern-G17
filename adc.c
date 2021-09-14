@@ -43,7 +43,7 @@ void selectADCChannel(uint8_t channel) {
         channelAdress = 0x07;
         break;
     default:
-        return EXIT_FAILURE;
+        return 0;//EXIT_FAILURE;
     }
 
     adcChannel[0x00] = channelAdress;
