@@ -39,7 +39,7 @@ int exercise2(void){
 }
 
 void exercise3(void){
-
+	char test = adcChannel[0x00];
 }
 
 void test(void){

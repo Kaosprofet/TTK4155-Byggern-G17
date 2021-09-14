@@ -12,17 +12,19 @@ volatile char adcData;                  // Storage for read ADC values
 
 
 void initADC(void) {
-    cli(); // Temporary dissables global interupts
+    //cli(); // Temporary dissables global interupts
 
-    clearBit(DDRD, PD3); // Sets PD3 as input
-    setBit(PORTD, PD3);  // Sets pullup resistor on PD3
+    //clearBit(DDRD, PD3); // Sets PD3 as input
+    //setBit(PORTD, PD3);  // Sets pullup resistor on PD3
 
-    setBit(GICR, INT1); // Sets interupt on PD3
+    //setBit(GICR, INT1); // Sets interupt on PD3
 
-    setBit(MCUCR, ISC11); // Trigger on fallin edge
-    clearBit(MCUCR, ISC10);
+    //setBit(MCUCR, ISC11); // Trigger on fallin edge
+    //clearBit(MCUCR, ISC10);
     
-    sei(); // Re-enables global interupts
+    //sei(); // Re-enables global interupts
+    setBit(DDRD, PD4);
+
 }
 
 void selectADCChannel(uint8_t channel) {
@@ -49,7 +51,7 @@ void selectADCChannel(uint8_t channel) {
     adcChannel[0x00] = channelAdress;
 }
 
-ISR(INT1_vect) {
-    adcData = adcChannel[0x00];
-}
+//ISR(INT1_vect) {
+//    //adcData = adcChannel[0x00];
+//}
 
