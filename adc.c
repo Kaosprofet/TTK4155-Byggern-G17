@@ -25,7 +25,7 @@ void initADC(void) {
     sei(); // Re-enables global interupts
 }
 
-void selectADCChannel(uin8_t channel) {
+void selectADCChannel(uint8_t channel) {
 	// Vi kan kanskje gj�re dette p� en bedre m�te, men har ikke helt skj�nt hvordan vi setter setter adressene skikkelig
     char channelAdress = 0x00;
 
@@ -43,7 +43,7 @@ void selectADCChannel(uin8_t channel) {
         channelAdress = 0x07;
         break;
     default:
-        return EXIT_FAILURE
+        return EXIT_FAILURE;
     }
 
     adcChannel[0x00] = channelAdress;
