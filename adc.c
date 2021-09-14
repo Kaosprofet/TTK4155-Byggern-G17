@@ -24,8 +24,9 @@ void initADC(void) {
     
     sei(); // Re-enables global interupts
 }
-/*
+
 void selectADCChannel(channel_t channel) {
+	// Vi kan kanskje gjøre dette på en bedre måte, men har ikke helt skjønt hvordan vi setter setter adressene skikkelig
     char channelAdress = 0x00;
 
     switch (channel) {
@@ -42,12 +43,12 @@ void selectADCChannel(channel_t channel) {
         channelAdress = 0x07;
         break;
     default:
-        return 0;
+        return EXIT_FAILURE
     }
 
     adcChannel[0x00] = channelAdress;
 }
-*/
+
 ISR(INT1_vect) {
     adcData = adcChannel[0x00];
 }

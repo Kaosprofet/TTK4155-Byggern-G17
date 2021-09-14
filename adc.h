@@ -4,7 +4,7 @@
 typedef enum {channel1, channel2, channel3, channel4} channel_t;
 
 void initADC(void);
-void selectADCChannel(void);
+void selectADCChannel(channel_t channel);
 char ADCRead(void);
 
 #endif

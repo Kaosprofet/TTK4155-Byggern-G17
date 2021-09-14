@@ -13,22 +13,23 @@
 
 #include <avr/io.h>
 #include "uart.h"
+#include "adc.h"
 #include "functions.h"
 
 
-
-int main(void) {
-	initUart();
-	
-	exercise2();
+void exercise1(void) {
+	while(1) {
+		unsigned char data = receiveByte(); //Recives the inputted characters
+		transmitByte(data+5); //Transmits the inputted characters and moves it 5 characters down
+	}
 }
 
-int exercise2(void){
+void exercise2(void) {
 	setBit(MCUCR, SRE); //Enabeling external memory interface
 	setBit(DDRE, PE1); //Enabling PE1 for output
 	setBit(DDRA, PA0);
 	setBit(DDRA, PA1);
-	while(1){
+	while(1) {
 		toggleBit(PORTA, PA0);
 		toggleBit(PORTA, PA0);
 		unsigned char data = receiveByte(); //Recives the inputted characters
@@ -36,10 +37,18 @@ int exercise2(void){
 	}
 }
 
-int exercise1(void) {
-	while(1){
-		unsigned char data = receiveByte(); //Recives the inputted characters
-		transmitByte(data+5); //Transmits the inputted characters and moves it 5 characters down
-	}
+void exercise3(void){
+	
 }
+
+int main(void) {
+	//initUart();
+	initADC();
+
+	exercise1();
+	//exercise2();
+	//exercise3();
+}
+
+
 
