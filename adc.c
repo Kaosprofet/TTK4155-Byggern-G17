@@ -25,21 +25,21 @@ void initADC(void) {
     sei(); // Re-enables global interupts
 }
 
-void selectADCChannel(channel_t channel) {
-	// Vi kan kanskje gjøre dette på en bedre måte, men har ikke helt skjønt hvordan vi setter setter adressene skikkelig
+void selectADCChannel(uin8_t channel) {
+	// Vi kan kanskje gjï¿½re dette pï¿½ en bedre mï¿½te, men har ikke helt skjï¿½nt hvordan vi setter setter adressene skikkelig
     char channelAdress = 0x00;
 
     switch (channel) {
-    case channel1:
+    case 1:
         channelAdress = 0x04;
         break;
-    case channel2:
+    case 2:
         channelAdress = 0x05;
         break;
-    case channel3:
+    case 3:
         channelAdress = 0x06;
         break;
-    case channel4:
+    case 4:
         channelAdress = 0x07;
         break;
     default:
