@@ -47,8 +47,8 @@ int main(void) {
 	initADC();
 	SRAM_init();
 
-	//SRAM_test();
-	Chip_select_test();
+	SRAM_test();
+	//Chip_select_test();
 
 
 	//exercise1();
