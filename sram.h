@@ -1,4 +1,7 @@
+#include <avr/io.h>
+#include <stdlib.h>
 #include "functions.h"
+
 void enableEMI(void);
 
 void SRAM_init(void);

@@ -42,12 +42,25 @@ void exercise3(void){
 
 }
 
+void test(void){
+	setBit(DDRC, PC3);
+	//setBit(MCUCR, SRE); //Enabeling external memory interface
+	setBit(DDRC, PC2); //Enabling PE1 for output
+	setBit(DDRC, PC0);
+	setBit(DDRC, PC1);
+	while(1){
+		clearBit(PORTC,PC3);
+		setBit(PORTC, PC2);
+	}
+}
+
 int main(void) {
 	initUart();
 	initADC();
-	SRAM_init();
+	test();
+	//SRAM_init();
 
-	SRAM_test();
+	//SRAM_test();
 	//Chip_select_test();
 
 
