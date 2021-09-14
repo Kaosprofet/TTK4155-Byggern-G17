@@ -10,9 +10,16 @@
 #define adcAddress 0x1400
 #endif
 
- // Starts by pointing to the first ADC channel
+// Starts by pointing to the first ADC channel
 volatile char *adcChannel = (char *)adcAddress;
-volatile char adcData;                  // Storage for read ADC values
+//volatile char adcData;                  // Storage for read ADC values
+
+volatile struct adcData {
+	volatile char channel1;
+	volatile char channel2; 
+	volatile char channel3;
+	volatile char channel4;  
+};
 
 void adcTest(void) {
 	enableEMI();
@@ -50,29 +57,17 @@ void initADC(void) {
 
 }
 
-void selectADCChannel(uint8_t channel) {
-	// Vi kan kanskje gj�re dette p� en bedre m�te, men har ikke helt skj�nt hvordan vi setter setter adressene skikkelig
-    char channelAdress = 0x00;
+void readADC() {
+	// Trigger read
+	// wait til converted
+	
+	
+	// Read data from adc
+	adcData.channel1 = adcChannel[0];
+	adcData.channel2 = adcChannel[0];
+	adcData.channel3 = adcChannel[0];
+	adcData.channel4 = adcChannel[0];
+}	
 
-    switch (channel) {
-    case 1:
-        channelAdress = 0x00;
-        break;
-    case 2:
-        channelAdress = 0x01;
-        break;
-    case 3:
-        channelAdress = 0x02;
-        break;
-    case 4:
-        channelAdress = 0x03;
-        break;
-    }
 
-    adcChannel[0x00] = channelAdress;
-}
-
-//ISR(INT1_vect) {
-//    //adcData = adcChannel[0x00];
-//}
 
