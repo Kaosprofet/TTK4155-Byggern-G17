@@ -40,8 +40,8 @@ int exercise2(void){
 }
 
 void exercise3(void){
-	//adcTest();
-	initPWM();
+	adcTest();
+	
 }
 
 void test(void){
@@ -58,6 +58,7 @@ void test(void){
 
 int main(void) {
 	initUart();
+	initPWM();
 	//initADC();
 	
 	//SRAM_init();

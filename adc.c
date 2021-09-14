@@ -4,6 +4,7 @@
 #include "uart.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <util/delay.h>
 
 #ifndef adcAddress
 #define adcAddress 0x1400
@@ -15,14 +16,23 @@ volatile char adcData;                  // Storage for read ADC values
 
 void adcTest(void) {
 	enableEMI();
-	char data1 = adcChannel[0];
-	printf("Data1 = %02d\n", data1);
-	char data2 = adcChannel[1];
-	printf("Data2 = %02d\n", data2);
-	char data3 = adcChannel[2];
-	printf("Data3 = %02d\n", data3);
-	char data4 = adcChannel[3];
-	printf("Data4 = %02d\n", data4);
+	
+	volatile char data1;
+	volatile char data2;
+	volatile char data3;
+	volatile char data4;
+
+		adcChannel[0] = 0x00;
+		_delay_ms(10);
+		data1 = adcChannel[0];
+		printf("Data1 = %02d\n", data1);
+		data2 = adcChannel[0];
+		printf("Data2 = %02d\n", data2);
+		data3 = adcChannel[0];
+		printf("Data3 = %02d\n", data3);
+		data4 = adcChannel[0];
+		printf("Data4 = %02d\n", data4);
+	
 }
 
 void initADC(void) {
