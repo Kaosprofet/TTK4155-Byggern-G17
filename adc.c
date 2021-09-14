@@ -1,5 +1,7 @@
 #include "adc.h"
 #include "functions.h"
+#include "sram.h"
+#include "uart.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
@@ -7,9 +9,21 @@
 #define adcAddress 0x1400
 #endif
 
-volatile char *adcChannel = (char *)adcAddress; // Starts by pointing to the first ADC channel
+ // Starts by pointing to the first ADC channel
+volatile char *adcChannel = (char *)adcAddress;
 volatile char adcData;                  // Storage for read ADC values
 
+void adcTest(void) {
+	enableEMI();
+	char data1 = adcChannel[0];
+	printf("Data1 = %02d\n", data1);
+	char data2 = adcChannel[1];
+	printf("Data2 = %02d\n", data2);
+	char data3 = adcChannel[2];
+	printf("Data3 = %02d\n", data3);
+	char data4 = adcChannel[3];
+	printf("Data4 = %02d\n", data4);
+}
 
 void initADC(void) {
     //cli(); // Temporary dissables global interupts
@@ -23,7 +37,6 @@ void initADC(void) {
     //clearBit(MCUCR, ISC10);
     
     //sei(); // Re-enables global interupts
-    setBit(DDRD, PD4);
 
 }
 
@@ -44,8 +57,6 @@ void selectADCChannel(uint8_t channel) {
     case 4:
         channelAdress = 0x03;
         break;
-    default:
-        return 0;//EXIT_FAILURE;
     }
 
     adcChannel[0x00] = channelAdress;

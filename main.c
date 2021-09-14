@@ -16,6 +16,7 @@
 #include "adc.h"
 #include "functions.h"
 #include "sram.h"
+#include "pwm.h"
 
 void exercise1(void) {
 	while(1) {
@@ -25,7 +26,7 @@ void exercise1(void) {
 }
 
 int exercise2(void){
-	//setBit(MCUCR, SRE); //Enabeling external memory interface
+	//enableEMI(); //Enabeling external memory interface
 	setBit(DDRE, PE1); //Enabling PE1 for output
 	setBit(DDRA, PA0);
 	setBit(DDRA, PA1);
@@ -39,8 +40,8 @@ int exercise2(void){
 }
 
 void exercise3(void){
-	
-	char test = adcChannel[0x00];
+	//adcTest();
+	initPWM();
 }
 
 void test(void){
@@ -57,7 +58,7 @@ void test(void){
 
 int main(void) {
 	initUart();
-	initADC();
+	//initADC();
 	
 	//SRAM_init();
 
@@ -67,7 +68,7 @@ int main(void) {
 
 	//exercise1();
 	//exercise2();
-	//exercise3();
+	exercise3();
 }
 
 
