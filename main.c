@@ -39,7 +39,7 @@ int exercise2(void){
 }
 
 void exercise3(void){
-	
+
 }
 
 int main(void) {
@@ -47,7 +47,8 @@ int main(void) {
 	initADC();
 	SRAM_init();
 
-	SRAM_test();
+	//SRAM_test();
+	Chip_select_test();
 
 
 	//exercise1();
