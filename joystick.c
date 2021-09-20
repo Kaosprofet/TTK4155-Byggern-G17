@@ -3,6 +3,11 @@
 
 #include "adc.h"
 
+volatile struct joystics {
+	volatile uint_8 x_val;
+	volatile uint_8 y_val;
+}
+
 uint8_t fetchJoystick(char xy) {
 	if (xy == 'x') {
 		return adcData.channel1;
