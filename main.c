@@ -68,7 +68,9 @@ void test(void){
 
 int main(void) {
 	initUart();
+	enableEMI();
 	initADC();
+
 	
 	//SRAM_init();
 
