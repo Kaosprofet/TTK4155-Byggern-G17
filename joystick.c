@@ -2,12 +2,12 @@
 
 
 #include "adc.h"
+#include "includes.h"
 
 volatile struct joysticks {
 	volatile uint8_t x_val;
 	volatile uint8_t y_val;
-	volatile enum x_dir;
-	volatile enum y_dir;
+	volatile enum dir;
 };
 
 volatile struct joysticks fetchJoystick(void) {
@@ -22,7 +22,7 @@ volatile struct joysticks fetchJoystick(void) {
 	joystick.x_val = joystickPercent(joystick.x_val);
 	joystick.y_val = joystickPercent(joystick.y_val);
 	
-	
+	joystick.dir = direction(joystick.x_val, joystick.y_val);
 	
 	return joystick;
 }

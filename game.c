@@ -9,7 +9,7 @@ volatile struct controllers {
 	volatile uint8_t slider2;
 };
 
-void fetchController() {
+void fetchController(void) {
 	//controller.joystick_x = fetchJoystick('x');
 	//controller.joystick_y = fetchJoystick('y');
 	//controller.slider1 = fetchSlider(1);
