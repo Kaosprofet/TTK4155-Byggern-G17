@@ -1,5 +1,6 @@
 #include "functions.h"
 #include "oled.h"
+#include "fonts.h"
 #include <avr/io.h>
 
 #ifndef OLED_CMD
@@ -20,6 +21,7 @@ volatile char * OLED_DATA_val = (char *)OLED_DATA;
 
 volatile oled_position position; //Defines the row/col position of the writer
 
+//Local functions
 void writeCMD(uint8_t cmd){OLED_CMD_val[0] = cmd;} //Writes the input command to the command register of the OLED
 void writeDATA(uint8_t data){OLED_DATA_val[0] = data;} //Writes the input data to the data register of the OLED
 
@@ -65,14 +67,30 @@ void printString(char inString){
 
 
 //----------------------------------------------------- Position related -----------------------------------------------------
+typedef enum{PAGE, HORIZONTAL, VERTICAL} modes;
+
+void set_addressing_mode(modes mode){
+	writeCMD(0x20); //Tells the OLED that we are going to change the address mode
+	//next bit is the addressing mode (reference manual page 27)
+	switch(mode){
+		case(PAGE):
+			writeCMD(2);
+		case(HORIZONTAL):
+			writeCMD(0);
+		case(VERTICAL):
+			writeCMD(1);
+	}
+}
 
 void oled_goto_page(uint8_t page){
-	if (page >  7 || page < 0){ //returns 0 if it is out of boundries. 
+	if (page >  7 || page < 0){ //returns 0 if input is illegal  
 		return 0;
 	}
 	else {
 		position.page = page; //stores the page position in the position struct
+		set_addressing_mode(PAGE);
 		writeCMD(0xB0 + page); //Sends the memory address page to the OLED.
+		set_addressing_mode(HORIZONTAL);
 	}
 }
 
@@ -82,8 +100,9 @@ void oled_goto_col(uint8_t col){
 	}
 	else {
 		position.col = col;
-		writeCMD()
-		writeCMD(0x00 + col);
+		set_addressing_mode(PAGE);
+		//writeCMD();
+		set_addressing_mode(HORIZONTAL);
 	}
 }
 
