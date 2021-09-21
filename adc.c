@@ -18,6 +18,7 @@ volatile uint8_t adcData[adc_num_channels];
 
 
 
+
 void initADC(void) {
 	// PWM output pin
 	setBit(DDRD, PD5);
