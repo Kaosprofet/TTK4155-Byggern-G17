@@ -8,6 +8,4 @@
 #include <stdio.h>
 #include <util/delay.h>
 
-enum directions {
-	UP, DOWN, LEFT, RIGHT, NEUTRAL
-}; 
+

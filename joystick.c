@@ -2,13 +2,12 @@
 
 
 #include "adc.h"
-#include "includes.h"
 
-volatile struct joysticks {
-	volatile double x_val;
-	volatile double y_val;
-	volatile enum directions dir;
-};
+#ifndef INCLUDES_H
+#include "includes.h"
+#endif
+
+
 
 volatile struct controllers {
 	volatile uint8_t slider1_val;
@@ -74,7 +73,7 @@ double joystickPercent(uint8_t val) {
 	return per_val;
 }
 
+void joystickTest(void) {
 
-uint8_t fetchSlider(uint8_t num) {
-	return 0;
+
 }
