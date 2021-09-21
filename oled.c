@@ -1,4 +1,5 @@
 #include "functions.h"
+#include "oled.h"
 #include <avr/io.h>
 
 #ifndef OLED_CMD
@@ -16,9 +17,11 @@
 volatile char * OLED_CMD_val = (char *)OLED_CMD; 
 volatile char * OLED_DATA_val = (char *)OLED_DATA;
 
-void writeCMD(uint8_t cmd){OLED_CMD_val[0] = cmd;} //Writes the input command to the command register of the OLED
-void writeDATA(uint8_t data){OLED_DATA_val[0] = data;} //Wrtites the input data to the data register of the OLED
 
+volatile oled_position position; //Defines the row/col position of the writer
+
+void writeCMD(uint8_t cmd){OLED_CMD_val[0] = cmd;} //Writes the input command to the command register of the OLED
+void writeDATA(uint8_t data){OLED_DATA_val[0] = data;} //Writes the input data to the data register of the OLED
 
 
 
@@ -53,8 +56,35 @@ void initOLED(void){
 	for(uint8_t i=0; i <(num_commands -1); i++){ //Writes all the commands
 		writeCMD(RecInitCommands[i]);
 	}	
-}
-
-void printOled(char inString[]){
 	
 }
+
+void printString(char inString){
+	
+}
+
+
+//----------------------------------------------------- Position related -----------------------------------------------------
+
+void oled_goto_page(uint8_t page){
+	if (page >  7 || page < 0){ //returns 0 if it is out of boundries. 
+		return 0;
+	}
+	else {
+		position.page = page; //stores the page position in the position struct
+		writeCMD(0xB0 + page); //Sends the memory address page to the OLED.
+	}
+}
+
+void oled_goto_col(uint8_t col){
+	if (col > 127 || col < 0){
+		return 0;
+	}
+	else {
+		position.col = col;
+		writeCMD()
+		writeCMD(0x00 + col);
+	}
+}
+
+void oled_pos(uint8_t page, uint8_t col){oled_goto_page(page); oled_goto_col(col);}
