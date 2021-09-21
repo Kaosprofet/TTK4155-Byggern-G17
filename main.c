@@ -5,23 +5,9 @@
  *
  */ 
 
-#ifndef F_CPU // In case F_CPU not defined
-#define F_CPU 4915200 // 4.9152 MHz
+#ifndef INCLUDES_H
+#include "includes.h"
 #endif
-
-#define BAUD 9600
-
-#include <avr/io.h>
-#include <stdio.h>
-#include <stdbool.h>
-
-#include "joystick.h"
-#include "uart.h"
-#include "adc.h"
-#include "functions.h"
-#include "sram.h"
-#include "pwm.h"
-#include "game.h"
 
 void exercise1(void) {
 	while(1) {
@@ -45,27 +31,11 @@ int exercise2(void){
 }
 
 void exercise3(void){
-	
-	volatile struct joysticks joystick;	
-	joystick.offset = 25;
-	volatile struct controllers controller;
-	initButton();
-	while(1) {
-		 joystick = fetchJoystick();
-		 controller = fetchController();
-		 
-		 bool button1 = bitIsSet(PIND, PD3);
-		 bool button2 = bitIsSet(PIND, PD4);
-		 
-		 
-		 printf("Joystick: X = %4d Y = %4d dir = %d  Sliders: 1 = %3d 2 = %3d  Buttons: 1 = %d 2 = %d\n\r", joystick.x_val, joystick.y_val, joystick.dir, controller.slider1_val, controller.slider2_val, button1, button2);
-		 //adcTest();
-	}
-	
+	playGame();
 	
 }
 
-void test(void){
+void testChipSelect(void){
 	setBit(DDRC, PC3);
 	//setBit(MCUCR, SRE); //Enabeling external memory interface
 	setBit(DDRC, PC2); //Enabling PE1 for output
@@ -73,7 +43,7 @@ void test(void){
 	setBit(DDRC, PC1);
 	while(1){
 		clearBit(PORTC,PC3);
-		setBit(PORTC, PC2);
+		clearBit(PORTC, PC2);
 	}
 }
 
@@ -82,7 +52,7 @@ int main(void) {
 	enableEMI();
 	initADC();
 
-	
+	//testChipSelect();
 	//SRAM_init();
 
 	//SRAM_test();

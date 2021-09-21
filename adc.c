@@ -1,12 +1,7 @@
-#include "adc.h"
-#include "functions.h"
-#include "sram.h"
-#include "uart.h"
-#include "joystick.h"
-#include <avr/io.h>
-#include <avr/interrupt.h>
-#include <util/delay.h>
-#include <stdio.h>
+#ifndef INCLUDES_H
+#include "includes.h"
+#endif
+
 #define adc_address 0x1400
 #define adc_num_channels 4
 //#define adc_config 0b10010000 // Brukes om vi vil hente single verdier
