@@ -2,5 +2,6 @@
 #define GAME_H_
 
 void initButton(void);
+void playGame(void);
 
 #endif

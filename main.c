@@ -48,7 +48,7 @@ void exercise3(void){
 	
 	volatile struct joysticks joystick;	
 	joystick.offset = 25;
-	volatile struct controllers controller;
+	volatile struct slide_controllers controller;
 	initButton();
 	while(1) {
 		 joystick = fetchJoystick();
@@ -73,7 +73,7 @@ void test(void){
 	setBit(DDRC, PC1);
 	while(1){
 		clearBit(PORTC,PC3);
-		setBit(PORTC, PC2);
+		clearBit(PORTC, PC2);
 	}
 }
 
@@ -82,7 +82,7 @@ int main(void) {
 	enableEMI();
 	initADC();
 
-	
+	//test();
 	//SRAM_init();
 
 	//SRAM_test();
@@ -91,7 +91,8 @@ int main(void) {
 
 	//exercise1();
 	//exercise2();
-	exercise3();
+	//exercise3();
+	playGame();
 }
 
 
