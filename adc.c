@@ -69,13 +69,13 @@ void adcTest(void) {
 		*adcVal = 0;
 		_delay_ms(70);
 		data1 = *adcVal;
-		printf("Data1 = %02d\n", data1);
+		printf("Data1 = %02d ", data1);
 		data2 = *adcVal;
-		printf("Data2 = %02d\n", data2);
+		printf("Data2 = %02d ", data2);
 		data3 = *adcVal;
-		printf("Data3 = %02d\n", data3);
+		printf("Data3 = %02d ", data3);
 		data4 = *adcVal;
-		printf("Data4 = %02d\n", data4);
+		printf("Data4 = %02d\n\r", data4);
 	
 }
 

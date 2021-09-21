@@ -43,12 +43,15 @@ int exercise2(void){
 }
 
 void exercise3(void){
-	//adcTest();
-	
 	volatile struct joysticks joystick;
-		
-	joystick = fetchJoystick();
-	printf("X: %f\n\r Y: %f\n\r dir: %d\n\r", joystick.x_val, joystick.y_val, joystick.dir);
+	
+	while(1) {
+		 //joystick = fetchJoystick();
+		 //printf("X: %f Y: %f dir: %d\n\r", joystick.x_val, joystick.y_val, joystick.dir);
+		 adcTest();
+	}
+	
+	
 }
 
 void test(void){
