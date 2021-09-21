@@ -43,7 +43,12 @@ void printController(volatile struct controllers *controller) {
 }
 
 signed int joystickPercent(uint8_t val) {
-	
-	signed int per_val = (signed int)val * 200.0 / 255.0 - 100.0;
-	return per_val;
+	if (val>=160){
+		signed int per_val = ((signed int)val-160) * 100.0/95.0;
+		return per_val;
+	}
+	else (val<=159){
+		signed int per_val = (signed int)val * -100.0 /159.0 - 100.0;
+		return per_val;
+	}
 }
