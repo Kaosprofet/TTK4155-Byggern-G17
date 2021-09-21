@@ -30,7 +30,6 @@ volatile struct joysticks fetchJoystick(void) {
 uint8_t joystickPercent(uint8_t val) {
 	
 	uint8_t per_val = val*100/255;
-	
 	return per_val;
 }
 
