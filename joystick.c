@@ -5,8 +5,8 @@
 #include "includes.h"
 
 volatile struct joysticks {
-	volatile uint8_t x_val;
-	volatile uint8_t y_val;
+	volatile double x_val;
+	volatile double y_val;
 	volatile enum directions dir;
 };
 
@@ -38,20 +38,21 @@ volatile struct joysticks fetchJoystick(void) {
 	
 	p = readADC();
 	
-	joystick.x_val = *p;
-	joystick.y_val = *(p+1);
+	uint8_t x_val = *p;
+	uint8_t y_val = *(p+1);
 	
-	joystick.x_val = joystickPercent(joystick.x_val);
-	joystick.y_val = joystickPercent(joystick.y_val);
+	joystick.dir = direction(x_val, y_val);
 	
-	joystick.dir = direction(joystick.x_val, joystick.y_val);
+	joystick.x_val = joystickPercent(x_val);
+	joystick.y_val = joystickPercent(y_val);
+	
 	
 	return joystick;
 }
 
-uint8_t joystickPercent(uint8_t val) {
+double joystickPercent(uint8_t val) {
 	
-	uint8_t per_val = val*100/255;
+	double per_val = val * (double)(100 + 100) / 255 + 100;
 	return per_val;
 }
 
