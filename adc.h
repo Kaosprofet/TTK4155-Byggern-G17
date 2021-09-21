@@ -5,7 +5,7 @@
 
 void initADC(void);
 void selectADCChannel(uint8_t channel);
-void readADC(void);
+uint8_t * readADC(void);
 void adcTest(void);
 
 #endif

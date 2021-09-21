@@ -5,7 +5,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
-
+#include <stdio.h>
 #define adc_address 0x1400
 #define adc_num_channels 4
 //#define adc_config 0b10010000 // Brukes om vi vil hente single verdier
@@ -45,15 +45,17 @@ void initADC(void) {
 	setBit(TCCR1B, CS10);
 }
 
-void readADC() {
+uint8_t * readADC(){
 	// Trigger read
 	*adcVal = 0;
+	
 	// wait til converted
 	_delay_us(70);
 	// Store all data from ADC
 	for (uint8_t i = 0; i < adc_num_channels; i++) {
 		adcData[i] = *adcVal;
 	}
+	return adcData;
 }	
 
 void adcTest(void) {
