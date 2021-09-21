@@ -2,6 +2,7 @@
 
 
 #include "adc.h"
+#include <stdio.h>
 
 #ifndef INCLUDES_H
 #include "includes.h"
@@ -9,21 +10,16 @@
 
 
 
-volatile struct controllers {
-	volatile uint8_t slider1_val;
-	volatile uint8_t slider2_val;
-	
-};
 
-enum directions direction(uint8_t x_val, uint8_t y_val) {
-	uint8_t deadzone = 10;
-	uint8_t zero = 0;
+ enum directions direction(signed int x_val, signed int y_val) {
+	signed int deadzone = 30;
+	signed int zero = 0;
 	
 	if (abs(x_val) > abs(y_val)) { //x>y -> left/right
 		if (x_val > (zero + deadzone)) {
 			return RIGHT;
 		}
-		else if (x_val < (zero-deadzone)) {
+		else if (x_val < (zero - deadzone)) {
 			return LEFT;
 		}
 	}
@@ -69,8 +65,8 @@ volatile struct controllers fetchController(void) {
 	return controller;
 }
 
-float joystickPercent(uint8_t val) {
+signed int joystickPercent(uint8_t val) {
 	
-	float per_val = val * (float)(100 + 100) / 255 - 100;
+	signed int per_val = (signed int)val * 200.0 / 255.0 - 100.0;
 	return per_val;
 }

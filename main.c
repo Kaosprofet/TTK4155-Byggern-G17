@@ -13,6 +13,7 @@
 
 #include <avr/io.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "joystick.h"
 #include "uart.h"
@@ -20,6 +21,7 @@
 #include "functions.h"
 #include "sram.h"
 #include "pwm.h"
+#include "game.h"
 
 void exercise1(void) {
 	while(1) {
@@ -43,12 +45,21 @@ int exercise2(void){
 }
 
 void exercise3(void){
-	volatile struct joysticks joystick;
 	
+	volatile struct joysticks joystick;	
+	joystick.offset = 25;
+	volatile struct controllers controller;
+	initButton();
 	while(1) {
-		 //joystick = fetchJoystick();
-		 //printf("X: %f Y: %f dir: %d\n\r", joystick.x_val, joystick.y_val, joystick.dir);
-		 adcTest();
+		 joystick = fetchJoystick();
+		 controller = fetchController();
+		 
+		 bool button1 = bitIsSet(PIND, PD3);
+		 bool button2 = bitIsSet(PIND, PD4);
+		 
+		 
+		 printf("Joystick: X = %4d Y = %4d dir = %d  Sliders: 1 = %3d 2 = %3d  Buttons: 1 = %d 2 = %d\n\r", joystick.x_val, joystick.y_val, joystick.dir, controller.slider1_val, controller.slider2_val, button1, button2);
+		 //adcTest();
 	}
 	
 	
