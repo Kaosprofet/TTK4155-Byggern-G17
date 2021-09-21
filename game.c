@@ -10,16 +10,16 @@ volatile struct controllers {
 };
 
 void fetchController() {
-	controller.joystick_x = fetchJoystick('x');
-	controller.joystick_y = fetchJoystick('y');
-	controller.slider1 = fetchSlider(1);
-	controller.slider2 = fetchSlider(2);
+	//controller.joystick_x = fetchJoystick('x');
+	//controller.joystick_y = fetchJoystick('y');
+	//controller.slider1 = fetchSlider(1);
+	//controller.slider2 = fetchSlider(2);
 }
 
 void playGame(void) {
 	volatile struct controllers controller;
-	controller.joystick_x = fetchJoystick('x');
-	controller.joystick_y = fetchJoystick('y');
-	controller.slider1 = fetchSlider(1);
-	controller.slider2 = fetchSlider(2);
+	//controller.joystick_x = fetchJoystick('x');
+	//controller.joystick_y = fetchJoystick('y');
+	//controller.slider1 = fetchSlider(1);
+	//controller.slider2 = fetchSlider(2);
 }

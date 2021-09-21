@@ -5,9 +5,6 @@
 #define F_CPU 4915200 // 4.9152 MHz
 #endif
 
-#define PWM_PRESCALE F_CPU
-
-
 void initPWM(void) {
 	// PWM output pin
 	setBit(DDRD, PD5);

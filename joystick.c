@@ -4,18 +4,14 @@
 #include "adc.h"
 
 volatile struct joystics {
-	volatile uint_8 x_val;
-	volatile uint_8 y_val;
-}
+	volatile uint8_t x_val;
+	volatile uint8_t y_val;
+};
 
 uint8_t fetchJoystick(char xy) {
-	if (xy == 'x') {
-		return adcData.channel1;
-	}
+	return 0;
 }
 
 uint8_t fetchSlider(uint8_t num) {
-	if (num == 1) {
-		return adcData.channel3;
-	}
+	return 0;
 }

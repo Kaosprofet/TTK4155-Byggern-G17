@@ -6,20 +6,54 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#ifndef adcAddress
-#define adcAddress 0x1400
-#endif
+#define adc_address 0x1400
+#define adc_num_channels 4
+//#define adc_config 0b10010000 // Brukes om vi vil hente single verdier
 
 // Starts by pointing to the first ADC channel
-volatile char *adcChannel = (char *)adcAddress;
-//volatile char adcData;                  // Storage for read ADC values
+volatile uint8_t *adcVal = (uint8_t *)adc_address;
+// Storage for read ADC values
+volatile uint8_t adcData[adc_num_channels];
 
-volatile struct adcData {
-	volatile char channel1;
-	volatile char channel2; 
-	volatile char channel3;
-	volatile char channel4;  
-};
+
+
+
+void initADC(void) {
+	// PWM output pin
+	setBit(DDRD, PD5);
+	
+	// Setts output pin to toggle
+	clearBit(TCCR1A, COM1A1);
+	setBit(TCCR1A, COM1A0);
+
+	// CTC PWM enabled
+	//setBit(TCCR0, WGM01);
+	//clearBit(TCCR0, WGM00);
+	clearBit(TCCR1B, WGM13);
+	setBit(TCCR1B, WGM12);
+	clearBit(TCCR1A, WGM11);
+	clearBit(TCCR1A, WGM10);
+	
+	// Top value set to 0 => triggers comparator each cycle
+	OCR1AH = 0x00;
+	OCR1AL = 0x00;
+	
+	// Set prescaling to clk/1
+	clearBit(TCCR1B, CS12);
+	clearBit(TCCR1B, CS11);
+	setBit(TCCR1B, CS10);
+}
+
+void readADC() {
+	// Trigger read
+	*adcVal = 0;
+	// wait til converted
+	_delay_us(70);
+	// Store all data from ADC
+	for (uint8_t i = 0; i < adc_num_channels; i++) {
+		adcData[i] = *adcVal;
+	}
+}	
 
 void adcTest(void) {
 	enableEMI();
@@ -29,45 +63,17 @@ void adcTest(void) {
 	volatile char data3;
 	volatile char data4;
 
-		adcChannel[0] = 0x00;
-		_delay_ms(10);
-		data1 = adcChannel[0];
+		*adcVal = 0;
+		_delay_ms(70);
+		data1 = *adcVal;
 		printf("Data1 = %02d\n", data1);
-		data2 = adcChannel[0];
+		data2 = *adcVal;
 		printf("Data2 = %02d\n", data2);
-		data3 = adcChannel[0];
+		data3 = *adcVal;
 		printf("Data3 = %02d\n", data3);
-		data4 = adcChannel[0];
+		data4 = *adcVal;
 		printf("Data4 = %02d\n", data4);
 	
 }
-
-void initADC(void) {
-    //cli(); // Temporary dissables global interupts
-
-    //clearBit(DDRD, PD3); // Sets PD3 as input
-    //setBit(PORTD, PD3);  // Sets pullup resistor on PD3
-
-    //setBit(GICR, INT1); // Sets interupt on PD3
-
-    //setBit(MCUCR, ISC11); // Trigger on fallin edge
-    //clearBit(MCUCR, ISC10);
-    
-    //sei(); // Re-enables global interupts
-
-}
-
-void readADC() {
-	// Trigger read
-	// wait til converted
-	
-	
-	// Read data from adc
-	adcData.channel1 = adcChannel[0];
-	adcData.channel2 = adcChannel[0];
-	adcData.channel3 = adcChannel[0];
-	adcData.channel4 = adcChannel[0];
-}	
-
 
 

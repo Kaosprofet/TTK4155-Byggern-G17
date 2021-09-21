@@ -58,8 +58,7 @@ void test(void){
 
 int main(void) {
 	initUart();
-	initPWM();
-	//initADC();
+	initADC();
 	
 	//SRAM_init();
 
