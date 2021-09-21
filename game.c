@@ -17,7 +17,7 @@ void fetchController(void) {
 }
 
 void playGame(void) {
-	volatile struct controllers controller;
+	//volatile struct controllers controller;
 	//controller.joystick_x = fetchJoystick('x');
 	//controller.joystick_y = fetchJoystick('y');
 	//controller.slider1 = fetchSlider(1);

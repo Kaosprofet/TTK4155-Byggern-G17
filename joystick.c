@@ -10,7 +10,7 @@ volatile struct joysticks {
 	volatile enum directions dir;
 };
 
-enum direction(uint8_t x_val, uint8_t y_val) {
+enum directions direction(uint8_t x_val, uint8_t y_val) {
 	uint8_t deadzone = 10;
 	
 	if (abs(x_val) > abs(y_val)) { //x>y -> left/right
