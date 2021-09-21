@@ -21,7 +21,7 @@ void printController(volatile struct controllers *controller) {
 
  enum directions direction(signed int x_val, signed int y_val) {
 	signed int deadzone = 20;
-	signed int zero = 25;
+	signed int zero = 0;
 	
 	if (abs(x_val) > abs(y_val)) { //x>y -> left/right
 		if (x_val > (zero + deadzone)) {
@@ -44,7 +44,7 @@ void printController(volatile struct controllers *controller) {
 
 signed int joystickPercent(uint8_t val) {
 	if (val>=160){
-		signed int per_val = ((signed int)val-160) * 100.0/95.0;
+		signed int per_val = ((signed int)val-160.0) * 100.0/95.0;
 		return per_val;
 	}
 	else (val<=159){
