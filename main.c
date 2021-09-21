@@ -36,6 +36,8 @@ void exercise3(void){
 }
 
 void testChipSelect(void){
+	//Disables EMI
+	clearBit(MCUCR, SRE);
 	setBit(DDRC, PC3);
 	//setBit(MCUCR, SRE); //Enabeling external memory interface
 	setBit(DDRC, PC2); //Enabling PE1 for output
@@ -49,7 +51,6 @@ void testChipSelect(void){
 
 int main(void) {
 	initUart();
-	enableEMI();
 	initADC();
 
 	//testChipSelect();
