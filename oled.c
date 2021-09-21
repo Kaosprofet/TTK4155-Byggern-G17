@@ -100,8 +100,11 @@ void oled_goto_col(uint8_t col){
 	}
 	else {
 		position.col = col;
+		uint8_t min = col % 16;
+		uint8_t max = col / 16;
 		set_addressing_mode(PAGE);
-		//writeCMD();
+		writeCMD(min);
+		writeCMD(0x10 + max);
 		set_addressing_mode(HORIZONTAL);
 	}
 }
