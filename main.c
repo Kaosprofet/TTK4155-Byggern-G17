@@ -52,10 +52,9 @@ void testChipSelect(void){
 int main(void) {
 	initUart();
 	initADC();
+	initSRAM();
 
 	//testChipSelect();
-	//SRAM_init();
-
 	//SRAM_test();
 	//Chip_select_test();
 
