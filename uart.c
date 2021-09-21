@@ -15,7 +15,7 @@ void initUart() {
 	//UCSR0C |= (1 << USBS0) | (1 << URSEL0);  // 2 stop bits
 	//UCSR0C |= (3 << UCSZ00);                 // 8 bit data recieve (UCSZ10)
 	
-	fdevopen(transmitByte,receiveByte); //enables printf function
+	fdevopen(transmitByte,receiveByte); //enables printf function over uart
 }
 
 void transmitByte(unsigned char byte) {

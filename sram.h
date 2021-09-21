@@ -11,5 +11,3 @@ void writeSRAM(uint8_t address, uint8_t data);
 
 	
 void SRAM_test(void);
-
-void Chip_select_test(void);

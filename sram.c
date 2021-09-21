@@ -60,12 +60,3 @@ void SRAM_test(void) {
 	printf("SRAM test completed with \n%4d errors in write phase and \n%4d errors in retrieval phase\n\n", write_errors, retrieval_errors);
 }
 
-void Chip_select_test(void)
-{
-	volatile char *ext_ram = (char *) 0x1600; // Start address for the SRAM
-	uint16_t ext_ram_size = 0x400;
-	while(1){
-		ext_ram[65530] = 16384;
-	}
-	
-}
