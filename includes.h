@@ -1,6 +1,6 @@
 
 #include <avr/io.h>
 
-enum direction {
+enum directions {
 	UP, DOWN, LEFT, RIGHT, NEUTRAL
 }; 
