@@ -1,8 +1,6 @@
-#include "sram.h"
-#include <avr/io.h>
-#include <stdlib.h>
-#include "uart.h"
-#include "functions.h"
+#ifndef INCLUDES_H
+#include "includes.h"
+#endif
 
 void enableEMI(void){setBit(MCUCR, SRE);} //Enabeling external memory interface
 

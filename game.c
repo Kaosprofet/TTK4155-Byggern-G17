@@ -1,10 +1,6 @@
-#include "game.h"
-#include <avr/io.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include "joystick.h"
-#include "functions.h"
-
+#ifndef INCLUDES_H
+#include "includes.h"
+#endif
 
 void initButton(void) {
 	clearBit(DDRD,PD3);
@@ -12,7 +8,6 @@ void initButton(void) {
 }
 
 volatile struct controllers* controller = NULL;
-
 
 void playGame(void) {
 	// Initialise and allocate controller
@@ -26,9 +21,4 @@ void playGame(void) {
 		updateController(controller);
 		printController(controller);
 	}
-
-	
-	
-	
-	
 }
