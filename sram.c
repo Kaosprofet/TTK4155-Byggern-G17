@@ -2,17 +2,28 @@
 #include "includes.h"
 #endif
 
-void enableEMI(void){setBit(MCUCR, SRE);} //Enabeling external memory interface
+//Lagt til i inits som trenger det kan slettes om det ikke dukker opp errors
+//void enableEMI(void){setBit(MCUCR, SRE);} //Enabeling external memory interface
 
-void SRAM_init(void){
-	enableEMI();
-	
+#define ext_ram_size 0x800
+#define sram_adress 0x1800
+// Pointer to start address for SRAM
+volatile char *ext_ram = (char *) sram_adress;
+
+void initSRAM(void) {
+	//Enabeling external memory interface
+	setBit(MCUCR, SRE);	
 }
 
-void SRAM_test(void)
-{
-	volatile char *ext_ram = (char *) 0x1800; // Start address for the SRAM //1600
-	uint16_t ext_ram_size = 0x800; //0x800
+uint8_t readSRAM(uint8_t address) {
+	return ext_ram[address];
+}
+
+void writeSRAM(uint8_t address, uint8_t data) {
+	ext_ram[address] = data;
+}
+
+void SRAM_test(void) {
 	uint16_t write_errors = 0;
 	uint16_t retrieval_errors = 0;
 	printf("Starting SRAM test...\n");
@@ -23,8 +34,10 @@ void SRAM_test(void)
 	srand(seed);
 	for (uint16_t i = 0; i < ext_ram_size; i++) {
 		uint8_t some_value = rand();
-		ext_ram[i] = some_value;
-		uint8_t retreived_value = ext_ram[i];
+		//ext_ram[i] = some_value;
+		writeSRAM(i,some_value);
+		uint8_t retreived_value = readSRAM(i);
+		//uint8_t retreived_value = ext_ram[i];
 		if (retreived_value != some_value) {
 			//printf("Write phase error: ext_ram[%4d] = %02X (should be %02X)\n", i, retreived_value, some_value);
 			write_errors++;
@@ -47,12 +60,3 @@ void SRAM_test(void)
 	printf("SRAM test completed with \n%4d errors in write phase and \n%4d errors in retrieval phase\n\n", write_errors, retrieval_errors);
 }
 
-void Chip_select_test(void)
-{
-	volatile char *ext_ram = (char *) 0x1600; // Start address for the SRAM
-	uint16_t ext_ram_size = 0x400;
-	while(1){
-		ext_ram[65530] = 16384;
-	}
-	
-}

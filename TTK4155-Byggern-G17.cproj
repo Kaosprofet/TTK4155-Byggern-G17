@@ -172,12 +172,6 @@
     <Compile Include="joystick.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="pwm.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="pwm.c">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="game.c">
       <SubType>compile</SubType>
     </Compile>

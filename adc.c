@@ -12,10 +12,9 @@ volatile uint8_t *adcVal = (uint8_t *)adc_address;
 volatile uint8_t adcData[adc_num_channels];
 
 
-
-
-
 void initADC(void) {
+	//Enabeling external memory interface
+	setBit(MCUCR, SRE);
 	// PWM output pin
 	setBit(DDRD, PD5);
 	

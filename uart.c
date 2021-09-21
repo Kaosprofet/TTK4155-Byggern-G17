@@ -1,18 +1,8 @@
-#ifndef BAUD // In case BAUD not defined
-#define BAUD 9600 
-#endif
-
-#ifndef F_CPU // In case F_CPU not defined
-#define F_CPU 4915200 // 4.9152 MHz
+#ifndef INCLUDES_H
+#include "includes.h"
 #endif
 
 #define BAUD_PRESCALE ((F_CPU / (BAUD * 16UL)) - 1)
-
-
-#include <avr/io.h>
-#include "functions.h"
-#include "uart.h"
-
 
 void initUart() {
 	// Casting 
@@ -25,7 +15,7 @@ void initUart() {
 	//UCSR0C |= (1 << USBS0) | (1 << URSEL0);  // 2 stop bits
 	//UCSR0C |= (3 << UCSZ00);                 // 8 bit data recieve (UCSZ10)
 	
-	fdevopen(transmitByte,receiveByte); //enables printf function
+	fdevopen(transmitByte,receiveByte); //enables printf function over uart
 }
 
 void transmitByte(unsigned char byte) {
