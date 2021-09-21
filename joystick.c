@@ -10,6 +10,12 @@ volatile struct joysticks {
 	volatile enum directions dir;
 };
 
+volatile struct controllers {
+	volatile uint8_t slider1_val;
+	volatile uint8_t slider2_val;
+	
+};
+
 enum directions direction(uint8_t x_val, uint8_t y_val) {
 	uint8_t deadzone = 10;
 	
@@ -48,6 +54,18 @@ volatile struct joysticks fetchJoystick(void) {
 	
 	
 	return joystick;
+}
+
+volatile struct controllers fetchController(void) {
+	uint8_t *p;
+	volatile struct controllers controller;
+	
+	p = readADC();
+	
+	controller.slider1_val = *(p+2);
+	controller.slider2_val = *(p+3);
+	
+	return controller;
 }
 
 double joystickPercent(uint8_t val) {
