@@ -2,20 +2,25 @@
 #include "includes.h"
 #endif
 
-void updateController(volatile struct controllers *controller) {
+void initButton(void) {
+	clearBit(DDRD,PD3);
+	clearBit(DDRD,PD4);
+}
+
+void updateController(struct controllers *controller) {
 	uint8_t *p;
 	
 	p = readADC();
 	
-	controller->x_val = joystickPercent(*p);
-	controller->y_val = joystickPercent(*(p+1));
+	controller->x_val = joystickPercent(*p, controller);
+	controller->y_val = joystickPercent(*(p+1),controller);
 	controller->slider1_val = *(p+2);
 	controller->slider2_val = *(p+3);
 	
 	controller->dir = direction(controller->x_val, controller->y_val);
 }
 
-void printController(volatile struct controllers *controller) { 
+void printController(struct controllers *controller) { 
 	printf("Joystick: X = %4d Y = %4d dir = %d  Sliders: 1 = %3d 2 = %3d  Buttons: 1 = %d 2 = %d\n\r", controller->x_val, controller->y_val, controller->dir, controller->slider1_val, controller->slider2_val,  (bool)bitIsSet(PIND, PD3),  (bool)bitIsSet(PIND, PD4));
 }
 
@@ -42,14 +47,22 @@ void printController(volatile struct controllers *controller) {
 	return NEUTRAL;
 }
 
-signed int joystickPercent(uint8_t val) {
+void calibrateJoystick(struct controllers *controller) {
+	uint8_t *p;
+	p = readADC();
+	
+	controller->x_zero = joystickPercent(*p, controller);
+	controller->y_zero = joystickPercent(*(p+1), controller);
+}
+
+signed int joystickPercent(uint8_t val, struct controllers *controller) {
 	signed int per_val;
-	if (val >= 160) {
-		per_val = ((signed int)val - 160.0) * 100.0/95.0;
+	if (val >= controller->x_zero) {
+		per_val = ((signed int)val - controller->x_zero) * 100.0/(255.0-controller->x_zero);
 		return per_val;
 	}
-	else if (val <= 159) {
-		per_val = (signed int)val * 100.0 /159.0 - 100.0;
+	else if (val <= (controller->x_zero-1)) {
+		per_val = (signed int)val * 100.0 /(controller->x_zero-1) - 100.0;
 		return per_val;
 	}
 }

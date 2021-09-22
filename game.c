@@ -2,22 +2,21 @@
 #include "includes.h"
 #endif
 
-void initButton(void) {
-	clearBit(DDRD,PD3);
-	clearBit(DDRD,PD4);
-}
 
-volatile struct controllers* controller = NULL;
+
+struct controllers* controller = NULL;
 
 void playGame(void) {
-	// Initialise and allocate controller
+	// Initialize and allocate controller
 	controller = (struct controllers*) malloc(sizeof(struct controllers));
-	controller->offset = 30;
+	calibrateJoystick(controller);
+
 	
-	// Initialise button
+	// Initialize button
 	initButton();
 
 	while(1) {
+		// update controller each loop
 		updateController(controller);
 		printController(controller);
 	}
