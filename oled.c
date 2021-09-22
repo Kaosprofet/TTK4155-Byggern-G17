@@ -1,6 +1,5 @@
 #include "functions.h"
 #include "oled.h"
-//#include "fonts.h"
 #include <avr/io.h>
 
 #ifndef OLED_CMD
@@ -15,15 +14,22 @@
 #define width 128
 
 
-volatile char * OLED_CMD_val = (char *)OLED_CMD; 
-volatile char * OLED_DATA_val = (char *)OLED_DATA;
+volatile char * OLED_CMD_val = (char *) OLED_CMD;
+volatile char * OLED_DATA_val = (char *) OLED_DATA;
 
 
 volatile oled_position position; //Defines the row/col position of the writer
 
-//Local functions
-void writeCMD(uint8_t cmd){OLED_CMD_val[0] = cmd;} //Writes the input command to the command register of the OLED
-void writeDATA(uint8_t data){OLED_DATA_val[0] = data;} //Writes the input data to the data register of the OLED
+
+//Writes the input command to the command register of the OLED
+void writeCMD(uint8_t cmd){
+	OLED_CMD_val[0] = cmd;
+}
+
+//Writes the input data to the data register of the OLED
+void writeDATA(uint8_t data){
+	OLED_DATA_val[0] = data;
+}
 
 //Initialization
 void initOLED(void){
@@ -39,14 +45,16 @@ void initOLED(void){
 		0x21, 0x20, //Set Memory Addressing Mode
 		0x02, 0xdb, //VCOM deselect level mode
 		0x30, 0xad, //master configuration
-		0x00, 0xa4, //out follows RAM content 
+		0x00, 0xa4, //out follows RAM content
 		0xa6, //set normal display
 		0xaf, // display on
 	};
 	uint8_t num_commands = 22;
-	for(uint8_t i=0; i <(num_commands -1); i++){ //Writes all the commands
+	
+	//Writes all the commands
+	for(uint8_t i=0; i <(num_commands -1); i++){
 		writeCMD(RecInitCommands[i]);
-	}	
+	}
 	
 }
 // ------------------------------------- Typing, writing and drawing things on the screen --------------------
@@ -56,34 +64,36 @@ uint8_t selected_font = 5;
 void oled_set_font(fonts font){
 	switch(font){
 		case(LARGE):
-			selected_font = 8;
+		selected_font = 8;
 		case(NORMAL):
-			selected_font = 5;
+		selected_font = 5;
 		case(SMALL):
-			selected_font = 4;
+		selected_font = 4;
 	}
 };
 
 
 //Typing characters
+/*
 void oled_type(char c){
 	uint8_t printChar = 32 - c;
 	switch(selected_font){
 		case(4):
-			for(int i = 0; i<4; i++){
-				//int byte = font4[printChar][i];
-				//writeDATA(byte); 
-				position.col +=4;
-				}
+		//for(int i = 0; i<4; i++){
+		//int byte = font4[printChar][i];
+		//writeDATA(byte);
+		//position.col += 4;
+		//}
 		case(5):
-			writeDATA(0);
-			//for(int i = 0; i<5; i++){writeDATA(pgm_read_word(&font5[printChar][i])); position.col +=5;}
+		//writeDATA(0);
+		//for(int i = 0; i<5; i++){writeDATA(pgm_read_word(&font5[printChar][i])); position.col +=5;}
 		case(8):
-			writeDATA(0);
-			//for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&font8[printChar][i])); position.col +=8;}
+		//writeDATA(0);
+		//for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&font8[printChar][i])); position.col +=8;}
 	}
 }
 
+*/
 //Writing the elektra logo
 void oled_elektra(void){
 	//for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&font8[2][i])); position.col +=8;}
@@ -95,7 +105,7 @@ void oled_penis(void){
 // ----------------------------------------- Cleaning the screen ------------------------------------------------
 
 //Clear the current page
-void oled_clear_page(void){ 
+void oled_clear_page(void){
 	oled_goto_col(0); //Moves to the 0 collumn
 	for(int i=0; i<128; i++){writeDATA(0);} //Writes a 0 in every column
 }
@@ -110,7 +120,7 @@ void oled_clear_specific(int row, int col){
 }
 
 //Reset the whole screen.
-void oled_reset(void){  
+void oled_reset(void){
 	for(int i=0; i<7; i++){ oled_clear_spage(i); } //Loops through all pages and clears them
 	oled_home(); //Sets the position to 0,0
 }
@@ -124,16 +134,16 @@ void set_addressing_mode(modes mode){
 	//next bit is the addressing mode (reference: manual page 27)
 	switch(mode){
 		case(PAGE):
-			writeCMD(2);
+		writeCMD(2);
 		case(HORIZONTAL):
-			writeCMD(0);
+		writeCMD(0);
 		case(VERTICAL):
-			writeCMD(1);
+		writeCMD(1);
 	}
 }
 
 void oled_goto_page(uint8_t page){
-	if (page >  7 || page < 0){ //returns 0 if input is illegal  
+	if (page >  7 || page < 0){ //returns 0 if input is illegal
 		return 0;
 	}
 	else {
@@ -160,9 +170,9 @@ void oled_goto_col(uint8_t col){
 }
 
 void oled_pos(uint8_t page, uint8_t col){
-	oled_goto_page(page); 
+	oled_goto_page(page);
 	oled_goto_col(col);
-	} //combines the two functions above
+} //combines the two functions above
 
 
 void oled_home(void){
