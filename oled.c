@@ -25,10 +25,7 @@ volatile oled_position position; //Defines the row/col position of the writer
 void writeCMD(uint8_t cmd){OLED_CMD_val[0] = cmd;} //Writes the input command to the command register of the OLED
 void writeDATA(uint8_t data){OLED_DATA_val[0] = data;} //Writes the input data to the data register of the OLED
 
-
-
-
-
+//Initialization
 void initOLED(void){
 	uint8_t RecInitCommands[] = { //From the OLED manual page 15 (Recommended initialization commands)
 		0xae, //Display off
@@ -52,27 +49,27 @@ void initOLED(void){
 	}	
 	
 }
-
-void oled_clear_page(void){ //Clears the current page
-	oled_goto_col(0); //Moves to the 0 collumn
-	for(int i=0; i<128; i++){ //Writes a 0 in every collumn
-		writeDATA(0);
-	}
-}
-
-void oled_reset(void){ //Resets the whole screen. 
-	for(int i=0; i<7 i++){ //Loops through all pages and clears them
-		oled_goto_page(i)
-		oled_clear_page();
-	}
-	oled_home(); //Sets the position to 0,0
-}
-
-void printString(char inString){
+// ------------------------------------- Typing, writing and drawing things on the screen --------------------
+void oled_type(char c){
 	
 }
 
 
+// ----------------------------------------- Cleaning the screen ------------------------------------------------
+
+//Clears the current page
+void oled_clear_page(void){ 
+	oled_goto_col(0); //Moves to the 0 collumn
+	for(int i=0; i<128; i++){writeDATA(0);} //Writes a 0 in every collumn
+}
+
+//Clears a specific page
+void oled_clear_spage(int page){ oled_goto_page(page); oled_clear_page();}
+
+void oled_reset(void){ //Resets the whole screen. 
+	for(int i=0; i<7; i++){ oled_clear_spage(i); } //Loops through all pages and clears them
+	oled_home(); //Sets the position to 0,0
+}
 
 
 //----------------------------------------------------- Position related -----------------------------------------------------
