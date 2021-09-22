@@ -1,6 +1,6 @@
 #include "functions.h"
 #include "oled.h"
-#include "fonts.h"
+//#include "fonts.h"
 #include <avr/io.h>
 
 #ifndef OLED_CMD
@@ -50,23 +50,67 @@ void initOLED(void){
 	
 }
 // ------------------------------------- Typing, writing and drawing things on the screen --------------------
+
+uint8_t selected_font = 5;
+
+void oled_set_font(fonts font){
+	switch(font){
+		case(LARGE):
+			selected_font = 8;
+		case(NORMAL):
+			selected_font = 5;
+		case(SMALL):
+			selected_font = 4;
+	}
+};
+
+
+//Typing characters
 void oled_type(char c){
-	
+	uint8_t printChar = 32 - c;
+	switch(selected_font){
+		case(4):
+			for(int i = 0; i<4; i++){
+				//int byte = font4[printChar][i];
+				//writeDATA(byte); 
+				position.col +=4;
+				}
+		case(5):
+			writeDATA(0);
+			//for(int i = 0; i<5; i++){writeDATA(pgm_read_word(&font5[printChar][i])); position.col +=5;}
+		case(8):
+			writeDATA(0);
+			//for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&font8[printChar][i])); position.col +=8;}
+	}
 }
 
+//Writing the elektra logo
+void oled_elektra(void){
+	//for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&font8[2][i])); position.col +=8;}
+}
+void oled_penis(void){
+	//for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&font8[3][i])); position.col +=8;}
+}
 
 // ----------------------------------------- Cleaning the screen ------------------------------------------------
 
-//Clears the current page
+//Clear the current page
 void oled_clear_page(void){ 
 	oled_goto_col(0); //Moves to the 0 collumn
-	for(int i=0; i<128; i++){writeDATA(0);} //Writes a 0 in every collumn
+	for(int i=0; i<128; i++){writeDATA(0);} //Writes a 0 in every column
 }
 
-//Clears a specific page
+//Clear a specific page
 void oled_clear_spage(int page){ oled_goto_page(page); oled_clear_page();}
 
-void oled_reset(void){ //Resets the whole screen. 
+//Clear specific pixel
+void oled_clear_specific(int row, int col){
+	oled_pos(row, col);
+	writeDATA(0);
+}
+
+//Reset the whole screen.
+void oled_reset(void){  
 	for(int i=0; i<7; i++){ oled_clear_spage(i); } //Loops through all pages and clears them
 	oled_home(); //Sets the position to 0,0
 }
@@ -77,7 +121,7 @@ typedef enum{PAGE, HORIZONTAL, VERTICAL} modes;
 
 void set_addressing_mode(modes mode){
 	writeCMD(0x20); //Tells the OLED that we are going to change the address mode
-	//next bit is the addressing mode (reference manual page 27)
+	//next bit is the addressing mode (reference: manual page 27)
 	switch(mode){
 		case(PAGE):
 			writeCMD(2);
@@ -95,7 +139,7 @@ void oled_goto_page(uint8_t page){
 	else {
 		position.page = page; //stores the page position in the position struct
 		set_addressing_mode(PAGE);
-		writeCMD(0xB0 + page); //Sends the memory address page to the OLED.
+		writeCMD(0xB0 + page); //Commands the OLED to change to the specified page
 		set_addressing_mode(HORIZONTAL);
 	}
 }
@@ -115,10 +159,13 @@ void oled_goto_col(uint8_t col){
 	}
 }
 
+void oled_pos(uint8_t page, uint8_t col){
+	oled_goto_page(page); 
+	oled_goto_col(col);
+	} //combines the two functions above
 
-void oled_pos(uint8_t page, uint8_t col){oled_goto_page(page); oled_goto_col(col);} //combines the two functions above
 
-void oled_home(){
+void oled_home(void){
 	oled_pos(0,0); //Move to page 0 column 0
 }
 
