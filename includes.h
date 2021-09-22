@@ -21,5 +21,6 @@
 #include "adc.h"
 #include "joystick.h"
 #include "game.h"
+#include "oled.h"
 
 
