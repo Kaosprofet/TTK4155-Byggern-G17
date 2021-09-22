@@ -47,6 +47,7 @@ uint8_t * readADC(){
 	
 	// wait til converted
 	_delay_us(70);
+	
 	// Store all data from ADC
 	for (uint8_t i = 0; i < adc_num_channels; i++) {
 		adcData[i] = *adcVal;
@@ -54,30 +55,5 @@ uint8_t * readADC(){
 	return adcData;
 }	
 
-void adcTest(void) {
-	uint8_t *p;
-	
-	*adcVal = 0;
-	
-	p = readADC();
-	_delay_us(70);
-	
-	uint8_t x_val = *p;
-	uint8_t y_val = *(p+1);
-	
-	signed int x_per_val = joystickPercent(x_val);
-	signed int y_per_val = joystickPercent(y_val);
-	signed int test2 = -100;
-	
-	enum directions dir = direction(x_val, y_val);
-	
-	printf("X = %d ", x_val);
-	printf("Y = %d ", y_val);
-	printf("X percent = %d ", x_per_val);
-	printf("Y percent = %d ", y_per_val);
-	printf("Dir = %d ", dir);
-	printf("Test = %d\n\r ", test2);
-	
-}
 
 
