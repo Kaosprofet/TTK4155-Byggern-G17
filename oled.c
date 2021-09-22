@@ -34,36 +34,45 @@ void initOLED(void){
 		0xae, //Display off
 		0xa1, //Segment remap
 		0xda, //Common pads hardware: alternative
-		0x12,
-		0xc8, //common output scan direction:com63~com0
+		0x12, 0xc8, //common output scan direction:com63~com0
 		0xa8, //multiplex ration mode:63
-		0x3f,
-		0xd5, //display divide ratio/osc. freq. mode
-		0x80,
-		0x81, //contrast control
-		0x50,
-		0xd9, //set pre-charge period
-		0x21, 
-		0x20, //Set Memory Addressing Mode
-		0x02,
-		0xdb, //VCOM deselect level mode
-		0x30,
-		0xad, //master configuration
-		0x00, 
-		0xa4, //out follows RAM content 
+		0x3f, 0xd5, //display divide ratio/osc. freq. mode
+		0x80, 0x81, //contrast control
+		0x50, 0xd9, //set pre-charge period
+		0x21, 0x20, //Set Memory Addressing Mode
+		0x02, 0xdb, //VCOM deselect level mode
+		0x30, 0xad, //master configuration
+		0x00, 0xa4, //out follows RAM content 
 		0xa6, //set normal display
 		0xaf, // display on
 	};
-	uint8_t num_commands = 21;
+	uint8_t num_commands = 22;
 	for(uint8_t i=0; i <(num_commands -1); i++){ //Writes all the commands
 		writeCMD(RecInitCommands[i]);
 	}	
 	
 }
 
+void oled_clear_page(void){ //Clears the current page
+	oled_goto_col(0); //Moves to the 0 collumn
+	for(int i=0; i<128; i++){ //Writes a 0 in every collumn
+		writeDATA(0);
+	}
+}
+
+void oled_reset(void){ //Resets the whole screen. 
+	for(int i=0; i<7 i++){ //Loops through all pages and clears them
+		oled_goto_page(i)
+		oled_clear_page();
+	}
+	oled_home(); //Sets the position to 0,0
+}
+
 void printString(char inString){
 	
 }
+
+
 
 
 //----------------------------------------------------- Position related -----------------------------------------------------
@@ -109,4 +118,10 @@ void oled_goto_col(uint8_t col){
 	}
 }
 
-void oled_pos(uint8_t page, uint8_t col){oled_goto_page(page); oled_goto_col(col);}
+
+void oled_pos(uint8_t page, uint8_t col){oled_goto_page(page); oled_goto_col(col);} //combines the two functions above
+
+void oled_home(){
+	oled_pos(0,0); //Move to page 0 column 0
+}
+

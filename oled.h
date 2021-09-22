@@ -11,5 +11,6 @@ void oled_pos(uint8_t page, uint8_t col);
 void oled_reset();
 void oled_home();
 void oled_print(char*);
+void oled_clear_page(void);
 
 typedef struct {int page, col;} oled_position;
