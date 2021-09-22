@@ -1,4 +1,3 @@
-#include "functions.h"
 #include <avr/io.h>
 
 typedef enum {LARGE, NORMAL, SMALL} fonts;

@@ -1,6 +1,6 @@
-#include "functions.h"
-#include "oled.h"
-#include <avr/io.h>
+#ifndef INCLUDES_H
+#include "includes.h"
+#endif
 
 #ifndef OLED_CMD
 #define OLED_CMD 0x1000 //The address room for OLED command
