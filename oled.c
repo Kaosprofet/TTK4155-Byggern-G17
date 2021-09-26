@@ -1,5 +1,6 @@
 #ifndef INCLUDES_H
 #include "includes.h"
+#include "fonts.h"
 #endif
 
 #ifndef OLED_CMD
@@ -74,32 +75,30 @@ void oled_set_font(fonts font){
 
 
 //Typing characters
-/*
+
 void oled_type(char c){
 	uint8_t printChar = 32 - c;
 	switch(selected_font){
 		case(4):
-		//for(int i = 0; i<4; i++){
-		//int byte = font4[printChar][i];
-		//writeDATA(byte);
-		//position.col += 4;
-		//}
+			for(int i = 0; i<3; i++){
+				int byte = font4[printChar][i];
+				writeDATA(byte);
+				position.col += 4;
+				}
 		case(5):
-		//writeDATA(0);
-		//for(int i = 0; i<5; i++){writeDATA(pgm_read_word(&font5[printChar][i])); position.col +=5;}
+			for(int i = 0; i<4; i++){writeDATA(pgm_read_word(&font5[printChar][i])); position.col +=5;}
 		case(8):
-		//writeDATA(0);
-		//for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&font8[printChar][i])); position.col +=8;}
+			for(int i = 0; i<7; i++){writeDATA(pgm_read_word(&font8[printChar][i])); position.col +=8;}
 	}
 }
 
-*/
+
 //Writing the elektra logo
 void oled_elektra(void){
-	//for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&font8[2][i])); position.col +=8;}
+	for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&specialSymbols[1][i])); position.col +=8;}
 }
 void oled_penis(void){
-	//for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&font8[3][i])); position.col +=8;}
+	for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&specialSymbols[0][i])); position.col +=8;}
 }
 
 // ----------------------------------------- Cleaning the screen ------------------------------------------------
