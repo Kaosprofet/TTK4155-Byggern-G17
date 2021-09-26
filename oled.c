@@ -95,7 +95,7 @@ void oled_type(char c){
 
 void oled_print(char string[]){
 	for(int i=0; i<strlen(string)-1;i++){
-		oled_type(string(i));
+		oled_type(string[i]);
 	}
 }
 //Writing the elektra logo
@@ -106,12 +106,22 @@ void oled_penis(void){
 	for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&specialSymbols[0][i])); position.col +=8;}
 }
 
-void oled_hline(int length, int thickness){
+void oled_draw_hline(int length, int thickness){
 	for(int i = 0; i<length-1;i++){
 		writeDATA(thickness);
 	}
 }
 
+void oled_draw_box(int x, int y, int w, int h, int thickness){
+	oled_pos(x,y);
+	uint8_t top_line_byte = oled_h_size_generator(thickness,0);
+	for(int i=0; i<w-1;i++){
+		writeDATA(top_line_byte);
+	}
+	for (int j=0;j<h-3;j++){
+		
+	}
+}
 // ----------------------------------------- Cleaning the screen ------------------------------------------------
 
 //Clear the current page
@@ -195,3 +205,17 @@ void oled_nl(void){ //Moves the cursor to a new page
 void oled_indent(int length){
 	oled_pos(position.page, position.col + length);
 }
+
+//Special functions
+/*
+uint8_t oled_h_size_generator(uint8_t size, int inverse){
+	if (size > 1){
+		if (inverse == 1){ return (pow(2,8-size)-1);}
+		else{ return (pow(2,size)-1); }
+	}
+	else {
+		if (inverse == 1){return 0x00000001;}
+		else{return 0x10000000;}
+	}
+}
+*/
