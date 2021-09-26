@@ -93,12 +93,23 @@ void oled_type(char c){
 }
 
 
+void oled_print(char string[]){
+	for(int i=0; i<strlen(string)-1;i++){
+		oled_type(string(i));
+	}
+}
 //Writing the elektra logo
 void oled_elektra(void){
 	for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&specialSymbols[1][i])); position.col +=8;}
 }
 void oled_penis(void){
 	for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&specialSymbols[0][i])); position.col +=8;}
+}
+
+void oled_hline(int length, int thickness){
+	for(int i = 0; i<length-1;i++){
+		writeDATA(thickness);
+	}
 }
 
 // ----------------------------------------- Cleaning the screen ------------------------------------------------
@@ -173,8 +184,14 @@ void oled_pos(uint8_t page, uint8_t col){
 	oled_goto_col(col);
 } //combines the two functions above
 
-
 void oled_home(void){
 	oled_pos(0,0); //Move to page 0 column 0
 }
 
+void oled_nl(void){ //Moves the cursor to a new page
+	oled_pos(position.page + 1, 0);
+}
+
+void oled_indent(int length){
+	oled_pos(position.page, position.col + length);
+}

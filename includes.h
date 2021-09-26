@@ -13,7 +13,7 @@
 #include <util/delay.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
+#include <string.h>
 
 #include "functions.h"
 #include "uart.h"
