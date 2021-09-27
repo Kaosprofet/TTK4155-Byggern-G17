@@ -247,31 +247,3 @@ void oled_nl(void){ //Moves the cursor to a new page
 void oled_indent(int length){
 	oled_pos(position.page, position.col + length);
 }
-
-/*
-uint8_t oled_h_size_generator(uint8_t size, uint8_t shift, int inverse){
-	uint8_t bits[8]={0,0,0,0,0,0,0,0};
-	uint8_t byte = 0;
-	
-	//Generating the bit-array
-	if(inverse== 1){
-		for(uint8_t j=0;j<size;j++){
-			bits[7-j-shift]=1;
-		}
-	}
-	else{
-		for(uint8_t i=0;i<size;i++){
-			bits[i+shift]=1;
-		}
-	}
-	//Generating the byte
-	double power = 0;
-	for(uint8_t k=0; k<8;k++){
-		if(bits[k]==1){
-			power = pow(2,k);
-			byte = byte + (uint8_t *)power;
-		}
-	}
-	return byte;
-}
-*/
