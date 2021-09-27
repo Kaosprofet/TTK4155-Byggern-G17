@@ -112,14 +112,56 @@ void oled_draw_hline(int length, int thickness){
 	}
 }
 
+
 void oled_draw_box(int x, int y, int w, int h, int thickness){
-	oled_pos(x,y);
-	uint8_t top_line_byte = oled_h_size_generator(thickness,0);
-	for(int i=0; i<w-1;i++){
-		writeDATA(top_line_byte);
+	uint8_t start_page = y/8;
+	uint8_t extra_top = y - start_page*8;
+	uint8_t needed_pages = (extra_top + h +(8-1))/8;
+	uint8_t extra_bottomn = needed_pages*8 - (extra_top + h);
+	uint8_t total_height = extra_top + h + extra_bottomn;
+	
+	bool raw_square[total_height][w];
+	for(int h1=0; h1<total_height; h1++){
+		for(int w1=0; w1<w; w1++){
+			raw_square[h1][w1]=0;
+		}
 	}
-	for (int j=0;j<h-3;j++){
-		
+	
+	//filling the square
+	for(int h2 = extra_top; h2<(total_height-extra_bottomn); h2++){
+		for(int w2 = 0; w2 < w; w2++){
+			raw_square[h2][w2]=1;
+		}
+	}
+	
+	//Removing the insides
+	for(int h3 = extra_top + thickness; h3 < (total_height-extra_bottomn-thickness); h3++){
+		for(int w3 = thickness; w3 <(w-thickness); w3++){
+			raw_square[h3][w3]=0;
+		}
+	}
+	//Converting raw_sqare into writable bytes.
+	uint8_t out_square[needed_pages][w];
+	for(int p0 = 0; p0<needed_pages; p0++){
+		for(int c0 = 0; c0<w; c0++){
+			uint8_t byte = 0;
+			uint8_t start = p0*8;
+			uint8_t end = p0*8+8;
+			for(int h4=start;h4 < end;h4++){
+				if(raw_square[h4][c0]==1){
+					byte = byte + pow(2,(h4-start));
+				}
+			}
+			out_square[p0][c0] = (uint8_t *)byte;
+		}
+	}
+	//Printing the array of bytes
+	oled_pos(start_page,x);  
+	for(int p1 =0;p1<needed_pages; p1++){
+		for(int c1 = 0; c1 < w; c1++){
+			writeDATA(out_square[p1][c1]);
+		}
+		oled_pos((start_page + p1),x);
 	}
 }
 // ----------------------------------------- Cleaning the screen ------------------------------------------------
@@ -206,16 +248,30 @@ void oled_indent(int length){
 	oled_pos(position.page, position.col + length);
 }
 
-//Special functions
 /*
-uint8_t oled_h_size_generator(uint8_t size, int inverse){
-	if (size > 1){
-		if (inverse == 1){ return (pow(2,8-size)-1);}
-		else{ return (pow(2,size)-1); }
+uint8_t oled_h_size_generator(uint8_t size, uint8_t shift, int inverse){
+	uint8_t bits[8]={0,0,0,0,0,0,0,0};
+	uint8_t byte = 0;
+	
+	//Generating the bit-array
+	if(inverse== 1){
+		for(uint8_t j=0;j<size;j++){
+			bits[7-j-shift]=1;
+		}
 	}
-	else {
-		if (inverse == 1){return 0x00000001;}
-		else{return 0x10000000;}
+	else{
+		for(uint8_t i=0;i<size;i++){
+			bits[i+shift]=1;
+		}
 	}
+	//Generating the byte
+	double power = 0;
+	for(uint8_t k=0; k<8;k++){
+		if(bits[k]==1){
+			power = pow(2,k);
+			byte = byte + (uint8_t *)power;
+		}
+	}
+	return byte;
 }
 */
