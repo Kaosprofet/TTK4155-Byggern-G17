@@ -101,7 +101,7 @@ void oled_set_font(fonts font){
 			selected_font = 4;
 			break;
 	}
-	return selected_font;
+	//return selected_font; // trengs vel ikke?
 };
 
 
@@ -295,7 +295,7 @@ void set_addressing_mode(modes mode){
 	}
 }
 
-void oled_goto_page(uint8_t page){
+uint8_t oled_goto_page(uint8_t page){
 	if (page >  7 || page < 0){ //returns 0 if input is illegal
 		return 0;
 	}
@@ -305,9 +305,10 @@ void oled_goto_page(uint8_t page){
 		writeCMD(0xB0 + page); //Commands the OLED to change to the specified page
 		set_addressing_mode(HORIZONTAL);
 	}
+	return 0; // never reached
 }
 
-void oled_goto_col(uint8_t column){
+uint8_t oled_goto_col(uint8_t column){
 	if (column > 127 || column < 0){
 		return 0;
 	}
@@ -320,6 +321,7 @@ void oled_goto_col(uint8_t column){
 		writeCMD(0x10 + max);
 		set_addressing_mode(HORIZONTAL);
 	}
+	return 0; // never reached
 }
 
 void oled_pos(uint8_t page, uint8_t col){
