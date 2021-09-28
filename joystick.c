@@ -56,6 +56,8 @@ void calibrateJoystick(struct controllers *controller) {
 }
 
 signed int joystickPercent(uint8_t val, struct controllers *controller) {
+	// This functions interpolates the measured value 0-255 into a -100-100 percent value. I currently assumes that the zero point
+	// remains equal between the two axis.
 	signed int per_val;
 	if (val >= controller->x_zero) {
 		per_val = ((signed int)val - controller->x_zero) * 100.0/(255.0-controller->x_zero);

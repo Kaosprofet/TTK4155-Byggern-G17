@@ -12,12 +12,20 @@ void playGame(void) {
 	calibrateJoystick(controller);
 
 	
-	// Initialize button
-	initButton();
+	// Initialize all functions
+	initGame();
 
 	while(1) {
-		// update controller each loop
+		// update and print controller each loop
 		updateController(controller);
 		printController(controller);
 	}
+}
+
+void initGame() {
+	initButton();
+	initOLED();
+	initADC();
+	initUart();
+	initSRAM();
 }
