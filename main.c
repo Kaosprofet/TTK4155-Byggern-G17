@@ -81,7 +81,7 @@ void spi_test(void)
 	spi_init();
 	while (1)
 	{
-		spi_transfer();
+		spi_transfer(0b00110101);
 	}
 }
 
