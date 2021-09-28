@@ -10,6 +10,8 @@ enum directions {
 struct controllers {											// Full struct for controller
 	signed int x_zero;
 	signed int y_zero;
+	volatile signed int org_x_val;
+	volatile signed int org_y_val;
 	volatile signed int x_val;
 	volatile signed int y_val;
 	volatile enum directions dir;

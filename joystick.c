@@ -12,6 +12,8 @@ void updateController(struct controllers *controller) {
 	
 	p = readADC();
 	
+	controller->org_x_val = *p;
+	controller->org_y_val = *(p+1);
 	controller->x_val = joystickPercent(*p, controller);
 	controller->y_val = joystickPercent(*(p+1),controller);
 	controller->slider1_val = *(p+2);
@@ -21,7 +23,7 @@ void updateController(struct controllers *controller) {
 }
 
 void printController(struct controllers *controller) { 
-	printf("Joystick: X = %4d Y = %4d dir = %d  Sliders: 1 = %3d 2 = %3d  Buttons: 1 = %d 2 = %d\n\r", controller->x_val, controller->y_val, controller->dir, controller->slider1_val, controller->slider2_val,  (bool)bitIsSet(PIND, PD3),  (bool)bitIsSet(PIND, PD4));
+	printf("Joystick: X = %4d Y = %4d X_org = %4d T_org = %4d dir = %d  Sliders: 1 = %3d 2 = %3d  Buttons: 1 = %d 2 = %d\n\r", controller->x_val, controller->y_val, controller->org_x_val, controller->org_y_val, controller->dir, controller->slider1_val, controller->slider2_val,  (bool)bitIsSet(PIND, PD3),  (bool)bitIsSet(PIND, PD4));
 }
 
  enum directions direction(signed int x_val, signed int y_val) {
@@ -51,19 +53,20 @@ void calibrateJoystick(struct controllers *controller) {
 	uint8_t *p;
 	p = readADC();
 	
-	controller->x_zero = joystickPercent(*p, controller);
-	controller->y_zero = joystickPercent(*(p+1), controller);
+	controller->x_zero = *p, controller;
+	controller->y_zero = *(p+1), controller;
 }
 
 signed int joystickPercent(uint8_t val, struct controllers *controller) {
-	// This functions interpolates the measured value 0-255 into a -100-100 percent value. I currently assumes that the zero point
+	// This functions interpolates the measured value 0-255 into a -100-100 percent value. We currently assumes that the zero point
 	// remains equal between the two axis.
 	signed int per_val;
 	if (val >= controller->x_zero) {
+					//(x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 		per_val = ((signed int)val - controller->x_zero) * 100.0/(255.0-controller->x_zero);
 		return per_val;
 	}
-	else if (val <= (controller->x_zero-1)) {
+	else if (val < controller->x_zero) {
 		per_val = (signed int)val * 100.0 /(controller->x_zero-1) - 100.0;
 		return per_val;
 	}
