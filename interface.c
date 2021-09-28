@@ -37,7 +37,7 @@ void bootStartMenu(void) {
 	oled_pos(4,0);
 	oled_print_centered("Highscore");
 	oled_pos(5,0);
-	oled_print_centered("Reset Highscore");
+	oled_print_centered("Reset");
 }
 
 // Determine movement direction
