@@ -33,11 +33,9 @@ void bootStartMenu(void) {
 	oled_draw_hline(128,0b00111100);
 	oled_set_font(NORMAL);
 	oled_pos(3,0);
-	oled_print_centered("Play Game");
-	oled_pos(4,0);
-	oled_print_centered("High Score");
-	oled_pos(5,0);
-	oled_print_centered("Reset");
+	oled_print_left("Play Game");
+	oled_print_left("High Score");
+	oled_print_left("Reset");
 }
 
 // Determine movement direction
