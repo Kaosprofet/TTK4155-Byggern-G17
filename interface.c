@@ -2,7 +2,7 @@
 #include "includes.h"
 #endif
 
-uint8_t menuSelected = 0;
+uint8_t menuSelected;
 uint8_t menuElements = 3;
 uint8_t highscore_address = 0x400; // Starting right after oled saved data
 uint8_t num_highscores = 5;
@@ -28,6 +28,7 @@ void bootStartupScreen(void) {
 
 // Print start menu
 void bootStartMenu(struct controllers *controller) {
+	menuSelected = 0;
 	oled_reset();
 	oled_set_font(LARGE);
 	oled_home();
@@ -61,7 +62,8 @@ void bootStartMenu(struct controllers *controller) {
 		oled_print("select");
 		
 		updateController(controller);
-		if (abs(controller->y_val) > joystickMenuTreshold && !(lastJoystickVal > joystickMenuTreshold)) {
+		printController(controller);
+		if (abs(controller->y_val) > joystickMenuTreshold && abs(lastJoystickVal) < joystickMenuTreshold) {
 			moveArrow(controller);
 		}
 		
@@ -115,7 +117,7 @@ void menuSelection(struct controllers *controller) {
 
 // The game segment
 void playMenu(struct controllers *controller) {
-	// 
+	oled_reset();
 	
 	// Playing the game
 	while (1) {
@@ -125,6 +127,7 @@ void playMenu(struct controllers *controller) {
 
 // Highscore
 void highscore(void) {
+	oled_reset();
 	//print highscore
 	while (1) {
 		// wait on highscore page
@@ -159,6 +162,7 @@ void set_highscore(uint8_t value) {
 
 // Reset highscore
 void resetGame(void) {
+	oled_reset();
 	for (uint8_t address = highscore_address; address < highscore_address+num_highscores; address++) {
 		writeSRAM(address, 0x00000000);
 	}
