@@ -20,5 +20,5 @@ void spi_transfer(void)
 {
     SPDR = 0b01011010; //Writes data for the SPI to transfer
 
-        waitUntilBitIsSet(SPSR, SPIF); //Recieves confirmation of finished transfer
+    waitUntilBitIsSet(SPSR, SPIF); //Recieves confirmation of finished transfer
 }
