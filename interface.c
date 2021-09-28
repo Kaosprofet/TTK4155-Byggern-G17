@@ -10,7 +10,7 @@ uint8_t num_highscores = 5;
 // Print startup screen
 void bootStartupScreen(void) {
 	oled_reset();
-	oled_set_font(LARGE)
+	oled_set_font(LARGE);
 	oled_pos(1,0);
 	oled_draw_hline(128,2);
 	oled_pos(3,0);
