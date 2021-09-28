@@ -26,7 +26,7 @@ void playGame(void) {
 		printController(controller);
 		
 		// Starting in menu
-		bootStartMenu();
+		bootStartMenu(struct controllers *controller);
 		while(1) {
 			updateController(controller);
 			if (abs(controller->y_val) > joystickMenuTreshold && !(lastJoystickVal > joystickMenuTreshold)) {

@@ -6,6 +6,7 @@ uint8_t menuSelected;
 uint8_t menuElements = 4;
 uint8_t highscore_address = 0x400; // Starting right after oled saved data
 uint8_t num_highscores = 5;
+uint8_t menu_offset = 30;
 
 // Print startup screen
 void bootStartupScreen(void) {
@@ -24,18 +25,35 @@ void bootStartupScreen(void) {
 
 
 // Print start menu
-void bootStartMenu(void) {
+void bootStartMenu(struct controllers *controller) {
 	oled_reset();
 	oled_set_font(LARGE);
 	oled_home();
-	oled_print_centered("Main Menu");
+	oled_print_centered("  Main Menu");
 	oled_pos(1,0);
 	oled_draw_hline(128,0b00111100);
-	oled_set_font(NORMAL);
-	oled_pos(3,0);
-	oled_print_left("Play Game",30);
-	oled_print_left("High Score",30);
-	oled_print_left("Reset",30);
+	while (1) {
+		oled_set_font(NORMAL);
+		oled_pos(3,0);
+		switch(menuSelected) {
+			case(0):
+			oled_print_left("> Play Game", menu_offset);
+			oled_print_left("  High Score", menu_offset);
+			oled_print_left("  Reset", menu_offset);
+			break;
+			case(1):
+			oled_print_left("  Play Game", menu_offset);
+			oled_print_left("> High Score", menu_offset);
+			oled_print_left("  Reset", menu_offset);
+			break;
+			case(2):
+			oled_print_left("  Play Game", menu_offset);
+			oled_print_left("  High Score", menu_offset);
+			oled_print_left("> Reset", menu_offset);
+			break;
+		}
+	}
+	
 }
 
 // Determine movement direction
