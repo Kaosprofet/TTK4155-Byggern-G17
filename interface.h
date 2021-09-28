@@ -13,7 +13,7 @@ void menuSelection(struct controllers *controller);		// Selecting behavior for t
 
 void playMenu(struct controllers *controller);			// The game segment
 void highscore(void);									// Highscore
-void set_highscore(uint8_t value);
+void set_highscore(char name[], uint8_t value);
 void resetGame(void);									
 
 #endif
