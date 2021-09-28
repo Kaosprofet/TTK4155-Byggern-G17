@@ -24,5 +24,6 @@
 #include "game.h"
 #include "oled.h"
 #include "interface.h"
+#include "spi.h"
 
 
