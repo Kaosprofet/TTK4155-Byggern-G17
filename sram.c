@@ -19,7 +19,7 @@ uint8_t readSRAM(uint16_t address) {
 	return ext_ram[address];
 }
 
-void writeSRAM(uint16_t address, uint8_t data) {
+void writeSRAM(uint16_t address, char data) { // data skiftet fra uint8_t
 	ext_ram[address] = data;
 }
 
