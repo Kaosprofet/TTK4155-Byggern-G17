@@ -34,6 +34,9 @@ void exercise3(void){
 	playGame();
 	
 }
+void exercise4(void){
+	oled_test();
+}
 
 void testChipSelect(void){
 	//Disables EMI
@@ -50,18 +53,8 @@ void testChipSelect(void){
 }
 
 int main(void) {
-	initUart();
-	initADC();
-	initSRAM();
-
-	//testChipSelect();
-	//SRAM_test();
-	//Chip_select_test();
-
-
-	//exercise1();
-	//exercise2();
-	exercise3();
+	initGame();
+	exercise4();
 }
 
 

@@ -22,13 +22,17 @@ volatile char * OLED_DATA_val = (char *) OLED_DATA;
 volatile oled_position position; //Defines the row/col position of the writer
 
 void oled_test(void){
-	oled_pos(2,2);
-	oled_set_font(LARGE);
-	oled_print("Hello world");
-	oled_nl();
-	oled_nl();
-	oled_indent(2);
-	oled_penis();
+	while(1){
+		oled_pos(2,2);
+		oled_set_font(LARGE);
+		oled_print("Hello world");
+		oled_nl();
+		oled_nl();
+		oled_indent(2);
+		oled_penis();
+		oled_reset();
+	}
+
 }
 
 
@@ -44,6 +48,7 @@ void writeDATA(uint8_t data){
 
 //Initialization
 void initOLED(void){
+	setBit(MCUCR, SRE);	
 	uint8_t RecInitCommands[] = { //From the OLED manual page 15 (Recommended initialization commands)
 		0xae, //Display off
 		0xa1, //Segment remap
@@ -63,7 +68,7 @@ void initOLED(void){
 	uint8_t num_commands = 22;
 	
 	//Writes all the commands
-	for(uint8_t i=0; i <(num_commands -1); i++){
+	for(uint8_t i=0; i <(num_commands); i++){
 		writeCMD(RecInitCommands[i]);
 	}
 	

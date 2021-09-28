@@ -24,8 +24,8 @@ void playGame(void) {
 
 void initGame() {
 	initButton();
-	initOLED();
 	initADC();
 	initUart();
 	initSRAM();
+	initOLED();
 }
