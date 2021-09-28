@@ -2,10 +2,13 @@
 #include "includes.h"
 #endif
 
-uint8_t menuSelected;
-uint8_t menuElements = 4;
+uint8_t menuSelected = 0;
+uint8_t menuElements = 3;
 uint8_t highscore_address = 0x400; // Starting right after oled saved data
 uint8_t num_highscores = 5;
+uint8_t menu_offset = 30;
+uint8_t lastJoystickVal = 0;
+uint8_t joystickMenuTreshold = 70;
 
 // Print startup screen
 void bootStartupScreen(void) {
@@ -24,18 +27,51 @@ void bootStartupScreen(void) {
 
 
 // Print start menu
-void bootStartMenu(void) {
+void bootStartMenu(struct controllers *controller) {
 	oled_reset();
 	oled_set_font(LARGE);
 	oled_home();
 	oled_print_centered("Main Menu");
 	oled_pos(1,0);
 	oled_draw_hline(128,0b00111100);
-	oled_set_font(NORMAL);
-	oled_pos(3,0);
-	oled_print_left("Play Game",30);
-	oled_print_left("High Score",30);
-	oled_print_left("Reset",30);
+	while (1) {
+		oled_set_font(NORMAL);
+		oled_pos(3,0);
+		switch(menuSelected) {
+			case(0):
+			oled_print_left("> Play Game", menu_offset);
+			oled_print_left("  High Score", menu_offset);
+			oled_print_left("  Reset", menu_offset);
+			break;
+			case(1):
+			oled_print_left("  Play Game", menu_offset);
+			oled_print_left("> High Score", menu_offset);
+			oled_print_left("  Reset", menu_offset);
+			break;
+			case(2):
+			oled_print_left("  Play Game", menu_offset);
+			oled_print_left("  High Score", menu_offset);
+			oled_print_left("> Reset", menu_offset);
+			break;
+		}
+		
+		
+		
+		oled_pos(7,100);
+		oled_print("select");
+		
+		updateController(controller);
+		if (abs(controller->y_val) > joystickMenuTreshold && !(lastJoystickVal > joystickMenuTreshold)) {
+			moveArrow(controller);
+		}
+		
+		// Menu selection 
+		if (bitIsSet(PORTD, PD4)) {break;}
+		
+		// update last joystick value
+		lastJoystickVal = controller->y_val;
+	}
+	
 }
 
 // Determine movement direction
@@ -51,7 +87,6 @@ void moveArrow(struct controllers *controller) {
 // Move the arrow up on the menu
 void arrowUp(void) {
 	if (menuSelected>0) {
-		
 		menuSelected--;
 	}
 }
@@ -59,7 +94,6 @@ void arrowUp(void) {
 // Move the arrow down on the menu
 void arrowDown(void) {
 	if (menuSelected<menuElements) {
-		
 		menuSelected++;
 	}
 }
