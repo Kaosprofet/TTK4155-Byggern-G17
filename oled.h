@@ -24,7 +24,7 @@ void oled_set_font(fonts font); //Sets the font. LARGE, NORMAL, SMALL
 void oled_type(unsigned char c); //Types the inputted character based on the font-size and the contents of fonts
 void oled_print(char string[]); //Prints the inputted string 
 void oled_print_centered(char string[]); //Prints the string centered on the current page
-
+void oled_print_left(char string[], int column);//prints on a specific column and moves the cursor down a page. 
 //Drawing
 void oled_draw_hline(int length, int thickness); //Prints a line with a defined length and thickness
 void oled_draw_box(int x, int y, int w, int h, int thickness); //Draws a box with the specified starting position, width, height and thickness 

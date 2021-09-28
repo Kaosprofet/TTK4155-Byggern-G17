@@ -153,6 +153,13 @@ void oled_print_centered(char string[]){
 	oled_print(string);
 }	
 
+//Prints left-adjusted and moves pointer down. 
+void oled_print_left(char string[], int column){
+	oled_goto_col(column);
+	oled_print(string);
+	oled_goto_page(position.page+1);
+}
+
 //Writing the elektra logo
 void oled_elektra(void){
 	for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&specialSymbols[1][i])); position.col +=8;}
@@ -160,6 +167,9 @@ void oled_elektra(void){
 void oled_penis(void){
 	for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&specialSymbols[0][i])); position.col +=8;}
 }
+
+
+//---------------------------------------------------------Drawing stuff ---------------------------------------
 
 void oled_draw_hline(int length, int thickness){
 	for(int i = 0; i<length-1;i++){
