@@ -31,5 +31,6 @@ void oled_draw_box(uint8_t xpos, uint8_t ypos, uint8_t w, uint8_t h, uint8_t thi
 //Printing special characters
 void oled_elektra(void); 
 void oled_penis(void);
+void oled_rightarrow(void); //prints a right arrow
 
 void oled_test(void);
