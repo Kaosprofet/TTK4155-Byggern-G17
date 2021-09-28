@@ -22,11 +22,12 @@ volatile char * OLED_DATA_val = (char *) OLED_DATA;
 volatile oled_position position; //Defines the row/col position of the writer
 
 void oled_test(void){
-	oled_pos(2,30);
+	oled_pos(2,2);
 	oled_set_font(LARGE);
 	oled_print("Hello world");
 	oled_nl();
-	oled_indent(30);
+	oled_nl();
+	oled_indent(2);
 	oled_penis();
 }
 
