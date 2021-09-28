@@ -15,11 +15,11 @@ void initSRAM(void) {
 	setBit(MCUCR, SRE);	
 }
 
-uint8_t readSRAM(uint8_t address) {
+uint8_t readSRAM(uint16_t address) {
 	return ext_ram[address];
 }
 
-void writeSRAM(uint8_t address, uint8_t data) {
+void writeSRAM(uint16_t address, uint8_t data) {
 	ext_ram[address] = data;
 }
 
