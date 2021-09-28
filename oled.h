@@ -23,6 +23,7 @@ void oled_reset(void); //Clears the whole page, position is set to home afterwar
 void oled_set_font(fonts font); //Sets the font. LARGE, NORMAL, SMALL
 void oled_type(unsigned char c); //Types the inputted character based on the font-size and the contents of fonts
 void oled_print(char string[]); //Prints the inputted string 
+void oled_print_centered(char string[]); //Prints the string centered on the current page
 
 //Drawing
 void oled_draw_hline(int length, int thickness); //Prints a line with a defined length and thickness

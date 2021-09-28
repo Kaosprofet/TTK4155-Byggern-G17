@@ -28,11 +28,7 @@ volatile oled_position position; //Defines the row/col position of the writer
 void oled_test(void){
 		oled_reset();
 		oled_set_font(LARGE);
-		oled_home();
-		oled_print("Penis");
-		oled_print("<-");
-		
-		
+		oled_print_centered("MENU");
 }
 
 
@@ -142,12 +138,21 @@ void oled_type_large(uint8_t c){
 	}	
 }
 
-
+//Printing a string
 void oled_print(char string[]){
 	for(int i=0; i<strlen(string);i++){
 		oled_type(string[i]);
 	}
 }
+
+//Prints the string centered column wise on the current page
+void oled_print_centered(char string[]){
+	int half = (strlen(string)*selected_font)/2;
+	uint8_t column = 64 - half;
+	oled_goto_col(column);
+	oled_print(string);
+}	
+
 //Writing the elektra logo
 void oled_elektra(void){
 	for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&specialSymbols[1][i])); position.col +=8;}
@@ -246,11 +251,14 @@ void set_addressing_mode(modes mode){
 	//next bit is the addressing mode (reference: manual page 27)
 	switch(mode){
 		case(PAGE):
-		writeCMD(0b00000010);
+			writeCMD(0b00000010);
+			break;
 		case(HORIZONTAL):
-		writeCMD(0b00000000);
+			writeCMD(0b00000000);
+			break;
 		case(VERTICAL):
-		writeCMD(0b00000001);
+			writeCMD(0b00000001);
+			break;
 	}
 }
 
@@ -266,14 +274,14 @@ void oled_goto_page(uint8_t page){
 	}
 }
 
-void oled_goto_col(uint8_t col){
-	if (col > 127 || col < 0){
+void oled_goto_col(uint8_t column){
+	if (column > 127 || column < 0){
 		return 0;
 	}
 	else {
-		position.col = col;
-		uint8_t min = col % 16;
-		uint8_t max = col / 16;
+		position.col = column;
+		uint8_t min = column % 16;
+		uint8_t max = column / 16;
 		set_addressing_mode(PAGE);
 		writeCMD(min);
 		writeCMD(0x10 + max);
