@@ -1,7 +1,7 @@
 #ifndef INCLUDES_H
 #include "includes.h"
-#include "fonts.h"
 #endif
+#include "fonts.h"
 
 #ifndef OLED_CMD
 #define OLED_CMD 0x1000 //The address room for OLED command
@@ -13,6 +13,8 @@
 
 #define height 64
 #define width 128
+#define num_pages 8
+#define SRAM_address_start 0
 
 
 volatile char * OLED_CMD_val = (char *) OLED_CMD;
@@ -42,6 +44,21 @@ void writeCMD(uint8_t cmd){
 //Writes the input data to the data register of the OLED
 void writeDATA(uint8_t data){
 	OLED_DATA_val[0] = data;
+}
+
+// Writes data to SRAM with address based on current page and column 
+void writeDataSRAM(uint8_t data) {
+	uint8_t address = SRAM_address_start+position.col+width*position.page;
+	writeSRAM(address, data);
+}
+
+// Prints entire screen from SRAM memory
+void printFromSRAM(void) {
+	for (uint16_t address = SRAM_address_start; address < SRAM_address_start+(width * num_pages); address++) {
+		uint8_t data = readSRAM(address);
+		oled_pos(address / width, address % width);
+		writeDATA(data);
+	}
 }
 
 //Initialization
