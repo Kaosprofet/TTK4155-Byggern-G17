@@ -23,5 +23,6 @@
 #include "joystick.h"
 #include "game.h"
 #include "oled.h"
+#include "interface.h"
 
 
