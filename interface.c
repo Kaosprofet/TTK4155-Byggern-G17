@@ -9,13 +9,23 @@ uint8_t num_highscores = 5;
 
 // Print startup screen
 void bootStartupScreen(void) {
-	
+	oled_reset();
+	oled_set_font(LARGE)
+	oled_pos(1,0);
+	oled_draw_hline(128,2);
+	oled_pos(3,0);
+	oled_print_centered("BukakeParty 5000");
+	oled_pos(4,0);
+	oled_print_centered("Victors wet mansion adventure");
+	oled_pos(6,0);
+	oled_draw_hline(128,2);
 }
 
 
 // Print start menu
 void bootStartMenu(void) {
-	
+	//oled_reset();
+	oled_pos(1,0);
 }
 
 // Determine movement direction

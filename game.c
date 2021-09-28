@@ -16,6 +16,8 @@ void playGame(void) {
 	
 	// Initialize all functions
 	initGame();
+	bootStartupScreen();
+	_delay_ms(200);
 	
 
 	while(1) {
