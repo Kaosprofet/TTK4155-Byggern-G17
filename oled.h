@@ -17,7 +17,7 @@ void oled_indent(int length); //Indents a defined length from left to right
 void oled_clear_page(void); //Clears the current page
 void oled_clear_spage(int page); //Clears a specified page
 void oled_clear_specific(int row, int col); //Clears a specific column in a specific row.
-void oled_reset(void); //Clears the whole page, position is set to home afterwards
+void oled_reset(void); //Clears the whole screen, position is set to home afterwards
 
 //Writing
 void oled_set_font(fonts font); //Sets the font. LARGE, NORMAL, SMALL

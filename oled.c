@@ -16,6 +16,7 @@
 #define num_pages 8
 #define SRAM_address_start 0
 
+static FILE mystdout = FDEV_SETUP_STREAM(oled_type, NULL, _FDEV_SETUP_WRITE);
 
 volatile char * OLED_CMD_val = (char *) OLED_CMD;
 volatile char * OLED_DATA_val = (char *) OLED_DATA;
@@ -28,7 +29,7 @@ volatile oled_position position; //Defines the row/col position of the writer
 void oled_test(void){
 		oled_reset();
 		oled_set_font(LARGE);
-		oled_print_centered("MENU");
+		oled_draw_box(20,20,20,20,1);
 }
 
 
@@ -130,12 +131,11 @@ void oled_type(uint8_t c){
 			
 	}
 }
-void oled_type_large(uint8_t c){
-	int printChar = c-32;
-	for(int d = 0; d<8; d++){
-	writeDATA(pgm_read_word(&(font8[printChar][d])));
-	position.col +=8;
-	}	
+void oled_printf(char* data, ...){
+	va_list args;
+	va_start(args, data);
+	vfprintf(&mystdout, data, args);
+	va_end(args);
 }
 
 //Printing a string
@@ -207,7 +207,7 @@ void oled_draw_box(int x, int y, int w, int h, int thickness){
 					byte = byte + pow(2,(h4-start));
 				}
 			}
-			out_square[p0][c0] = (uint8_t)byte;
+			out_square[p0][c0] = (uint8_t*)byte;
 		}
 	}
 	//Printing the array of bytes

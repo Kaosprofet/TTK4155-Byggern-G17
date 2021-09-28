@@ -72,7 +72,7 @@ void testChipSelect(void){
 
 int main(void) {
 	initGame();
-	exercise4();
+	exercise3();
 }
 
 
