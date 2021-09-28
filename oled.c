@@ -159,17 +159,11 @@ void oled_print_left(char string[], int column){
 	oled_print(string);
 }
 
-//Writing the elektra logo
-void oled_elektra(void){
-	for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&specialSymbols[1][i])); position.col +=8;}
-}
-void oled_penis(void){
-	for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&specialSymbols[0][i])); position.col +=8;}
-}
-void oled_rightarrow(void){
-	for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&specialSymbols[2][i])); position.col +=8;}
-}
-
+//Writing special characters. 
+void oled_elektra(void){for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&specialSymbols[1][i])); position.col +=8;}}
+void oled_penis(void){for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&specialSymbols[0][i])); position.col +=8;}}
+void oled_rightarrow(void){for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&specialSymbols[2][i])); position.col +=8;}}
+void oled_leftarrow(void){for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&specialSymbols[3][i])); position.col +=8;}}
 
 //---------------------------------------------------------Drawing stuff ---------------------------------------
 
