@@ -29,7 +29,8 @@ volatile oled_position position; //Defines the row/col position of the writer
 void oled_test(void){
 		oled_reset();
 		oled_set_font(LARGE);
-		oled_draw_box(20,20,20,20,1);
+		oled_draw_box(20,20,20,10,1);
+
 }
 
 
@@ -177,57 +178,128 @@ void oled_draw_hline(int length, int thickness){
 	}
 }
 
-
-void oled_draw_box(int x, int y, int w, int h, int thickness){
-	uint8_t start_page = y/8;
-	uint8_t extra_top = y - start_page*8;
-	uint8_t needed_pages = (extra_top + h +(8-1))/8;
-	uint8_t extra_bottomn = needed_pages*8 - (extra_top + h);
-	uint8_t total_height = extra_top + h + extra_bottomn;
-	
-	bool raw_square[total_height][w];
-	for(int h1=0; h1<total_height; h1++){
-		for(int w1=0; w1<w; w1++){
-			raw_square[h1][w1]=0;
-		}
-	}
-	
-	//filling the square
-	for(int h2 = extra_top; h2<(total_height-extra_bottomn); h2++){
-		for(int w2 = 0; w2 < w; w2++){
-			raw_square[h2][w2]=1;
-		}
-	}
-	
-	//Removing the insides
-	for(int h3 = extra_top + thickness; h3 < (total_height-extra_bottomn-thickness); h3++){
-		for(int w3 = thickness; w3 <(w-thickness); w3++){
-			raw_square[h3][w3]=0;
-		}
-	}
-	//Converting raw_sqare into writable bytes.
-	uint8_t out_square[needed_pages][w];
+/*
+void oled_matrix_print(bool matrix,uint8_t page, uint8_t collumn){
+	//Converting the matrix into printable bytes
+	uint8_t h = (sizeof(matrix)/sizeof(matrix[0]));
+	uint8_t w = sizeof(matrix)/h;
+	uint8_t needed_pages = h/8; //getting the number of pages
+	uint8_t out_matrix[needed_pages][w];
 	for(int p0 = 0; p0<needed_pages; p0++){
 		for(int c0 = 0; c0<w; c0++){
 			uint8_t byte = 0;
 			uint8_t start = p0*8;
 			uint8_t end = p0*8+8;
 			for(int h4=start;h4 < end;h4++){
-				if(raw_square[h4][c0]==1){
+				if(matrix[h4][c0]==1){
 					byte = byte + pow(2,(h4-start));
 				}
 			}
-			out_square[p0][c0] = (uint8_t*)byte;
+			out_matrix[p0][c0] = (uint8_t*)byte;
 		}
 	}
-	//Printing the array of bytes
-	oled_pos(start_page,x);  
+	oled_pos(page,collumn);
 	for(int p1 =0;p1<needed_pages; p1++){
 		for(int c1 = 0; c1 < w; c1++){
-			writeDATA(out_square[p1][c1]);
+			writeDATA(out_matrix[p1][c1]);
 		}
-		oled_pos((start_page + p1),x);
+		oled_pos((page + p1),collumn);
 	}
+}
+*/
+void oled_draw_box(uint8_t xpos, uint8_t ypos, uint8_t w, uint8_t h, uint8_t thickness){
+	uint8_t start_page = ypos/8;
+	uint8_t extra_top = ypos - start_page*8;
+	uint8_t needed_pages = (extra_top + h +(8-1))/8;
+	uint8_t extra_bottomn = needed_pages*8 - (extra_top + h);
+	uint8_t total_height = extra_top + h + extra_bottomn;
+	
+	oled_print("1");
+	bool raw_square[total_height][w];
+	for(int h1=0; h1<total_height; h1++){
+		for(int w1=0; w1<w; w1++){
+			raw_square[h1][w1]=0;
+		}
+	}
+	oled_print("2");
+	//filling the square
+	for(int h2 = extra_top; h2<(total_height-extra_bottomn); h2++){
+		for(int w2 = 0; w2 < w; w2++){
+			raw_square[h2][w2]=1;
+		}
+	}
+	oled_print("3");
+	//Removing the insides
+	for(int h3 = extra_top + thickness; h3 < (total_height-extra_bottomn-thickness); h3++){
+		for(int w3 = thickness; w3 <(w-thickness); w3++){
+			raw_square[h3][w3]=0;
+		}
+	}
+	oled_print("4");
+	//Converting raw_sqare writable bytes.
+	uint8_t out_square[needed_pages][w];
+	for(int p0 = 0; p0<needed_pages; p0++){
+		for(int c0 = 0; c0<w; c0++){
+			uint8_t byte = 0;
+			uint8_t start = (p0*8);
+			uint8_t end = (p0*8)+8;
+			uint8_t bits[8] = {1,2,4,8,16,32,64,128};
+			for(int h4=start;h4 < end;h4++){
+				if(raw_square[h4][c0]==1){
+	              byte = byte + bits[h4-start];
+				}
+			}
+			out_square[p0][c0] = (uint8_t)byte;
+		}
+	}
+	
+	for(int h0=0; h0<total_height; h0++){
+		printf("[");
+		for(int w0=0; w0<w; w0++){
+			printf("%d ",raw_square[h0][w0]);
+		}
+		printf("]\n\r");
+	}
+	
+	printf("\n\r\n\r");
+	for(int p1=0; p1<needed_pages; p1++){
+		printf("[");
+		for(int c1=0; c1<w; c1++){
+			printf("%d ",out_square[p1][c1]);
+		}
+		printf("]\n\r");
+	}
+	
+	
+	//Writing it to the oled;
+	oled_print("5");
+	uint8_t writebyte;
+	for(int p1=0;p1<needed_pages; p1++){
+		for(int c1=0; c1<w; c1++){
+			writebyte = out_square[p1][c1];
+			writeCMD(writebyte);
+		}
+		oled_pos(start_page+p1,xpos);
+	}
+	//printing the square
+	/*
+	for(int h0=0; h0<total_height; h0++){
+		printf("[");
+		for(int w0=0; w0<w; w0++){
+			printf("%d ",raw_square[h0][w0]);
+		}
+		printf("]\n\r");
+	}
+	
+	printf("\n\r\n\r");
+	for(int p1=0; p1<needed_pages; p1++){
+		printf("[");
+		for(int c1=0; c1<w; c1++){
+			printf("%d ",out_square[p1][c1]);
+		}
+		printf("]\n\r");
+	}
+	*/
 }
 // ----------------------------------------- Cleaning the screen ------------------------------------------------
 

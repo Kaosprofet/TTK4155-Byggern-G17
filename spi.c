@@ -18,7 +18,9 @@ void spi_init(void)
 
 void spi_transfer(void)
 {
+	clearBit(PORTB,PB4);
     SPDR = 0b01011010; //Writes data for the SPI to transfer
 
     waitUntilBitIsSet(SPSR, SPIF); //Recieves confirmation of finished transfer
+	setBit(PORTB,PB4);
 }

@@ -88,5 +88,6 @@ void spi_test(void)
 int main(void)
 {
 	initGame();
-	exercise3();
+	//spi_test();
+	exercise4();
 }

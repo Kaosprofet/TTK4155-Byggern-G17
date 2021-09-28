@@ -14,10 +14,10 @@ void bootStartupScreen(void) {
 	oled_pos(1,0);
 	oled_draw_hline(128,0b00111100);
 	oled_pos(3,0);
-	oled_print_centered("BukakeParty 5000");
+	oled_print_centered("Kult spill 5000");
 	oled_set_font(SMALL);
 	oled_pos(4,0);
-	oled_print_centered("Victors wet mansion adventure");
+	oled_print_centered("An ok adventure");
 	oled_pos(6,0);
 	oled_draw_hline(128,0b00111100);
 }
@@ -33,9 +33,9 @@ void bootStartMenu(void) {
 	oled_draw_hline(128,0b00111100);
 	oled_set_font(NORMAL);
 	oled_pos(3,0);
-	oled_print_left("Play Game");
-	oled_print_left("High Score");
-	oled_print_left("Reset");
+	oled_print_left("Play Game",30);
+	oled_print_left("High Score",30);
+	oled_print_left("Reset",30);
 }
 
 // Determine movement direction
