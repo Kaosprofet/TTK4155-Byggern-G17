@@ -18,21 +18,19 @@
 volatile char * OLED_CMD_val = (char *) OLED_CMD;
 volatile char * OLED_DATA_val = (char *) OLED_DATA;
 
+uint8_t selected_font = 5;
 
+typedef enum{PAGE, HORIZONTAL, VERTICAL} modes;
 volatile oled_position position; //Defines the row/col position of the writer
 
 void oled_test(void){
-	while(1){
-		oled_pos(2,2);
-		oled_set_font(LARGE);
-		oled_print("Hello world");
-		oled_nl();
-		oled_nl();
-		oled_indent(2);
-		oled_penis();
 		oled_reset();
-	}
-
+		oled_set_font(LARGE);
+		oled_home();
+		oled_print("Penis");
+		oled_print("<-");
+		
+		
 }
 
 
@@ -75,41 +73,61 @@ void initOLED(void){
 }
 // ------------------------------------- Typing, writing and drawing things on the screen --------------------
 
-uint8_t selected_font = 5;
+
 
 void oled_set_font(fonts font){
 	switch(font){
 		case(LARGE):
-		selected_font = 8;
+			selected_font = 8;
+			break;
 		case(NORMAL):
-		selected_font = 5;
+			selected_font = 5;
+			break;
 		case(SMALL):
-		selected_font = 4;
+			selected_font = 4;
+			break;
 	}
+	return selected_font;
 };
 
 
 //Typing characters
 
-void oled_type(char c){
-	uint8_t printChar = 32 - c;
+void oled_type(uint8_t c){
+	int printChar = c-32;
 	switch(selected_font){
 		case(4):
-			for(int i = 0; i<3; i++){
-				int byte = font4[printChar][i];
-				writeDATA(byte);
+			for(int a = 0; a<4; a++){
+				writeDATA(pgm_read_word(&font4[printChar][a])); 
 				position.col += 4;
 				}
+			break;
 		case(5):
-			for(int i = 0; i<4; i++){writeDATA(pgm_read_word(&font5[printChar][i])); position.col +=5;}
+			for(int b = 0; b<5; b++){
+				writeDATA(pgm_read_word(&font5[printChar][b])); 
+				position.col +=5;
+				}
+			break;
 		case(8):
-			for(int i = 0; i<7; i++){writeDATA(pgm_read_word(&font8[printChar][i])); position.col +=8;}
+			for(int d = 0; d<8; d++){
+				writeDATA(pgm_read_word(&(font8[printChar][d])));
+				position.col +=8;
+				}
+			break;
+			
 	}
+}
+void oled_type_large(uint8_t c){
+	int printChar = c-32;
+	for(int d = 0; d<8; d++){
+	writeDATA(pgm_read_word(&(font8[printChar][d])));
+	position.col +=8;
+	}	
 }
 
 
 void oled_print(char string[]){
-	for(int i=0; i<strlen(string)-1;i++){
+	for(int i=0; i<strlen(string);i++){
 		oled_type(string[i]);
 	}
 }
@@ -184,7 +202,7 @@ void oled_draw_box(int x, int y, int w, int h, int thickness){
 //Clear the current page
 void oled_clear_page(void){
 	oled_goto_col(0); //Moves to the 0 collumn
-	for(int i=0; i<128; i++){writeDATA(0);} //Writes a 0 in every column
+	for(int i=0; i<128; i++){writeDATA(0x00);} //Writes a 0 in every column
 }
 
 //Clear a specific page
@@ -193,29 +211,29 @@ void oled_clear_spage(int page){ oled_goto_page(page); oled_clear_page();}
 //Clear specific pixel
 void oled_clear_specific(int row, int col){
 	oled_pos(row, col);
-	writeDATA(0);
+	writeDATA(0x00);
 }
 
 //Reset the whole screen.
 void oled_reset(void){
-	for(int i=0; i<7; i++){ oled_clear_spage(i); } //Loops through all pages and clears them
+	for(int i=0; i<8; i++){ oled_clear_spage(i); } //Loops through all pages and clears them
 	oled_home(); //Sets the position to 0,0
 }
 
 
 //----------------------------------------------------- Position related -----------------------------------------------------
-typedef enum{PAGE, HORIZONTAL, VERTICAL} modes;
+
 
 void set_addressing_mode(modes mode){
 	writeCMD(0x20); //Tells the OLED that we are going to change the address mode
 	//next bit is the addressing mode (reference: manual page 27)
 	switch(mode){
 		case(PAGE):
-		writeCMD(2);
+		writeCMD(0b00000010);
 		case(HORIZONTAL):
-		writeCMD(0);
+		writeCMD(0b00000000);
 		case(VERTICAL):
-		writeCMD(1);
+		writeCMD(0b00000001);
 	}
 }
 
