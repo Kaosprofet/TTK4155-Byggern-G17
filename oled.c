@@ -1,7 +1,7 @@
 #ifndef INCLUDES_H
 #include "includes.h"
-#include "fonts.h"
 #endif
+#include "fonts.h"
 
 #ifndef OLED_CMD
 #define OLED_CMD 0x1000 //The address room for OLED command
