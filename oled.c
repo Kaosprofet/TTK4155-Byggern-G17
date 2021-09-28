@@ -27,29 +27,9 @@ typedef enum{PAGE, HORIZONTAL, VERTICAL} modes;
 volatile oled_position position; //Defines the row/col position of the writer
 
 void oled_test(void){
+		oled_reset();
 		oled_set_font(LARGE);
-		uint8_t i = 1;
-		bool dir= 0; 
-		while(1){
-			oled_reset();
-			oled_draw_box(0,i,100,8,4);
-			switch(i){
-				case(0):
-					dir = 0;
-				case(63):
-					dir = 1;
-			}
-			if(dir == 1){
-				i -=1;
-			}
-			else{
-				i+=1;
-			}
-			_delay_ms(50);
-			
-		}
-		
-
+		oled_penis();
 }
 
 
@@ -177,17 +157,13 @@ void oled_print_centered(char string[]){
 void oled_print_left(char string[], int column){
 	oled_goto_col(column);
 	oled_print(string);
-	oled_goto_page(position.page+1);
 }
 
-//Writing the elektra logo
-void oled_elektra(void){
-	for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&specialSymbols[1][i])); position.col +=8;}
-}
-void oled_penis(void){
-	for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&specialSymbols[0][i])); position.col +=8;}
-}
-
+//Writing special characters. 
+void oled_elektra(void){for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&specialSymbols[1][i])); position.col +=8;}}
+void oled_penis(void){for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&specialSymbols[0][i])); position.col +=8;}}
+void oled_rightarrow(void){for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&specialSymbols[2][i])); position.col +=8;}}
+void oled_leftarrow(void){for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&specialSymbols[3][i])); position.col +=8;}}
 
 //---------------------------------------------------------Drawing stuff ---------------------------------------
 
@@ -197,35 +173,7 @@ void oled_draw_hline(int length, int thickness){
 	}
 }
 
-/*
-void oled_matrix_print(bool matrix,uint8_t page, uint8_t collumn){
-	//Converting the matrix into printable bytes
-	uint8_t h = (sizeof(matrix)/sizeof(matrix[0]));
-	uint8_t w = sizeof(matrix)/h;
-	uint8_t needed_pages = h/8; //getting the number of pages
-	uint8_t out_matrix[needed_pages][w];
-	for(int p0 = 0; p0<needed_pages; p0++){
-		for(int c0 = 0; c0<w; c0++){
-			uint8_t byte = 0;
-			uint8_t start = p0*8;
-			uint8_t end = p0*8+8;
-			for(int h4=start;h4 < end;h4++){
-				if(matrix[h4][c0]==1){
-					byte = byte + pow(2,(h4-start));
-				}
-			}
-			out_matrix[p0][c0] = (uint8_t*)byte;
-		}
-	}
-	oled_pos(page,collumn);
-	for(int p1 =0;p1<needed_pages; p1++){
-		for(int c1 = 0; c1 < w; c1++){
-			writeDATA(out_matrix[p1][c1]);
-		}
-		oled_pos((page + p1),collumn);
-	}
-}
-*/
+
 void oled_draw_box(uint8_t xpos, uint8_t ypos, uint8_t w, uint8_t h, uint8_t thickness){
 	uint8_t start_page = ypos/8;
 	uint8_t extra_top = ypos - start_page*8;
