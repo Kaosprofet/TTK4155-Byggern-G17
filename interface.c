@@ -35,7 +35,7 @@ void bootStartMenu(void) {
 	oled_pos(3,0);
 	oled_print_centered("Play Game");
 	oled_pos(4,0);
-	oled_print_centered("Highscore");
+	oled_print_centered("High Score");
 	oled_pos(5,0);
 	oled_print_centered("Reset");
 }
