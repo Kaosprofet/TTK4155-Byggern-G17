@@ -21,7 +21,7 @@ void oled_reset(void); //Clears the whole page, position is set to home afterwar
 
 //Writing
 void oled_set_font(fonts font); //Sets the font. LARGE, NORMAL, SMALL
-void oled_type(char c); //Types the inputted character based on the font-size and the contents of fonts
+void oled_type(unsigned char c); //Types the inputted character based on the font-size and the contents of fonts
 void oled_print(char string[]); //Prints the inputted string 
 
 //Drawing
