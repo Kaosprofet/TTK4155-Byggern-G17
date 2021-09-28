@@ -26,7 +26,9 @@ void oled_print(char string[]); //Prints the inputted string
 
 //Drawing
 void oled_draw_hline(int length, int thickness); //Prints a line with a defined length and thickness
-void oled_draw_box(int x, int y, int w, int h, int thickness); //Draws a box with the specified starting position **
+void oled_draw_box(int x, int y, int w, int h, int thickness); //Draws a box with the specified starting position, width, height and thickness 
 //Printing special characters
 void oled_elektra(void); 
 void oled_penis(void);
+
+void oled_test(void);

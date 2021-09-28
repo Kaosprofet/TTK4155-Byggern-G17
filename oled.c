@@ -21,6 +21,15 @@ volatile char * OLED_DATA_val = (char *) OLED_DATA;
 
 volatile oled_position position; //Defines the row/col position of the writer
 
+void oled_test(void){
+	oled_pos(2,30);
+	oled_set_font(LARGE);
+	oled_print("Hello world");
+	oled_nl();
+	oled_indent(30);
+	oled_penis();
+}
+
 
 //Writes the input command to the command register of the OLED
 void writeCMD(uint8_t cmd){
@@ -152,7 +161,7 @@ void oled_draw_box(int x, int y, int w, int h, int thickness){
 					byte = byte + pow(2,(h4-start));
 				}
 			}
-			out_square[p0][c0] = (uint8_t *)byte;
+			out_square[p0][c0] = (uint8_t)byte;
 		}
 	}
 	//Printing the array of bytes
