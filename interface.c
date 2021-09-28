@@ -8,7 +8,7 @@ uint8_t highscore_address = 0x400; // Starting right after oled saved data
 uint8_t num_highscores = 5;
 uint8_t menu_offset = 30;
 uint8_t lastJoystickVal = 0;
-uint8_t joystickMenuTreshold = 70;
+uint8_t joystickMenuTreshold = 50;
 
 // Print startup screen
 void bootStartupScreen(void) {
