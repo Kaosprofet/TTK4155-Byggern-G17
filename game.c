@@ -37,4 +37,5 @@ void initGame() {
 	initUart();
 	initSRAM();
 	initOLED();
+	initHighscore();
 }
