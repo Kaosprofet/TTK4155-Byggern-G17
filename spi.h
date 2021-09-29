@@ -2,6 +2,6 @@
 #define SPI_H_
 
 void spi_init(void);
-void spi_transfer(char);
+void spi_transfer(unsigned char);
 
 #endif
