@@ -6,8 +6,8 @@ typedef struct {int page, col;} oled_position;
 void initOLED(void); //Run this on boot-up
 
 //Position
-void oled_goto_page(uint8_t page);
-void oled_goto_col(uint8_t col);
+uint8_t oled_goto_page(uint8_t page);
+uint8_t oled_goto_col(uint8_t col);
 void oled_pos(uint8_t page, uint8_t col);
 void oled_home(void); // Sets position 0,0 (upper left corner)
 void oled_nl(void); //New line function (next page all the way to the left) 

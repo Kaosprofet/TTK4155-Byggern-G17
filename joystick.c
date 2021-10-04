@@ -53,8 +53,8 @@ void calibrateJoystick(struct controllers *controller) {
 	uint8_t *p;
 	p = readADC();
 	
-	controller->x_zero = *p, controller;
-	controller->y_zero = *(p+1), controller;
+	controller->x_zero = *p;
+	controller->y_zero = *(p+1);
 }
 
 signed int joystickPercent(uint8_t val, struct controllers *controller) {
@@ -70,4 +70,5 @@ signed int joystickPercent(uint8_t val, struct controllers *controller) {
 		per_val = (signed int)val * 100.0 /(controller->x_zero-1) - 100.0;
 		return per_val;
 	}
+	return 0;
 }
