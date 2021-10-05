@@ -44,17 +44,23 @@ void bootStartMenu(struct controllers *controller) {
 		switch(menuSelected) {
 			case(0):
 			oled_print_left("> Play Game", menu_offset);
+			oled_pos(4,0);
 			oled_print_left("  High Score", menu_offset);
+			oled_pos(5,0);
 			oled_print_left("  Reset", menu_offset);
 			break;
 			case(1):
 			oled_print_left("  Play Game", menu_offset);
+			oled_pos(4,0);
 			oled_print_left("> High Score", menu_offset);
+			oled_pos(5,0);
 			oled_print_left("  Reset", menu_offset);
 			break;
 			case(2):
 			oled_print_left("  Play Game", menu_offset);
+			oled_pos(4,0);
 			oled_print_left("  High Score", menu_offset);
+			oled_pos(5,0);
 			oled_print_left("> Reset", menu_offset);
 			break;
 		}
@@ -63,7 +69,7 @@ void bootStartMenu(struct controllers *controller) {
 		oled_print("select");
 		
 		updateController(controller);
-		//printController(controller);
+		printController(controller);
 		if (abs(controller->y_val) > joystickMenuTreshold && abs(lastJoystickVal) < joystickMenuTreshold) {
 			moveArrow(controller);
 		}
@@ -123,6 +129,10 @@ void playMenu(struct controllers *controller) {
 	// Playing the game
 	while (1) {
 		oled_print("For ever a looser");
+		// Break on back button
+		if (bitIsSet(PIND, PD3)) {
+			break;
+		}
 	}
 }
 
@@ -156,7 +166,7 @@ void highscore(void) {
 	}
 	
 	for (uint8_t i = 0; i< num_highscores; i++) {
-		oled_pos(i,0);
+		oled_pos(i+2,0);
 		char name[10]; // legg til anntall plasser
 		for (uint8_t j = 0; j<num_highscore_char;j++) {
 			name[j] = names[i][j];
@@ -166,16 +176,14 @@ void highscore(void) {
 		sprintf(high_score_char, "%d", highscore[i]);   
 		strcat(name, high_score_char);	
 		oled_print_left(name, highscore_offset);
+		printf("High score %s\n", name);
 	}
 	oled_pos(7,0);
 	oled_print("back");
-	while (1) {
+	while (!bitIsSet(PIND, PD3)) {
 		// wait on highscore page
-		
+		//printf("test %d\n\r", 0);
 		// Break on back button
-		if (bitIsSet(PORTD, PD3)) {
-			break;
-		}
 	}
 }
 
