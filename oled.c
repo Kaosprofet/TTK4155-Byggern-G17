@@ -259,6 +259,17 @@ void oled_draw_box(uint8_t xpos, uint8_t ypos, uint8_t w, uint8_t h, uint8_t thi
 	}
 	*/
 }
+
+//Prints 6 frames of legs walking
+void oled_walking(uint8_t row, uint8_t col){
+	for(int a=0; a<6; a++){
+		oled_pos(row,col);
+		for(int i=0;i<10;i++){
+			writeDATA(pgm_read_word(&walking[a][i]));
+		}
+		_delay_ms(80);
+	}
+}
 // ----------------------------------------- Cleaning the screen ------------------------------------------------
 
 //Clear the current page
@@ -271,6 +282,7 @@ void oled_clear_page(void){
 void oled_clear_spage(int page){ oled_goto_page(page); oled_clear_page();}
 
 //Clear specific pixel
+
 void oled_clear_specific(int row, int col){
 	oled_pos(row, col);
 	writeDATA(0x00);
