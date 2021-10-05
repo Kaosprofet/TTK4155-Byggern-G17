@@ -2,13 +2,13 @@
 #include "includes.h"
 #endif
 
-void can_controller_read(uint8_t address)
+uint8_t can_controller_read(uint8_t address)
 {
     clearBit(PORTB, PB4);     //Lower chip-select
     spi_transfer(0b00000011); //Read data from register beginning at selected adress
     spi_transfer(address);    //The adress from where to begin reading data
-    spi_transfer(data);       //The data to write data
     setBit(PORTB, PB4);       //Raise chip-select
+	return SPDR;              // Return the SPDR register which contains data read
 }
 
 void can_controller_write(uint8_t address, uint8_t data)
