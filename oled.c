@@ -239,25 +239,6 @@ void oled_draw_box(uint8_t xpos, uint8_t ypos, uint8_t w, uint8_t h, uint8_t thi
 			writeDATA(writebyte);
 		}
 	}
-	//printing the square
-	/*
-	for(int h0=0; h0<total_height; h0++){
-		printf("[");
-		for(int w0=0; w0<w; w0++){
-			printf("%d ",raw_square[h0][w0]);
-		}
-		printf("]\n\r");
-	}
-	
-	printf("\n\r\n\r");
-	for(int p1=0; p1<needed_pages; p1++){
-		printf("[");
-		for(int c1=0; c1<w; c1++){
-			printf("%d ",out_square[p1][c1]);
-		}
-		printf("]\n\r");
-	}
-	*/
 }
 
 //Prints 6 frames of legs walking
