@@ -2,7 +2,6 @@
 #include "includes.h"
 #endif
 
-#define menuElements 3
 #define highscore_address 0x400 // Starting right after oled saved data
 #define num_highscores 3
 #define num_highscore_char 3
@@ -11,7 +10,13 @@
 #define joystickMenuTreshold 50
 
 uint8_t menuSelected;
-uint8_t lastJoystickVal = 0;
+uint8_t letterSelected;
+
+char letters[4] = {'A', 'A', 'A', '\0'};
+
+uint8_t lastJoystickYVal = 0;
+uint8_t lastJoystickXVal = 0;
+
 
 // Print startup screen
 void bootStartupScreen(void) {
@@ -69,9 +74,8 @@ void bootStartMenu(struct controllers *controller) {
 		oled_print("select");
 		
 		updateController(controller);
-		printf("Menu selected: %d\n\r", menuSelected);
-		//printController(controller);
-		if (abs(controller->y_val) > joystickMenuTreshold && abs(lastJoystickVal) < joystickMenuTreshold) {
+	
+		if (abs(controller->y_val) > joystickMenuTreshold && abs(lastJoystickYVal) < joystickMenuTreshold) {
 			moveArrow(controller);
 		}
 		
@@ -79,34 +83,11 @@ void bootStartMenu(struct controllers *controller) {
 		if (bitIsSet(PIND, PD4)) {break;}
 		
 		// update last joystick value
-		lastJoystickVal = controller->y_val;
+		lastJoystickYVal = controller->y_val;
 	}
 	
 }
 
-// Determine movement direction
-void moveArrow(struct controllers *controller) {
-	if(controller->y_val > 0) {
-		arrowUp();
-	}
-	else if(controller->y_val < 0) {
-		arrowDown();
-	}
-}
-
-// Move the arrow up on the menu
-void arrowUp(void) {
-	if (menuSelected>0) {
-		menuSelected--;
-	}
-}
-
-// Move the arrow down on the menu
-void arrowDown(void) {
-	if (menuSelected<menuElements-1) {
-		menuSelected++;
-	}
-}
 
 // Selecting behavior for the buttons on the main menu
 void menuSelection(struct controllers *controller) {
@@ -164,21 +145,56 @@ void highscore(void) {
 		high_score[num_highscore_char] = ' ';
 		high_score[num_highscore_char+1] = readSRAM(highscore_address+i*4)+'0';
 		high_score[num_highscore_char+2] = '\0';
-		//printf("%s\n\r", high_score);	//debug
 		oled_pos(i+2,0);
 		oled_print_left(high_score, highscore_offset);
 	}
-	
+		
 	oled_pos(7,0);
 	oled_print("back");
 	while (!bitIsSet(PIND, PD3)) {
-
 	}
 }
 
-void input_highscore(void) {
+void input_highscore(struct controllers *controller) {
+	letterSelected = 0;
+	oled_reset();
+	oled_set_font(LARGE);
+	oled_pos(1,0);
+	oled_draw_hline(128,0b00111100);
+	oled_pos(3,0);
+	oled_print_centered("NEW HIGHSCORE!!!");
+	oled_set_font(NORMAL);
+	oled_pos(4,0);
+	oled_print_centered("Congratulation");
+	oled_pos(6,0);
+	oled_draw_hline(128,0b00111100);
+	
+	_delay_ms(2000);
+	
+	oled_reset();
+	oled_set_font(LARGE);
+	oled_home();
+	oled_print_centered("Enter your name");
+	oled_pos(1,0);
+	oled_draw_hline(128,0b00111100);
+	
+
 	while(1) {
 		
+		oled_pos(3,0);
+		oled_print_centered(letters);
+		
+		updateController(controller);
+		if (abs(controller->x_val) > joystickMenuTreshold && abs(lastJoystickXVal) < joystickMenuTreshold) {
+			changeLetter(controller);
+		}
+		if (abs(controller->y_val) > joystickMenuTreshold && abs(lastJoystickYVal) < joystickMenuTreshold) {
+			changeChar(controller);
+		}
+		printf("Letter selected: %d\n\r", letterSelected);
+		//printController(controller);
+		lastJoystickXVal = controller->x_val;
+		lastJoystickYVal = controller->y_val;
 	}
 }
 
@@ -224,4 +240,34 @@ void set_highscore(char name[], uint8_t value) {
 // Reset highscore
 void resetGame(void) {
 	initHighscore();
+}
+
+// Determine movement direction
+void moveArrow(struct controllers *controller) {
+	if(controller->y_val > 0 && menuSelected>0) {
+		menuSelected--;
+	}
+	else if(controller->y_val < 0 && menuSelected<2) {
+		menuSelected++;
+	}
+}
+
+// Change the selected letter in highscore
+void changeLetter(struct controllers *controller) {
+	if(controller->x_val > 0 && letterSelected<2) {
+		letterSelected++;
+	}
+	else if(controller->x_val < 0 && letterSelected>0) {
+		letterSelected--;
+	}
+}
+
+// Change the selected letters character
+void changeChar(struct controllers *controller) {
+	if(controller->y_val > 0 && letterSelected>'A') {
+		letters[letterSelected]--;
+	}
+	else if(controller->y_val < 0 && letterSelected<'Z') {
+		letters[letterSelected]++;
+	}
 }
