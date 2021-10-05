@@ -81,13 +81,23 @@ void spi_test(void)
 	spi_init();
 	while (1)
 	{
-		spi_transfer(0b00110101);
+		spi_transfer_command(0b00000000);
+		spi_transfer_data(0b01111110);
+	}
+}
+
+void can_controller_test(void){
+	spi_init();
+	while (1){
+		can_controller_write(0b00001111);
+		can_controller_read(0b00001111);
+		printf("%d\n\r",0);
 	}
 }
 
 int main(void)
 {
-	initGame();
-	//spi_test();
-	exercise3();
+	//initGame();
+	can_controller_test();
+	//exercise3();
 }
