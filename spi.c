@@ -12,8 +12,8 @@ void spi_init(void)
     setBit(PORTB, PB4);  //Sets the SS pin to high
     setBit(SPCR, SPE);   //Enable SPI
     setBit(SPCR, MSTR);  //Enable master mode
-    setBit(SPCR, SPR0);  //Sets the SCK frequency to Fclk/16
     clearBit(SPSR, SPIF);
+    setBit(SPCR, SPR0);  //Sets the SCK frequency to Fclk/16
     clearBit(SPCR, SPR1);
     clearBit(SPSR, SPI2X); //Sets SPI transfer speed to normal
 }
@@ -27,7 +27,7 @@ char spi_read(void)
     return SPDR; //Returns read value
 }
 
-void spi_write(unsigned char Data)
+void spi_write(char Data)
 {
     SPDR = Data; //Writes data for the SPI to transfer
 

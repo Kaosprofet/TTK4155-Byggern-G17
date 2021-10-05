@@ -10,14 +10,10 @@ void playGame(void) {
 	initGame();
 	controller = (struct controllers*) malloc(sizeof(struct controllers));
 	calibrateJoystick(controller);
-
-	
-	// Initialize all functions
 	
 	bootStartupScreen();
 	_delay_ms(2000);
 	
-
 	while(1) {
 		// update and print controller each loop
 		//updateController(controller);
@@ -27,8 +23,6 @@ void playGame(void) {
 		bootStartMenu(controller);
 		// Go to selected part of game
 		menuSelection(controller);
-		
-		
 	}
 }
 

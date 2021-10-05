@@ -2,7 +2,7 @@
 #define SPI_H_
 
 void spi_init(void);
-void spi_write(unsigned char Data);
+void spi_write(char Data);
 char spi_transfer_data(void);
 
 #endif
