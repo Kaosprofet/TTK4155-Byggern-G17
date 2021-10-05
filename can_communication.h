@@ -12,7 +12,7 @@
 #define CAN_STAT 0x0E //Status register, read to return the status of the MCP
 
 //interrupt enable
-#define CANINTE 0x2B
+#define CANInterrruptEnable 0x2B
 	#define MERRE 0b10000000 //Interrupt on error
 	#define WAKIE 0b01000000 //Interrupt on CAN bus activity
 	#define TX2IE 0b00010000 // TXB2 becoming empty
@@ -22,8 +22,7 @@
 	#define RX0IE 0b00000001 // Interrupt when message received in RXB0
 
 //Interrupt flag
-#define CANINTF 0x2C
-
+#define CANInterruptFlags 0x2C
 
 //Transmit buffers
 #define TXB0CTRL 0x30
@@ -53,33 +52,36 @@
 
 //Transmit Identifier high
 #define TXB0SIDH 0x31
-#define TXB1SIDH 0x41
-#define TXB2SIDH 0x51  	
-
+	
 //Transmit identifier low
 #define TXB0SIDL 0x32  	  	  	  	  		
-#define TXB0SIDL 0x42
-#define TXB0SIDL 0x52 
 
 //Transmit data length
 #define TXB0DLC 0x35
-#define TXB1DLC 0x45
-#define TXB2DLC 0x55
 
 //Transmit data buffer
 #define TXB0Dm 0x36
 
 //Receive buffers
 #define RXB0CTRL 0x60
-#define RXB1CTRL 0x70
+
+//Receive buffer identifiers
+#define RXB0SIDH 0x61 //high
+#define RXB0SIDL 0x62 //low
+
+//Receive buffer data length
+#define RXB0DLC 0x65
+
+//Receive buffer data byte
+#define RXB0DM 0x66
 
 
 //----------------------OTHER Definitions and functions ------------
 typedef struct{uint8_t ID; uint8_t length; uint8_t data[8];} can_message;
 	
-
-
 void CAN_controller_init(uint8_t can_mode); // Initializes using loop-back mode**
 void CAN_sendmessage(can_message* message); // sends data**
-uint8_t CAN_com_recieve(void); //receives data **
+uint8_t CAN_recieve_message(void); //receives data **
+
+
 #endif

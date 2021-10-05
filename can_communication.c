@@ -11,7 +11,7 @@ void CAN_test(void){
 
 void CAN_controller_init(uint8_t can_mode){
 	write_CANCTRL(can_mode); //Setting the CAN controller to the specified mode
-	
+	can_controller_write(CANInterrruptEnable, (RX0IE + RX1IE + TX0IE + TX1IE + TX2IE)); //Enables interrupt on all receive and transmit buffers. 
 }
 
 //Sends the selected mode to CANCTRL register (Manual page 60)
@@ -25,7 +25,7 @@ void CAN_sendmessage(can_message* message){
 	static int can_buffer = 0;
 	
 	//Looping until a buffer is clear
-	while(CAN_buffer_clear(can_buffer)){
+	while(CAN_buffer_tx_clear(can_buffer)){
 		can_buffer += 1;
 		if(can_buffer>2){can_buffer=0;}
 	}
@@ -51,9 +51,26 @@ void CAN_sendmessage(can_message* message){
 }
 
 //Checks the interrupt flag of a buffer. Returns 1 of it is zero
-int CAN_buffer_clear(int can_buffer){
-	uint8_t interrupt_flags = can_controller_read(CANINTF); //Reads the interrupt flags
+int CAN_buffer_tx_clear(int can_buffer){
+	uint8_t interrupt_flags = can_controller_read(CANInterruptFlags); //Reads the interrupt flags
 	uint8_t check_bit = can_buffer+2;
 	if(!bitIsSet(interrupt_flags,check_bit)){ return 1;}
+	else{ return 0;}
+}
+
+//Receives a message
+uint8_t CAN_recieve_message(void){
+	int can_buffer = 0;
+	
+	//Looking for data
+	while(CAN_buffer_rx_clear(can_buffer)){
+		can_buffer +=1;
+		if(can_buffer>1){can_buffer=0;}
+	}
+}	
+
+int CAN_buffer_rx_clear(int can_buffer){
+	uint8_t interrupt_flags = can_controller_read(CANInterruptFlags); //Reads the interrupt flags
+	if(!bitIsSet(interrupt_flags,can_buffer)){ return 1;}
 	else{ return 0;}
 }
