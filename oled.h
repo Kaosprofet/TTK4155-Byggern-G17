@@ -29,7 +29,9 @@ void oled_print_right(char string[], int column);//prints right-adjusted to a sp
 //Drawing
 void oled_draw_hline(int length, int thickness); //Prints a line with a defined length and thickness
 void oled_draw_box(uint8_t xpos, uint8_t ypos, uint8_t w, uint8_t h, uint8_t thickness); //Draws a box with the specified starting position, width, height and thickness 
-void oled_walking(uint8_t row, uint8_t col);
+void oled_walking(uint8_t row, uint8_t col); //Animates a walking figure 
+void oled_walkingDeletesAPage(uint8_t page);
+void oled_moonwalkingDeletesAPage(uint8_t page);
 //Printing special characters
 void oled_elektra(void); 
 void oled_penis(void);
