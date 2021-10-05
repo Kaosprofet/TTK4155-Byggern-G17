@@ -4,22 +4,56 @@
 #endif
 
 
+void CAN_test(void){
+	CAN_controller_init(CAN_LOOPBACK);
+}
 
-typedef enum{CAN_NORMAL, CAN_SLEEP, CAN_LOOPBACK, CAN_LISTEN, CAN_CONFIG} can_modes;
 
-void CAN_controller_init(can_modes mode){
+void CAN_controller_init(uint8_t can_mode){
+	write_CANCTRL(can_mode); //Setting the CAN controller to the specified mode
 	
 }
 
-void CAN_CTRL(can_modes mode){
-	uint8_t byte = 0;
-	switch(mode){
-		case(CAN_NORMAL): byte = 0b00000000; break;
-		case(CAN_SLEEP): byte = 0b00100000; break;
-		case(CAN_LOOPBACK): byte = 0b01000000; break;
-		case(CAN_LISTEN): byte = 0b01100000; break;
-		case(CAN_CONFIG): byte = 0b10000000; break;
+//Sends the selected mode to CANCTRL register (Manual page 60)
+void write_CANCTRL(uint8_t can_mode){ can_controller_write(CAN_CTRL, can_mode); }
+
+//Reads the status from the controller
+uint8_t CAN_STATUS(void){ return can_controller_read(CAN_STAT);}
+
+//Sends the inputted message
+void CAN_sendmessage(can_message* message){
+	static int can_buffer = 0;
+	
+	//Looping until a buffer is clear
+	while(CAN_buffer_clear(can_buffer)){
+		can_buffer += 1;
+		if(can_buffer>2){can_buffer=0;}
 	}
-	can_controller_write(0xF, byte);
+	
+	//Sending ID to the identifier buffer
+	uint8_t id = message->ID;
+		//ID high	
+		uint8_t ID_high = id/8;
+		can_controller_write(TXB0SIDH + 0x10*can_buffer, ID_high);
+		//ID low
+		uint8_t ID_low = id%8;
+		can_controller_write(TXB0SIDL + 0x10*can_buffer, ID_low);
+	
+	//Sending the length to the length buffer
+	uint8_t L = message->length;
+		can_controller_write(TXB0DLC + 0x10*can_buffer, L);
+	
+	//Sending the data
+	uint8_t* data2send = message->data;
+	for(int i = 0; i<L;i++){
+		can_controller_write(TXB0Dm + i + 0x10*can_buffer, data2send[i]);
+	}
 }
-//CANCTRL (ADDRESS: XFh)
+
+//Checks the interrupt flag of a buffer. Returns 1 of it is zero
+int CAN_buffer_clear(int can_buffer){
+	uint8_t interrupt_flags = can_controller_read(CANINTF); //Reads the interrupt flags
+	uint8_t check_bit = can_buffer+2;
+	if(!bitIsSet(interrupt_flags,check_bit)){ return 1;}
+	else{ return 0;}
+}
