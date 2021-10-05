@@ -81,23 +81,24 @@ void spi_test(void)
 	spi_init();
 	while (1)
 	{
-		spi_transfer_command(0b00000000);
-		spi_transfer_data(0b01111110);
+		spi_transfer(0b00000000); //command
+		spi_transfer(0b01111110); //data
 	}
 }
 
 void can_controller_test(void){
 	spi_init();
+	can_controller_reset();
 	while (1){
-		can_controller_write(0b00001111);
-		can_controller_read(0b00001111);
-		printf("%d\n\r",0);
+		can_controller_write(0b00001111, 0b10101010);
+		uint8_t data = can_controller_read(0b00001111);
+		printf("%d\n\r",data);
 	}
 }
 
 int main(void)
 {
-	//initGame();
+	initGame();
 	can_controller_test();
 	//exercise3();
 }

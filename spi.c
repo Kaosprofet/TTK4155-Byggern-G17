@@ -18,16 +18,18 @@ void spi_init(void)
     clearBit(SPSR, SPI2X); //Sets SPI transfer speed to normal
 }
 
-void spi_transfer_command(unsigned char Command)
+char spi_read(void)
 {
-    SPDR = Command; //Writes command byte for the SPI to transfer
+    SPDR = 0b00000000; //Writes an empty value to transfer
 
-    waitUntilBitIsSet(SPSR, SPIF);
+    waitUntilBitIsSet(SPSR, SPIF); //Waits until transfer is completed
+
+    return SPDR; //Returns read value
 }
 
-void spi_transfer_data(unsigned char Data)
+void spi_write(unsigned char Data)
 {
     SPDR = Data; //Writes data for the SPI to transfer
 
-    waitUntilBitIsSet(SPSR, SPIF);
+    waitUntilBitIsSet(SPSR, SPIF); //Waits until data has been transmitted
 }
