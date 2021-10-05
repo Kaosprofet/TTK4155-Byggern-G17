@@ -153,9 +153,16 @@ void oled_print_centered(char string[]){
 	oled_print(string);
 }	
 
-//Prints left-adjusted and moves pointer down. 
+//Prints left-adjusted
 void oled_print_left(char string[], int column){
 	oled_goto_col(column);
+	oled_print(string);
+}
+
+//Print right-adjusted
+void oled_print_right(char string[], int column){
+	uint8_t place = strlen(string)*selected_font;
+	oled_goto_col(column-place);
 	oled_print(string);
 }
 
