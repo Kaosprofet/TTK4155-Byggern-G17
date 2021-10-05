@@ -69,6 +69,7 @@ void bootStartMenu(struct controllers *controller) {
 		oled_print("select");
 		
 		updateController(controller);
+		printf("Menu selected: %d\n\r", menuSelected);
 		//printController(controller);
 		if (abs(controller->y_val) > joystickMenuTreshold && abs(lastJoystickVal) < joystickMenuTreshold) {
 			moveArrow(controller);
@@ -102,7 +103,7 @@ void arrowUp(void) {
 
 // Move the arrow down on the menu
 void arrowDown(void) {
-	if (menuSelected<menuElements) {
+	if (menuSelected<menuElements-1) {
 		menuSelected++;
 	}
 }
@@ -140,9 +141,9 @@ void playMenu(struct controllers *controller) {
 // Initierer til AAA 0 poeng, bør ha en test som sjekker om vi ikke har non volatile minne og kan lagre mellom kjøringer
 void initHighscore(void) {
 		for (uint8_t i = 0; i < num_highscores*4; i = i + 4) {
-			writeSRAM(highscore_address+i, 0);
+			writeSRAM(highscore_address+i, 4);
 			for (uint8_t j = 1; j <= num_highscore_char; j++) {
-				writeSRAM(highscore_address+i+j, "A");
+				writeSRAM(highscore_address+i+j, 'A');
 			}
 		}
 }
@@ -155,53 +156,46 @@ void highscore(void) {
 	oled_pos(1,0);
 	oled_draw_hline(128,0b00111100);
 	
-	uint8_t highscore[num_highscores];
-	char names[num_highscores][num_highscore_char];
-	
-	for (uint8_t i = 0; i < num_highscores*4; i=i+4) {
-		highscore[i] = readSRAM(highscore_address+i);
+	for (uint8_t i = 0; i < num_highscores; i++) {
+		char high_score[10] = "";
 		for (uint8_t j = 1; j <= num_highscore_char; j++) {
-			names[i][j] = readSRAM(highscore_address+i+j);
+			high_score[j-1] = readSRAM(highscore_address+i*4+j);
 		}
+		high_score[num_highscore_char] = ' ';
+		high_score[num_highscore_char+1] = readSRAM(highscore_address+i*4)+'0';
+		high_score[num_highscore_char+2] = '\0';
+		//printf("%s\n\r", high_score);	//debug
+		oled_pos(i+2,0);
+		oled_print_left(high_score, highscore_offset);
 	}
 	
-	for (uint8_t i = 0; i< num_highscores; i++) {
-		oled_pos(i+2,0);
-		char name[10]; // legg til anntall plasser
-		for (uint8_t j = 0; j<num_highscore_char;j++) {
-			name[j] = names[i][j];
-		}
-		name[num_highscore_char+1] = " ";
-		char high_score_char[5];
-		sprintf(high_score_char, "%d", highscore[i]);   
-		strcat(name, high_score_char);	
-		oled_print_left(name, highscore_offset);
-		printf("High score %s\n\r", name);
-	}
 	oled_pos(7,0);
 	oled_print("back");
 	while (!bitIsSet(PIND, PD3)) {
-		// wait on highscore page
-		//printf("test %d\n\r", 0);
-		// Break on back button
+
 	}
 }
 
-// Vi har kanskje et problem med at vi skriver char direkte til writeSRAM, kanskje skifte den til char og caste?
+void input_highscore(void) {
+	while(1) {
+		
+	}
+}
+
 void set_highscore(char name[], uint8_t value) {
 	uint8_t highscore[num_highscores];
 	char names[num_highscores][num_highscore_char];
 	
-	for (uint8_t i = 0; i < num_highscores*4; i=i+4) {
-		highscore[i] = readSRAM(highscore_address+i);
+	for (uint8_t i = 0; i < num_highscores; i++) {
+		highscore[i] = readSRAM(highscore_address+i*4);
 		for (uint8_t j = 1; j <= num_highscore_char; j++) {
-			names[i][j] = readSRAM(highscore_address+i+j);
+			names[i][j-1] = readSRAM(highscore_address+i*4+j);
 		}
 	}
 
 	for (uint8_t i = num_highscores-1; i >= 0; i--) {
 		if (highscore[i]<value) {
-			if (i==num_highscores) {
+			if (i==num_highscores) {			// If last name in high score
 				highscore[i] = value;
 				for (uint8_t j = 0; j < num_highscore_char; j++) {
 					names[i][j] = name[j];
@@ -210,7 +204,7 @@ void set_highscore(char name[], uint8_t value) {
 			else {
 				highscore[i+1] = highscore[i];
 				for (uint8_t j = 0; j < num_highscore_char; j++) {
-					names[i-1][j] = name[j];
+					names[i+1][j] = names[i][j];
 				}
 				highscore[i] = value;
 				for (uint8_t j = 0; j < num_highscore_char; j++) {
@@ -219,18 +213,15 @@ void set_highscore(char name[], uint8_t value) {
 			}
 		}
 	}
-	for (uint8_t i = 0; i < num_highscores*4; i = i + 4) {
-		writeSRAM(highscore_address+i, highscore[i]);
+	for (uint8_t i = 0; i < num_highscores; i++) {
+		writeSRAM(highscore_address+i*4, highscore[i]);
 		for (uint8_t j = 1; j <= num_highscore_char; j++) {
-			writeSRAM(highscore_address+i+j, names[i][j]);
+			writeSRAM(highscore_address+i*4+j, names[i][j-1]);
 		}
 	}
 }
 
 // Reset highscore
 void resetGame(void) {
-	oled_reset();
-	for (uint8_t i = highscore_address; i < highscore_address+num_highscores*2; i++) {
-		writeSRAM(i, 0x00000000);
-	}
+	initHighscore();
 }
