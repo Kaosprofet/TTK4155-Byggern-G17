@@ -46,7 +46,7 @@ uint8_t * readADC(){
 	*adcVal = 0;
 	
 	// wait til converted
-	_delay_ms(20);
+	_delay_ms(30);
 	
 	// Store all data from ADC
 	for (uint8_t i = 0; i < adc_num_channels; i++) {
