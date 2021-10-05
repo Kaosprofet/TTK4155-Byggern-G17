@@ -7,7 +7,7 @@
 #define num_highscores 3
 #define num_highscore_char 3
 #define menu_offset 30
-#define  highscore_offset 30
+#define highscore_offset 30
 #define joystickMenuTreshold 50
 
 uint8_t menuSelected;
@@ -69,7 +69,7 @@ void bootStartMenu(struct controllers *controller) {
 		oled_print("select");
 		
 		updateController(controller);
-		printController(controller);
+		//printController(controller);
 		if (abs(controller->y_val) > joystickMenuTreshold && abs(lastJoystickVal) < joystickMenuTreshold) {
 			moveArrow(controller);
 		}
@@ -176,7 +176,7 @@ void highscore(void) {
 		sprintf(high_score_char, "%d", highscore[i]);   
 		strcat(name, high_score_char);	
 		oled_print_left(name, highscore_offset);
-		printf("High score %s\n", name);
+		printf("High score %s\n\r", name);
 	}
 	oled_pos(7,0);
 	oled_print("back");
