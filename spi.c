@@ -20,7 +20,7 @@ void spi_init(void)
 
 char spi_read(void)
 {
-    SPDR = 0b00000000; //Writes an empty value to transfer
+    SPDR = 0x00; //Writes an empty value to transfer
 
     waitUntilBitIsSet(SPSR, SPIF); //Waits until transfer is completed
 
