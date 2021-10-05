@@ -91,9 +91,11 @@ void bootStartMenu(struct controllers *controller) {
 
 // Selecting behavior for the buttons on the main menu
 void menuSelection(struct controllers *controller) {
+	uint8_t score = 10;
 	switch(menuSelected){
 		case(0):
-		playMenu(controller);
+		//playMenu(controller);
+		input_highscore(controller, score);
 		break;
 		case(1):
 		highscore();
@@ -155,8 +157,9 @@ void highscore(void) {
 	}
 }
 
-void input_highscore(struct controllers *controller) {
+void input_highscore(struct controllers *controller, uint8_t score) {
 	letterSelected = 0;
+	for (uint8_t i = 0; i<3 ;i++) {letters[i] = 'A';};
 	oled_reset();
 	oled_set_font(LARGE);
 	oled_pos(1,0);
@@ -178,9 +181,12 @@ void input_highscore(struct controllers *controller) {
 	oled_pos(1,0);
 	oled_draw_hline(128,0b00111100);
 	
-
-	while(1) {
-		
+	oled_set_font(NORMAL);
+	oled_pos(7,90);
+	oled_print("select");
+	oled_set_font(LARGE);
+	
+	while(!bitIsSet(PIND, PD4)) {
 		oled_pos(3,0);
 		oled_print_centered(letters);
 		
@@ -191,11 +197,10 @@ void input_highscore(struct controllers *controller) {
 		if (abs(controller->y_val) > joystickMenuTreshold && abs(lastJoystickYVal) < joystickMenuTreshold) {
 			changeChar(controller);
 		}
-		printf("Letter selected: %d\n\r", letterSelected);
-		//printController(controller);
 		lastJoystickXVal = controller->x_val;
 		lastJoystickYVal = controller->y_val;
 	}
+	set_highscore(letters, score);
 }
 
 void set_highscore(char name[], uint8_t value) {
@@ -264,10 +269,10 @@ void changeLetter(struct controllers *controller) {
 
 // Change the selected letters character
 void changeChar(struct controllers *controller) {
-	if(controller->y_val > 0 && letterSelected>'A') {
+	if(controller->y_val > 0 && letters[letterSelected]>'A') {
 		letters[letterSelected]--;
 	}
-	else if(controller->y_val < 0 && letterSelected<'Z') {
+	else if(controller->y_val < 0 && letters[letterSelected]<'Z') {
 		letters[letterSelected]++;
 	}
 }

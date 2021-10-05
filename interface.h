@@ -15,8 +15,8 @@ void menuSelection(struct controllers *controller);		// Selecting behavior for t
 
 void playMenu(struct controllers *controller);			// The game segment
 void initHighscore(void);
-void input_highscore(struct controllers *controller);
 void highscore(void);									// Highscore
+void input_highscore(struct controllers *controller, uint8_t score);
 void set_highscore(char name[], uint8_t value);
 void resetGame(void);									
 
