@@ -251,6 +251,24 @@ void oled_walking(uint8_t row, uint8_t col){
 		_delay_ms(80);
 	}
 }
+void oled_walkingDeletesAPage(uint8_t page){
+	int col=0;
+	oled_goto_page(page);
+	while(col<127){
+		for(int a=0; a<6; a++){
+			oled_goto_col(col);
+			for(int i=0;i<10;i++){
+				writeDATA(pgm_read_word(&walking[a][i]));
+			}
+			_delay_ms(80);
+			oled_goto_col(col);
+			writeDATA(0);
+			col +=1;
+		}
+	}
+	
+}
+
 // ----------------------------------------- Cleaning the screen ------------------------------------------------
 
 //Clear the current page
