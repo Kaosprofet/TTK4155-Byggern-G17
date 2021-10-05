@@ -8,7 +8,6 @@
 #ifndef INCLUDES_H
 #include "includes.h"
 #endif
-#include "can_controller.h"
 
 void exercise1(void)
 {
@@ -89,8 +88,9 @@ void spi_test(void)
 
 void can_controller_test(void){
 	spi_init();
+	can_controller_reset();
 	while (1){
-		can_controller_write(0b00001111, 0b00001111);
+		can_controller_write(0b00001111, 0b10101010);
 		uint8_t data = can_controller_read(0b00001111);
 		printf("%d\n\r",data);
 	}

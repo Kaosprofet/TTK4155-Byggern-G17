@@ -25,5 +25,6 @@
 #include "oled.h"
 #include "interface.h"
 #include "spi.h"
+#include "can_controller.h"
 
 
