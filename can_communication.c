@@ -51,7 +51,7 @@ void CAN_sendmessage(can_message* message){
 		can_controller_write(TXB0Dm + i + 0x10*can_buffer, data2send[i]);
 	}
 	//Request to send
-	can_controller_request_to_send();	
+	//can_controller_request_to_send();	
 }
 
 //Checks the interrupt flag of a buffer. Returns 1 of it is zero
