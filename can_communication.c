@@ -88,13 +88,16 @@ can_message CAN_recieve_message(){
 	if(checkBitmask(CANINTF,RX0IF)){
 		can_get_message(0, &B1_message);
 		can_controller_bit_modify(CANInterruptFlags,RX0IF,0);
+		return B1_message;
 		
 	}
 	//Checks if there is a message in buffer 1
 	if(checkBitmask(CANINTF,RX1IF)){
-		can_get_message(1,&B1_message);
+		can_get_message(1,&B2_message);
+		can_controller_bit_modify(CANInterruptFlags,RX1IF,0);
+		return B2_message;
 	}
-	
+	return B1_message;
 }
 
 //Get the message from a specified buffer

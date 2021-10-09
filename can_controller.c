@@ -35,11 +35,13 @@ uint8_t can_controller_read_status(void)
     setBit(PORTB, PB4); //Lower chip-select
     return status;
 }
-void can_controller_bit_modify(uint8_t address)
+void can_controller_bit_modify(uint8_t address, uint8_t mask, uint8_t data)
 {
     clearBit(PORTB, PB4);  //Lower chip-select
     spi_write(0b00000101); // Op code for modifying bit
     spi_write(address);    //Adress of register to modify
+	spi_write(mask);
+	spi_write(data);
     setBit(PORTB, PB4);    //Raise chip-select
 }
 void can_controller_reset(void)
