@@ -13,19 +13,24 @@
 
 //interrupt enable
 #define CANInterrruptEnable 0x2B
-#define MERRE 0b10000000 //Interrupt on error
-#define WAKIE 0b01000000 //Interrupt on CAN bus activity
-#define TX2IE 0b00010000 // TXB2 becoming empty
-#define TX1IE 0b00001000 // TXB1 becoming empty
-#define TX0IE 0b00000100 // TXB0 becoming empty
-#define RX1IE 0b00000010 // Interrupt when message received in RXB1
-#define RX0IE 0b00000001 // Interrupt when message received in RXB0
+	#define MERRE 0b10000000 //Interrupt on error
+	#define WAKIE 0b01000000 //Interrupt on CAN bus activity
+	#define TX2IE 0b00010000 // TXB2 becoming empty
+	#define TX1IE 0b00001000 // TXB1 becoming empty
+	#define TX0IE 0b00000100 // TXB0 becoming empty
+	#define RX1IE 0b00000010 // Interrupt when message received in RXB1
+	#define RX0IE 0b00000001 // Interrupt when message received in RXB0
 
 //Interrupt flag
 #define CANInterruptFlags 0x2C
-#define MERRF 0b10000000 //Message error interrupt flag
-#define WAKIF 0b01000000 //Interrupt pending
-#define ERRIF 0b00100000 //Error interrupt flag
+	#define MERRF 0b10000000 //Message error interrupt flag
+	#define WAKIF 0b01000000 //Interrupt pending
+	#define ERRIF 0b00100000 //Error interrupt flag
+	#define TX2IF 0b00010000 //TX Buffer 2 empty
+	#define TX1IF 0b00001000 //TX Buffer 1 empty
+	#define TX0IF 0b00000100 //TX Buffer 0 empty
+	#define RX1IF 0b00000010 //RX Buffer 1 full
+	#define RX0IF 0b00000001 //RX Buffer 0 full
 
 //Transmit buffers
 #define TXB0CTRL 0x30
@@ -44,6 +49,13 @@
 
 //Pin control and status registers
 #define TXRTSCTRL 0x0D
+
+//SPI instructions. Ready To Send (RTS)
+#define RTS_TX0 0x81
+#define RTS_TX1 0x81
+#define RTS_TX2 0x81
+#define RTS_ALL 0x81
+
 //0 when in ready to send mode
 #define B2RTS 0b00100000
 #define B1RTS 0b00010000

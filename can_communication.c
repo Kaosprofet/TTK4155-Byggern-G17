@@ -51,7 +51,7 @@ void CAN_sendmessage(can_message* message){
 		can_controller_write(TXB0Dm + i + 0x10*can_buffer, data2send[i]);
 	}
 	//Request to send
-	//can_controller_request_to_send();	
+	can_controller_request_to_send(RTS_TX0 + can_buffer);	
 }
 
 //Checks the interrupt flag of a buffer. Returns 1 of it is zero
@@ -78,35 +78,44 @@ int CAN_error_check(void){
 
 //Receives a message
 can_message CAN_recieve_message(){
-	uint8_t CANINTE = can_controller_read(CANInterrruptEnable);
-	can_message message;
+	can_message B1_message;
+	can_message B2_message;
+	
+	//Getting the interrupt flags
+	uint8_t CANINTF = can_controller_read(CANInterruptFlags);
+
 	//Checks if there is a message in buffer 0
-	if(checkBitmask(CANINTE,RX0IE)){
-		uint8_t ID0 = can_get_ID(0);
-		uint8_t LO = can_get_length(0);
+	if(checkBitmask(CANINTF,RX0IF)){
+		can_get_message(0, &B1_message);
+		can_controller_bit_modify(CANInterruptFlags,RX0IF,0);
+		
 	}
 	//Checks if there is a message in buffer 1
-	if(checkBitmask(CANINTE,RX1IE)){
-		uint8_t ID1 = can_get_ID(1);
-		uint8_t L1 = can_get_length(1);
+	if(checkBitmask(CANINTF,RX1IF)){
+		can_get_message(1,&B1_message);
 	}
 	
-	return message;
 }
 
-//get ID
-int can_get_ID(int buffernumber){
+//Get the message from a specified buffer
+void can_get_message(uint8_t buffernumber, can_message* message){
+	//Getting the ID
 	uint8_t id_high = can_controller_read(RXB0SIDH + 0x10*buffernumber); //getting the lower part
 	uint8_t id_low = can_controller_read(RXB0SIDL + 0x10*buffernumber); //getting the higher part
 	uint8_t mask = 0xE0;
 	id_low = (id_low & mask);
-	return 0x8*id_high + id_low/0x20; //returning the ID
+	message->ID = 0x8*id_high + id_low/0x20;
+	
+	//Getting the length of data
+	uint8_t l = can_controller_read(RXB0DLC + 0x10*buffernumber);
+	message->length = (l & 0xF);
+	
+	//Getting the data
+	for(uint8_t i=0;i<l;i++){
+		message->data[i] = can_controller_read(RXB0DM + 0x10*buffernumber + i);
+	}
 }
 
-int can_get_length(int buffernumber){
-	uint8_t length = can_controller_read(RXB0DLC + 0x10*buffernumber);
-	return (length & 0xF);
-}
 
 int CAN_buffer_rx_clear(int can_buffer){
 	uint8_t interrupt_flags = can_controller_read(CANInterruptFlags); //Reads the interrupt flags
