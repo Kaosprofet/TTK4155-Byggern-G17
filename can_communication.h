@@ -3,11 +3,11 @@
 
 //--------------------- MCP2515 ADDRESSES -------------
 #define CAN_CTRL 0x0F //Controll register. The following are the different modes sent there. 
-#define CAN_NORMAL	0b00000000
-#define CAN_SLEEP 0b00100000
-#define CAN_LOOPBACK 0b01000000
-#define CAN_LISTEN 0b01100000
-#define CAN_CONFIG 0b10000000
+	#define CAN_NORMAL	0b00000000
+	#define CAN_SLEEP 0b00100000
+	#define CAN_LOOPBACK 0b01000000
+	#define CAN_LISTEN 0b01100000
+	#define CAN_CONFIG 0b10000000
 
 #define CAN_STAT 0x0E //Status register, read to return the status of the MCP
 
@@ -23,6 +23,9 @@
 
 //Interrupt flag
 #define CANInterruptFlags 0x2C
+	#define MERRF 0b10000000 //Message error interrupt flag
+	#define WAKIF 0b01000000 //Interrupt pending
+	#define ERRIF 0b00100000 //Error interrupt flag 	
 
 //Transmit buffers
 #define TXB0CTRL 0x30
@@ -77,7 +80,7 @@
 
 
 //----------------------OTHER Definitions and functions ------------
-typedef struct{uint8_t ID; uint8_t length; uint8_t data[8];} can_message;
+typedef struct{unsigned int ID; uint8_t length; uint8_t data[8];} can_message;
 	
 void CAN_controller_init(uint8_t can_mode); // Initializes using loop-back mode**
 void CAN_sendmessage(can_message* message); // sends data**
