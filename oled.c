@@ -226,10 +226,7 @@ void oled_draw_box(uint8_t xpos, uint8_t ypos, uint8_t w, uint8_t h, uint8_t thi
 			out_square[p0][c0] = (uint8_t)byte;
 		}
 	}
-	
-
-	
-	
+		
 	//Writing it to the oled;
 	uint8_t writebyte;
 	for(int p1=0;p1<needed_pages; p1++){
@@ -269,6 +266,28 @@ void oled_walkingDeletesAPage(uint8_t page){
 	
 }
 
+//Draws a line between two coordinates
+void oled_draw_line(uint8_t startx,uint8_t starty,uint8_t endx,uint8_t endy){
+	uint8_t length_x = endx - startx;
+	uint8_t length_y = endy - endy;
+	float gain = length_y/length_x;
+	for(uint8_t x=startx; x<endx;x++){
+		uint8_t y = gain*x + starty;
+		oled_draw_pixel(x,y);
+	}
+}
+
+
+//Draws a pixel in the OLED coordinate space
+void oled_draw_pixel(uint8_t x,uint8_t y){
+	uint8_t pagenumber = y/8; //The page the pixel is on
+	uint8_t bitnumber = y-pagenumber*8; //the bit on the page pixel is on;
+	uint8_t bits[8] = {1,2,4,8,16,32,64,128};
+	uint8_t byte = bits[bitnumber];
+	oled_pos(pagenumber,x);
+	writeDATA(byte);
+}
+	
 // ----------------------------------------- Cleaning the screen ------------------------------------------------
 
 //Clear the current page

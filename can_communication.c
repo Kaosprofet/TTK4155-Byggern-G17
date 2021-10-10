@@ -6,8 +6,7 @@
 
 void CAN_test(void){
 	CAN_com_init(CAN_LOOPBACK);
-	
-	
+		
 }
 
 
