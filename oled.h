@@ -24,15 +24,15 @@ void oled_set_font(fonts font); //Sets the font. LARGE, NORMAL, SMALL
 void oled_type(unsigned char c); //Types the inputted character based on the font-size and the contents of fonts
 void oled_print(char string[]); //Prints the inputted string 
 void oled_print_centered(char string[]); //Prints the string centered on the current page
-void oled_print_left(char string[], int column);//prints left-adjusted to a specified collumn
-void oled_print_right(char string[], int column);//prints right-adjusted to a specified collumn
+void oled_print_left(char string[], int column);//prints left-adjusted to a specified column
+void oled_print_right(char string[], int column);//prints right-adjusted to a specified column
 //Drawing
 void oled_draw_hline(int length, int thickness); //Prints a line with a defined length and thickness
 void oled_draw_box(uint8_t xpos, uint8_t ypos, uint8_t w, uint8_t h, uint8_t thickness); //Draws a box with the specified starting position, width, height and thickness 
 void oled_walking(uint8_t row, uint8_t col); //Animates a walking figure 
 void oled_walkingDeletesAPage(uint8_t page);
 void oled_moonwalkingDeletesAPage(uint8_t page);
-void oled_draw_line(uint8_t startx,uint8_t starty,uint8_t endx,uint8_t endy); //**
+void oled_draw_line(uint8_t startx,uint8_t starty,uint8_t endx,uint8_t endy); //Draws a line between two points
 void oled_draw_circle(uint8_t center_x,uint8_t center_y, uint8_t radius);//**
 //Printing special characters
 void oled_elektra(void); 
