@@ -19,7 +19,7 @@ int can_interrupt(){
 void CAN_test(void){
 	CAN_com_init(CAN_LOOPBACK);
 	can_message testmessage1;
-	testmessage1.ID = 69;
+	testmessage1.ID = 1000;
 	testmessage1.data[0] = 69;
 	testmessage1.length = 1;
 	printf("Test1 ID: %d, Test1 length: %d, Test1 data: %d \n\r",testmessage1.ID, testmessage1.length, testmessage1.data[0]);
@@ -27,9 +27,12 @@ void CAN_test(void){
 	CAN_sendmessage(&testmessage1);
 	//printf("Interrupt flags after %d\n\r",can_controller_read(CANInterruptFlags));
 	
-	
 	can_message rmessage;
-	can_get_message(0,&rmessage);
+	rmessage.ID = 1;
+	rmessage.data[0]=1;
+	rmessage.length = 1;
+	can_message* p = &rmessage;
+	can_get_message(0,p);
 	
 	printf("Rec ID: %d, Rec length: %d, Rec data: %d \n\r",rmessage.ID, rmessage.length, rmessage.data[0]);
 	//printf("test: %d \n\r",(can_controller_read(RXB0DLC)& 0xF));
@@ -42,7 +45,7 @@ void CAN_com_init(uint8_t can_mode){
 	can_controller_init(can_mode);
 	can_controller_write(CANInterrruptEnable, 0x03); //Enables interrupt on all receive. 
 	
-	//Disable masks/interrupts on RXB0 and RXB1
+	//Disable masks/filters on RXB0 and RXB1
 	can_controller_write(RXB0CTRL,RX_FilterOff);
 	can_controller_write(RXB1CTRL,RX_FilterOff);
 	
@@ -86,14 +89,13 @@ void CAN_sendmessage(can_message* message){
 	can_controller_write(TXB0SIDL + 0x10*can_buffer, id_low);
 	
 	//Sending the length to the length buffer
-	uint8_t* L = message->length;
+	uint8_t L = message->length;
 	can_controller_write(TXB0DLC + 0x10*can_buffer, L);
 	
 	//Sending the data
 	uint8_t* data2send = message->data;
 	for(int i = 0; i<L;i++){
-		uint8_t number = i + 0x10*can_buffer;
-		can_controller_write(TXB0Dm + number, data2send[i]);
+		can_controller_write(TXB0Dm + i + 0x10*can_buffer, data2send[i]);
 	}
 	
 	//Request to send
@@ -152,14 +154,13 @@ void can_get_message(uint8_t buffernumber, can_message* message){
 	//Getting the ID
 	uint8_t id_high = can_controller_read(RXB0SIDH + 0x10*buffernumber); //getting the lower part
 	uint8_t id_low = can_controller_read(RXB0SIDL + 0x10*buffernumber); //getting the higher part
-	uint8_t mask = 0xE0;
-	id_low = (id_low & mask);
-	message->ID = 0x8*id_high + id_low/0x20;
+	message->ID = (id_high<<3) + (id_low>>5);
 	
 	//Getting the length of data
 	uint8_t l = can_controller_read(RXB0DLC + 0x10*buffernumber);
-	message->length = (l & 0xF);
+	message->length = l&0b00001111;
 	
+	if(l>8){l=8;}
 	//Getting the data
 	for(uint8_t i=0;i<l;i++){
 		message->data[i] = can_controller_read(RXB0DM + 0x10*buffernumber + i);
