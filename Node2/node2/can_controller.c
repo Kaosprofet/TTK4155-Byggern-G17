@@ -8,11 +8,9 @@
  *
  */ 
 
-#include "can_controller.h"
-
-#include "sam.h"
-
-#include "printf.h"
+#ifndef INCLUDES_H
+#include "includes.h"
+#endif
 
 
 /**

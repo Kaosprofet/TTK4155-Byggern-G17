@@ -7,10 +7,15 @@
 #define BAUD_PRESCALE (F_CPU / (BAUD * 16UL))
 
 #include <stdint.h>
+#include <stdio.h>
+#include <stdarg.h>
 
 #include "sam.h"
 #include "functions.h"
 #include "uart.h"
+#include "can_controller.h"
+#include "can_interrupt.h"
+#include "printf.h"
 
 
 #endif

@@ -121,7 +121,7 @@ void playMenu(struct controllers *controller) {
 }
 
 // Highscore
-// Initierer til AAA 0 poeng, bør ha en test som sjekker om vi ikke har non volatile minne og kan lagre mellom kjøringer
+// Initierer til AAA 0 poeng, bï¿½r ha en test som sjekker om vi ikke har non volatile minne og kan lagre mellom kjï¿½ringer
 void initHighscore(void) {
 		for (uint8_t i = 0; i < num_highscores*4; i = i + 4) {
 			writeSRAM(highscore_address+i, 0);
@@ -237,7 +237,7 @@ void set_highscore(char name[], uint8_t value) {
 		for (uint8_t j = 1; j <= num_highscore_char; j++) {
 			names[i][j-1] = readSRAM(highscore_address+i*4+j);
 		}
-		printf("Name: %s Score: %d\n\r",names[i], highscore[i] );
+		printf("Name: %s Score: %d\n\r",names[i], highscore[i]);
 	}
 	/*
 	// Reorder highscore list for new highscore
