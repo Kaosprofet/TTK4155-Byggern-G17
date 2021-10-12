@@ -231,13 +231,15 @@ void set_highscore(char name[], uint8_t value) {
 	char names[num_highscores][num_highscore_char];
 	
 	// Collecting highscore from SRAM
+	
 	for (uint8_t i = 0; i < num_highscores; i++) {
 		highscore[i] = readSRAM(highscore_address+i*4);
 		for (uint8_t j = 1; j <= num_highscore_char; j++) {
 			names[i][j-1] = readSRAM(highscore_address+i*4+j);
 		}
+		printf("Name: %s Score: %d\n\r",names[i], highscore[i] )
 	}
-
+	/*
 	// Reorder highscore list for new highscore
 	for (uint8_t i = num_highscores-1; i >= 0; i--) {
 		if (highscore[i]<value) {
@@ -263,12 +265,14 @@ void set_highscore(char name[], uint8_t value) {
 	}
 	
 	// Write new highscore to SRAM
+	
 	for (uint8_t i = 0; i < num_highscores; i++) {
 		writeSRAM(highscore_address+i*4, highscore[i]);
 		for (uint8_t j = 1; j <= num_highscore_char; j++) {
 			writeSRAM(highscore_address+i*4+j, names[i][j-1]);
 		}
 	}
+	*/
 }
 
 // Reset highscore
