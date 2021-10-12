@@ -7,10 +7,9 @@
  * NTNU - Norwegian University of Science and Technology
  *
  */ 
-#include <stdint.h>
-
-#include "sam.h"
-#include "uart.h"
+#ifndef INCLUDES_H
+#include "includes.h"
+#endif
 
 //Ringbuffer for receiving multiple characters
 uart_ringbuffer rx_buffer;
@@ -57,7 +56,7 @@ void configure_uart(void) {
 	UART->UART_CR = UART_CR_RSTRX | UART_CR_RSTTX | UART_CR_RXDIS | UART_CR_TXDIS;
 
 	// Set the baudrate
-	UART->UART_BRGR = 547; // MCK / 16 * x = BaudRate (write x into UART_BRGR)  
+	UART->UART_BRGR = BAUD_PRESCALE; // MCK / 16 * x = BaudRate (write x into UART_BRGR)  
 
 	// No parity bits
 	UART->UART_MR = UART_MR_PAR_NO | UART_MR_CHMODE_NORMAL;	
