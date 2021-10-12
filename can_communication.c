@@ -19,8 +19,8 @@ int can_interrupt(){
 void CAN_test(void){
 	CAN_com_init(CAN_LOOPBACK);
 	can_message testmessage1;
-	testmessage1.ID = 1000;
-	testmessage1.data[0] = 69;
+	testmessage1.ID = 250;
+	testmessage1.data[0] = 232;
 	testmessage1.length = 1;
 	printf("Test1 ID: %d, Test1 length: %d, Test1 data: %d \n\r",testmessage1.ID, testmessage1.length, testmessage1.data[0]);
 	//printf("Interrupt flags before %d\n\r",can_controller_read(CANInterruptFlags));
@@ -28,18 +28,32 @@ void CAN_test(void){
 	//printf("Interrupt flags after %d\n\r",can_controller_read(CANInterruptFlags));
 	
 	can_message rmessage;
-	rmessage.ID = 1;
-	rmessage.data[0]=1;
-	rmessage.length = 1;
+	rmessage.ID = 0;
+	rmessage.data[0]=0;
+	rmessage.length = 0;
 	can_message* p = &rmessage;
 	can_get_message(0,p);
-	
+	//CAN_test_Transmission(0,p);
 	printf("Rec ID: %d, Rec length: %d, Rec data: %d \n\r",rmessage.ID, rmessage.length, rmessage.data[0]);
-	//printf("test: %d \n\r",(can_controller_read(RXB0DLC)& 0xF));
-	
-	
+	while(1){
+		if(can_controller_read(CANInterruptFlags)>0){
+			can_get_message(0,p);
+			printf("Rec ID: %d, Rec length: %d, Rec data: %d \n\r",rmessage.ID, rmessage.length, rmessage.data[0]);
+		}
+	}
+	//printf("test: %d\n\r",can_controller_read(RXB0DLC));
+	//printf("test: %d \n\r",can_controller_read(TXB0DLC));
 }
 
+void CAN_test_Transmission(uint8_t buffernumber, can_message* message){
+	message->length= can_controller_read(TXB0DLC+0x10*buffernumber);
+	uint8_t id_low = can_controller_read(TXB0SIDL);
+	uint8_t id_high = can_controller_read(TXB0SIDH);
+	message->ID = (id_high<<3) +(id_low>>5);
+	for(uint8_t i=0;i<message->length;i++){
+		message->data[i] = can_controller_read(TXB0Dm + 0x10*buffernumber + i);
+	}
+}
 
 void CAN_com_init(uint8_t can_mode){
 	can_controller_init(can_mode);
@@ -48,7 +62,9 @@ void CAN_com_init(uint8_t can_mode){
 	//Disable masks/filters on RXB0 and RXB1
 	can_controller_write(RXB0CTRL,RX_FilterOff);
 	can_controller_write(RXB1CTRL,RX_FilterOff);
-	
+	can_controller_write(TXB0DLC,0);
+	can_controller_write(TXB0DLC + 0x10,0);
+	can_controller_write(TXB0DLC + 0x20,0);
 	// Disable global interrupts
 	cli();
 	// Interrupt on falling edge PD2
@@ -77,6 +93,7 @@ void CAN_sendmessage(can_message* message){
 		can_buffer += 1;
 		if(can_buffer>2){can_buffer=0;}
 	}
+	printf("Transmitting on buffer: %d\n\r",can_buffer);
 	//printf("Sending to buffer: %d\n\r",can_buffer);
 	//Sending ID to the identifier buffer
 	uint8_t id = message->ID;
@@ -91,6 +108,7 @@ void CAN_sendmessage(can_message* message){
 	//Sending the length to the length buffer
 	uint8_t L = message->length;
 	can_controller_write(TXB0DLC + 0x10*can_buffer, L);
+	//can_controller_bit_modify(TXB0DLC + 0x10*can_buffer,0x0F,L-1);
 	
 	//Sending the data
 	uint8_t* data2send = message->data;
