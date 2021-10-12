@@ -237,7 +237,7 @@ void set_highscore(char name[], uint8_t value) {
 		for (uint8_t j = 1; j <= num_highscore_char; j++) {
 			names[i][j-1] = readSRAM(highscore_address+i*4+j);
 		}
-		printf("Name: %s Score: %d\n\r",names[i], highscore[i] )
+		printf("Name: %s Score: %d\n\r",names[i], highscore[i]);
 	}
 	/*
 	// Reorder highscore list for new highscore
