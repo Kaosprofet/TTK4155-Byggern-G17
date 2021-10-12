@@ -89,8 +89,8 @@ void spi_test(void)
 void can_controller_test(void){
 	can_controller_init(CAN_LOOPBACK);
 	while (1){
-		can_controller_write(0b00110000, 0b01010101);
-		uint8_t data = can_controller_read(0b00110000);
+		can_controller_write(0b00001111, 0b11111111);
+		uint8_t data = can_controller_read(0b00001111);
 		printf("%d\n\r",data);
 	}
 }
