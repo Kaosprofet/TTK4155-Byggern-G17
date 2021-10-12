@@ -17,8 +17,8 @@
 
 //interrupt enable
 #define CANInterrruptEnable 0x2B
-	#define MERRE 0b10000000 //Interrupt on error
-	#define WAKIE 0b01000000 //Interrupt on CAN bus activity
+	#define MERRE 0b10000000 // Interrupt on error
+	#define WAKIE 0b01000000 // Interrupt on CAN bus activity
 	#define TX2IE 0b00010000 // TXB2 becoming empty
 	#define TX1IE 0b00001000 // TXB1 becoming empty
 	#define TX0IE 0b00000100 // TXB0 becoming empty
@@ -27,29 +27,29 @@
 
 //Interrupt flag
 #define CANInterruptFlags 0x2C
-	#define MERRF 0b10000000 //Message error interrupt flag
-	#define WAKIF 0b01000000 //Interrupt pending
-	#define ERRIF 0b00100000 //Error interrupt flag
-	#define TX2IF 0b00010000 //TX Buffer 2 empty
-	#define TX1IF 0b00001000 //TX Buffer 1 empty
-	#define TX0IF 0b00000100 //TX Buffer 0 empty
-	#define RX1IF 0b00000010 //RX Buffer 1 full
-	#define RX0IF 0b00000001 //RX Buffer 0 full
+	#define MERRF 0b10000000 // Message error interrupt flag
+	#define WAKIF 0b01000000 // Interrupt pending
+	#define ERRIF 0b00100000 // Error interrupt flag
+	#define TX2IF 0b00010000 // TX Buffer 2 empty
+	#define TX1IF 0b00001000 // TX Buffer 1 empty
+	#define TX0IF 0b00000100 // TX Buffer 0 empty
+	#define RX1IF 0b00000010 // RX Buffer 1 full
+	#define RX0IF 0b00000001 // RX Buffer 0 full
 
 //Transmit buffers
 #define TXB0CTRL 0x30
 #define TXB1CTRL 0x40
 #define TXB2CTRL 0x50
 //... sub bits
-#define ABTF 0b01000000 // (R) High if message was aborted
-#define MLOA 0b00100000 // (R) High if message lost arbitration while being sent
-#define TXERR 0b00010000 // (R) High if transmission error is detected
-#define TXREQ 0b00001000 // (R/W) High if the buffer is pending a transmission
+#define ABTF 0b01000000		// (R) High if message was aborted
+#define MLOA 0b00100000		// (R) High if message lost arbitration while being sent
+#define TXERR 0b00010000	// (R) High if transmission error is detected
+#define TXREQ 0b00001000	// (R/W) High if the buffer is pending a transmission
 //Message priority(R/W):
-#define TXP_HIGH 0b00000011 //High
-#define TXP_HIGHInter 0b00000010 //High-intermediate
-#define TXP_LOWInter 0b00000001 //Low intermediate
-#define TXP_LOW 0b00000000 //Low
+#define TXP_HIGH 0b00000011			//High
+#define TXP_HIGHInter 0b00000010	//High-intermediate
+#define TXP_LOWInter 0b00000001		//Low intermediate
+#define TXP_LOW 0b00000000			//Low
 
 //Pin control and status registers
 #define TXRTSCTRL 0x0D
@@ -94,14 +94,16 @@
 //Receive buffer data byte
 #define RXB0DM 0x66
 
+void can_controller_init(uint8_t can_mode);
+void can_controller_reset(void);
+
 
 uint8_t can_controller_read(uint8_t address);
 void can_controller_write(uint8_t address, uint8_t data);
+
 void can_controller_request_to_send(uint8_t address);
 uint8_t can_controller_read_status(void);
 void can_controller_bit_modify(uint8_t address, uint8_t mask, uint8_t data);
-void can_controller_reset(void);
-void can_controller_init(uint8_t can_mode);
 void can_set_mode(uint8_t can_mode);
 uint8_t setbitfunction(uint8_t byte, uint8_t bit);
 #endif
