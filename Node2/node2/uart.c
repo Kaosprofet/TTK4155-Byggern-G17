@@ -15,7 +15,6 @@
 //Ringbuffer for receiving multiple characters
 uart_ringbuffer rx_buffer;
 
-
 /**
  * \brief Configure UART.
  *
@@ -23,19 +22,18 @@ uart_ringbuffer rx_buffer;
  *
  * \retval void.
  */
-void configure_uart(void)
-{
+void configure_uart(void) {
 	uint32_t ul_sr;
 
-/*
-Initialize UART ring buffer as empty
-*/
-rx_buffer.head=0;
-rx_buffer.tail=0;
+	/*
+	Initialize UART ring buffer as empty
+	*/
+	rx_buffer.head=0;
+	rx_buffer.tail=0;
 
-/*
-Initialize UART communication
-*/
+	/*
+	Initialize UART communication
+	*/
 	// Pin configuration
 	// Disable interrupts on Uart receive (URXD) and transmit (UTXD) pins
 	PIOA->PIO_IDR = PIO_PA8A_URXD | PIO_PA9A_UTXD;
@@ -76,9 +74,6 @@ Initialize UART communication
 
 	// Enable UART receiver and transmitter
 	UART->UART_CR = UART_CR_RXEN | UART_CR_TXEN;
-	
-	
-
 }
 
 /**
@@ -88,8 +83,7 @@ Initialize UART communication
  *
  * \retval Success(0) or failure(1)
  */
-int uart_getchar(uint8_t *c)
-{
+int uart_getchar(uint8_t *c) {
 	// Check if a character is available in the ringbuffer
 	if(rx_buffer.head == rx_buffer.tail) { //Buffer is empty
 		return 1;
@@ -108,8 +102,7 @@ int uart_getchar(uint8_t *c)
  *
  * \retval Success(0) or failure(1).
  */
-int uart_putchar(const uint8_t c)
-{
+int uart_putchar(const uint8_t c) {
 	// Check if the transmitter is ready
 	if((UART->UART_SR & UART_SR_TXRDY) != UART_SR_TXRDY)
 	return 1;
@@ -120,22 +113,18 @@ int uart_putchar(const uint8_t c)
 	return 0;
 }
 
-void UART_Handler(void)
-{
+void UART_Handler(void) {
 	uint32_t status = UART->UART_SR;
 	
 	//Reset UART at overflow error and frame error
-	if(status & (UART_SR_OVRE | UART_SR_FRAME | UART_SR_PARE))
-	{
+	if(status & (UART_SR_OVRE | UART_SR_FRAME | UART_SR_PARE)) {
 		UART->UART_CR = UART_CR_RXEN | UART_CR_TXEN | UART_CR_RSTSTA;
 	}
 	
 	//Check if message is ready to be received
-	if(status & UART_SR_RXRDY)
-	{
+	if(status & UART_SR_RXRDY) {
 		//Check if receive ring buffer is full and 
-		if((rx_buffer.tail + 1) % UART_RINGBUFFER_SIZE == rx_buffer.head)
-		{
+		if((rx_buffer.tail + 1) % UART_RINGBUFFER_SIZE == rx_buffer.head) {
 			printf("ERR: UART RX buffer is full\n\r");
 			rx_buffer.data[rx_buffer.tail] = UART->UART_RHR; //Throw away message
 			return;
@@ -144,6 +133,4 @@ void UART_Handler(void)
 		rx_buffer.tail = (rx_buffer.tail + 1) % UART_RINGBUFFER_SIZE;
 		
 	}
-	
-	
 }

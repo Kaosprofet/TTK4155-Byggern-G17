@@ -18,11 +18,10 @@
 /*
  * Ringbuffer for receiving characters from  
  */
-typedef struct uart_ringbuffer_t
-{
+typedef struct uart_ringbuffer_t {
 	uint8_t head, tail;
 	char data[UART_RINGBUFFER_SIZE];
-	} uart_ringbuffer;
+} uart_ringbuffer;
 
 
 void configure_uart(void);
@@ -30,7 +29,7 @@ void configure_uart(void);
 int uart_getchar(uint8_t *c);
 int uart_putchar(const uint8_t c);
 
-void UART_Handler       ( void );
+void UART_Handler( void );
 
 
 
