@@ -20,7 +20,7 @@ void can_controller_write(uint8_t address, uint8_t data)
     spi_write(data);       //The data to write data
     setBit(PORTB, PB4);    //Raise chip-select
 }
-void can_controller_request_to_send_TXB0(uint8_t address)
+void can_controller_request_to_send(uint8_t address)
 {
     clearBit(PORTB, PB4); //Lower chip-select
     spi_write(0b10000001);

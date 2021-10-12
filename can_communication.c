@@ -7,17 +7,13 @@ void CAN_test(void){
 	CAN_com_init(CAN_LOOPBACK);
 	can_message testmessage;
 	can_message rmessage;
-	while(1){
 		testmessage.ID = 69;
-		testmessage.data[0] = 'h';
-		testmessage.data[1] = 'e';
-		testmessage.data[2] = 'i';
-		testmessage.length = 3;
+		testmessage.data[0] = 69;
+		testmessage.length = 1;
 		
 		CAN_sendmessage(&testmessage);
 		rmessage = CAN_recieve_message();
-		//printf("Data: &d \n\r",rmessage.data[0]);
-	}
+		printf("Data: %d \n\r",rmessage.data[0]);
 }
 
 
@@ -40,6 +36,7 @@ void CAN_sendmessage(can_message* message){
 	
 	//Looping until we find a clear buffer
 	while(CAN_buffer_tx_clear(can_buffer)){
+		printf("Increasing buffer, buffer= %d \n\r",can_buffer);
 		can_buffer += 1;
 		if(can_buffer>2){can_buffer=0;}
 	}
@@ -70,8 +67,8 @@ void CAN_sendmessage(can_message* message){
 int CAN_buffer_tx_clear(int can_buffer){
 	uint8_t interrupt_flags = can_controller_read(CANInterruptFlags); //Reads the interrupt flags
 	uint8_t check_bit = can_buffer+2;
-	if(!bitIsSet(interrupt_flags,check_bit)){ return 1;}
-	else{ return 0;}
+	if(!bitIsSet(interrupt_flags,check_bit)){ return 0;}
+	else{ return 1;}
 }
 
 
