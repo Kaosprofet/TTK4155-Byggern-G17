@@ -9,23 +9,19 @@
 #include "includes.h"
 #endif
 
-void exercise1(void)
-{
-	while (1)
-	{
+void exercise1(void) {
+	while (1) {
 		unsigned char data = receiveByte(); //Recives the inputted characters
 		transmitByte(data + 5);				//Transmits the inputted characters and moves it 5 characters down
 	}
 }
 
-int exercise2(void)
-{
+int exercise2(void) {
 	//enableEMI(); //Enabeling external memory interface
 	setBit(DDRE, PE1); //Enabling PE1 for output
 	setBit(DDRA, PA0);
 	setBit(DDRA, PA1);
-	while (1)
-	{
+	while (1) {
 		setBit(PORTE, PE1);
 		toggleBit(PORTA, PA0);
 		setBit(PORTA, PA1);
@@ -34,17 +30,14 @@ int exercise2(void)
 	}
 }
 
-void exercise3(void)
-{
+void exercise3(void) {
 	playGame();
 }
-void exercise4(void)
-{
+void exercise4(void) {
 	oled_test();
 }
 
-void testChipSelect(void)
-{
+void testChipSelect(void) {
 	//Disables EMI
 	clearBit(MCUCR, SRE);
 	setBit(DDRA, PA7);
@@ -59,8 +52,8 @@ void testChipSelect(void)
 	setBit(DDRC, PC2); //Enabling PE1 for output
 	setBit(DDRC, PC1);
 	setBit(DDRC, PC0);
-	while (1)
-	{
+	
+	while (1) {
 		setBit(PORTA, PA7);
 		setBit(PORTA, PA6);
 		setBit(PORTA, PA5);
@@ -76,11 +69,9 @@ void testChipSelect(void)
 	}
 }
 
-void spi_test(void)
-{
+void spi_test(void) {
 	spi_init();
-	while (1)
-	{
+	while (1) {
 		spi_transfer(0b00000000); //command
 		spi_transfer(0b01111110); //data
 	}
@@ -88,15 +79,14 @@ void spi_test(void)
 
 void can_controller_test(void){
 	can_controller_init(CAN_LOOPBACK);
-	while (1){
+	while (1) {
 		can_controller_write(0b00001111, 0b11111111);
 		uint8_t data = can_controller_read(0b00001111);
 		printf("%d\n\r",data);
 	}
 }
 
-int main(void)
-{
+int main(void) {
 	initGame();
 	CAN_test();
 	//exercise3();
