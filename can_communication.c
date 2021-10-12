@@ -1,18 +1,28 @@
 #ifndef INCLUDES_H
 #include "includes.h"
-#include "can_communication.h"
 #endif
 
 
 void CAN_test(void){
 	CAN_com_init(CAN_LOOPBACK);
+	can_message testmessage;
+	can_message rmessage;
+	while(1){
+		testmessage.ID = 69;
+		testmessage.data[0] = 'h';
+		testmessage.data[1] = 'e';
+		testmessage.data[2] = 'i';
+		testmessage.length = 3;
 		
+		CAN_sendmessage(&testmessage);
+		rmessage = CAN_recieve_message();
+		//printf("Data: &d \n\r",rmessage.data[0]);
+	}
 }
 
 
 void CAN_com_init(uint8_t can_mode){
 	can_controller_init(can_mode);
-	write_CANCTRL(can_mode); //Setting the CAN controller to the specified mode
 	can_controller_write(CANInterrruptEnable, (RX0IE + RX1IE + TX0IE + TX1IE + TX2IE)); //Enables interrupt on all receive and transmit buffers. 
 }
 

@@ -12,10 +12,9 @@ void spi_init(void)
     setBit(PORTB, PB4);  //Sets the SS pin to high
     setBit(SPCR, SPE);   //Enable SPI
     setBit(SPCR, MSTR);  //Enable master mode
-    clearBit(SPSR, SPIF);
     setBit(SPCR, SPR0);  //Sets the SCK frequency to Fclk/16
-    clearBit(SPCR, SPR1);
-    clearBit(SPSR, SPI2X); //Sets SPI transfer speed to normal
+		clearBit(SPCR, SPR1); 
+		clearBit(SPSR, SPI2X); //Sets SPI transfer speed to normal
 }
 
 char spi_read(void)

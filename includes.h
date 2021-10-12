@@ -26,5 +26,6 @@
 #include "interface.h"
 #include "spi.h"
 #include "can_controller.h"
+#include "can_communication.h"
 
 
