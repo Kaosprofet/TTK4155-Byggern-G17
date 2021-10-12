@@ -98,6 +98,6 @@ void can_controller_test(void){
 int main(void)
 {
 	initGame();
-	can_controller_test();
+	CAN_test();
 	//exercise3();
 }

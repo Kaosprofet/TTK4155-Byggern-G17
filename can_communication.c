@@ -1,6 +1,5 @@
 #ifndef INCLUDES_H
 #include "includes.h"
-#include "can_communication.h"
 #endif
 
 
@@ -17,10 +16,8 @@ void CAN_test(void){
 		
 		CAN_sendmessage(&testmessage);
 		rmessage = CAN_recieve_message();
-		printf(rmessage.data);
+		//printf("Data: &d \n\r",rmessage.data[0]);
 	}
-	
-		
 }
 
 
