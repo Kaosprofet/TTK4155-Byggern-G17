@@ -9,7 +9,6 @@
 #include "includes.h"
 #endif
 
-
 #define LED_1 PIO_PA19
 #define LED_2 PIO_PA20
 
@@ -21,8 +20,6 @@ int main(void) {
     SystemInit();
 	
 	led_test();
-	
-	
 	
 	
     while (1) {
@@ -40,5 +37,11 @@ void led_test(void) {
 	PIOA->PIO_PUDR |= LED_2;
 	
 	setBit(PIOA, LED_1);
-	clearBit(PIOA, LED_2);
+	
+	
+	while(1) {
+		toggleBit(PIOA, LED_1);
+		toggleBit(PIOA, LED_2);
+	}
+	
 }
