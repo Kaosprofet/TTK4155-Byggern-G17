@@ -11,6 +11,10 @@
 
 #define CAN_STAT 0x0E //Status register, read to return the status of the MCP
 
+#define CAN_WRITE 0x02
+#define CAN_READ 0x03
+#define CAN_BITMOD 0x05
+
 //interrupt enable
 #define CANInterrruptEnable 0x2B
 	#define MERRE 0b10000000 //Interrupt on error
@@ -63,7 +67,7 @@
 //Used to request message transmission
 #define B2RTSM 0b00000100
 #define B1RTSM 0b00000010
-#define B1RTSM 0b00000001
+#define B0RTSM 0b00000001
 
 //Transmit Identifier high
 #define TXB0SIDH 0x31

@@ -2,6 +2,19 @@
 #include "includes.h"
 #endif
 
+volatile int can_interrupt_flag = 0;
+
+ISR(INT0_vect){
+	can_interrupt_flag = 1;
+}
+
+int can_interrupt(){
+	if(can_interrupt_flag){
+		can_interrupt_flag = 0;
+		return 1;
+	}
+	else{return 0;}
+}
 
 void CAN_test(void){
 	CAN_com_init(CAN_LOOPBACK);
@@ -14,18 +27,30 @@ void CAN_test(void){
 	CAN_sendmessage(&testmessage1);
 	//printf("Interrupt flags after %d\n\r",can_controller_read(CANInterruptFlags));
 	
+	
 	can_message rmessage;
 	can_get_message(0,&rmessage);
 	
+	printf("Rec ID: %d, Rec length: %d, Rec data: %d \n\r",rmessage.ID, rmessage.length, rmessage.data[0]);
 	//printf("test: %d \n\r",(can_controller_read(RXB0DLC)& 0xF));
-	printf("Received ID: %d, Received length: %d, Received data: %d \n\r",rmessage.ID, rmessage.length, rmessage.data[0]);
+	
 	
 }
 
 
 void CAN_com_init(uint8_t can_mode){
 	can_controller_init(can_mode);
-	can_controller_write(CANInterrruptEnable, (RX0IE + RX1IE + TX0IE + TX1IE + TX2IE)); //Enables interrupt on all receive and transmit buffers. 
+	can_controller_write(CANInterrruptEnable, 0x03); //Enables interrupt on all receive. 
+	// Disable global interrupts
+	cli();
+	// Interrupt on falling edge PD2
+	setBit(MCUCR, ISC01);
+	clearBit(MCUCR, ISC00);
+	// Enable interrupt on PD2
+	setBit(GICR, INT0);
+	// Enable global interrupts
+	sei();
+	
 }
 
 //Sends the selected mode to CANCTRL register (Manual page 60)
@@ -47,13 +72,16 @@ void CAN_sendmessage(can_message* message){
 	//printf("Sending to buffer: %d\n\r",can_buffer);
 	//Sending ID to the identifier buffer
 	uint8_t id = message->ID;
-	//ID high	
-	can_controller_write(TXB0SIDH + 0x10*can_buffer, id/8);
+	
+	//ID high
+	char id_high = id/8;	
+	can_controller_write(TXB0SIDH + 0x10*can_buffer, id_high);
 	//ID low
-	can_controller_write(TXB0SIDL + 0x10*can_buffer, id%8);
+	char id_low = (id %8)<<5;
+	can_controller_write(TXB0SIDL + 0x10*can_buffer, id_low);
 	
 	//Sending the length to the length buffer
-	uint8_t L = message->length;
+	uint8_t* L = message->length;
 	can_controller_write(TXB0DLC + 0x10*can_buffer, L);
 	
 	//Sending the data
@@ -80,8 +108,8 @@ int CAN_buffer_tx_clear(int can_buffer){
 //checks for errorflags
 int CAN_error_check(void){
 	uint8_t byte = can_controller_read(CANInterruptFlags);
-	if(byte & ERRIF == ERRIF){ //Checks if the the error bit/flag is high
-		printf("(!) CAN: Error detected\n\l");
+	if((byte & ERRIF) == ERRIF){ //Checks if the the error bit/flag is high
+		printf("(!) CAN: Error detected\n\r");
 		return 1;
 	}
 	else {return 0;}
@@ -141,7 +169,7 @@ int CAN_buffer_rx_clear(int can_buffer){
 }
 
 int checkBitmask(int byte,int mask){
-	if(byte & mask == mask){
+	if((byte & mask) == mask){
 		return 1;
 	}
 	else {return 0;}
