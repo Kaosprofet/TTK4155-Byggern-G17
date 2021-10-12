@@ -124,7 +124,7 @@ void playMenu(struct controllers *controller) {
 // Initierer til AAA 0 poeng, bør ha en test som sjekker om vi ikke har non volatile minne og kan lagre mellom kjøringer
 void initHighscore(void) {
 		for (uint8_t i = 0; i < num_highscores*4; i = i + 4) {
-			writeSRAM(highscore_address+i, 4);
+			writeSRAM(highscore_address+i, 0);
 			for (uint8_t j = 1; j <= num_highscore_char; j++) {
 				writeSRAM(highscore_address+i+j, 'A');
 			}
@@ -132,6 +132,7 @@ void initHighscore(void) {
 }
 
 void highscore(void) {
+	// Screen candy
 	oled_reset();
 	oled_set_font(LARGE);
 	oled_home();
@@ -160,6 +161,8 @@ void highscore(void) {
 void input_highscore(struct controllers *controller, uint8_t score) {
 	letterSelected = 0;
 	for (uint8_t i = 0; i<3 ;i++) {letters[i] = 'A';};
+	
+	// Screen candy
 	oled_reset();
 	oled_set_font(LARGE);
 	oled_pos(1,0);
@@ -186,6 +189,7 @@ void input_highscore(struct controllers *controller, uint8_t score) {
 	oled_print("select");
 	oled_set_font(LARGE);
 	
+	// Name input 
 	while(!bitIsSet(PIND, PD4)) {
 		oled_pos(3,0);
 		oled_print_centered(letters);
@@ -197,16 +201,36 @@ void input_highscore(struct controllers *controller, uint8_t score) {
 		if (abs(controller->y_val) > joystickMenuTreshold && abs(lastJoystickYVal) < joystickMenuTreshold) {
 			changeChar(controller);
 		}
+		
+		// Indicator printing
+		oled_pos(4,0);
+		switch(letterSelected) {
+			case(0):
+			oled_print_centered("^  ");
+			break;
+			case(1):
+			oled_print_centered(" ^ ");
+			break;
+			case(2):
+			oled_print_centered("  ^");
+			break;
+		}
+		
 		lastJoystickXVal = controller->x_val;
 		lastJoystickYVal = controller->y_val;
 	}
+	oled_pos(4,0);
+	oled_print_centered("   ");
+	
 	set_highscore(letters, score);
 }
 
+// Stores new highscore to memory
 void set_highscore(char name[], uint8_t value) {
 	uint8_t highscore[num_highscores];
 	char names[num_highscores][num_highscore_char];
 	
+	// Collecting highscore from SRAM
 	for (uint8_t i = 0; i < num_highscores; i++) {
 		highscore[i] = readSRAM(highscore_address+i*4);
 		for (uint8_t j = 1; j <= num_highscore_char; j++) {
@@ -214,19 +238,22 @@ void set_highscore(char name[], uint8_t value) {
 		}
 	}
 
+	// Reorder highscore list for new highscore
 	for (uint8_t i = num_highscores-1; i >= 0; i--) {
 		if (highscore[i]<value) {
-			if (i==num_highscores) {			// If last name in high score
+			if (i==num_highscores) {			// If last name in high score discard old "last" place
 				highscore[i] = value;
 				for (uint8_t j = 0; j < num_highscore_char; j++) {
 					names[i][j] = name[j];
 				}
 			}
 			else {
+				// Push old highscore down 
 				highscore[i+1] = highscore[i];
 				for (uint8_t j = 0; j < num_highscore_char; j++) {
 					names[i+1][j] = names[i][j];
 				}
+				// Add new highscore
 				highscore[i] = value;
 				for (uint8_t j = 0; j < num_highscore_char; j++) {
 					names[i][j] = name[j];
@@ -234,6 +261,8 @@ void set_highscore(char name[], uint8_t value) {
 			}
 		}
 	}
+	
+	// Write new highscore to SRAM
 	for (uint8_t i = 0; i < num_highscores; i++) {
 		writeSRAM(highscore_address+i*4, highscore[i]);
 		for (uint8_t j = 1; j <= num_highscore_char; j++) {
