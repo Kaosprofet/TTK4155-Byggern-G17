@@ -19,22 +19,19 @@ Edited 2020 by Eivind H. Jølsgard and Gustav O. Often for use in course TTK4155
 2020
 */
 
-
-#include <stdarg.h>
-#include "uart.h"
-
+#ifndef INCLUDES_H
+#include "includes.h"
+#endif
 
 //insert function to print to here
-static void printchar(char **str, int c)
-{
+static void printchar(char **str, int c) {
 	(void) uart_putchar(c);  //Send characters to uart
 }
 
 #define PAD_RIGHT 1
 #define PAD_ZERO 2
 
-static int prints(char **out, const char *string, int width, int pad)
-{
+static int prints(char **out, const char *string, int width, int pad){ 
 	register int pc = 0, padchar = ' ';
 
 	if (width > 0) {
@@ -59,15 +56,13 @@ static int prints(char **out, const char *string, int width, int pad)
 		printchar (out, padchar);
 		++pc;
 	}
-
 	return pc;
 }
 
 /* the following should be enough for 32 bit int */
 #define PRINT_BUF_LEN 12
 
-static int printi(char **out, int i, int b, int sg, int width, int pad, int letbase)
-{
+static int printi(char **out, int i, int b, int sg, int width, int pad, int letbase) {
 	char print_buf[PRINT_BUF_LEN];
 	register char *s;
 	register int t, neg = 0, pc = 0;
@@ -105,12 +100,10 @@ static int printi(char **out, int i, int b, int sg, int width, int pad, int letb
 			*--s = '-';
 		}
 	}
-
 	return pc + prints (out, s, width, pad);
 }
 
-static int print( char **out, const char *format, va_list args )
-{
+static int print( char **out, const char *format, va_list args ) {
 	register int width, pad;
 	register int pc = 0;
 	char scr[2];
@@ -173,16 +166,14 @@ static int print( char **out, const char *format, va_list args )
 	return pc;
 }
 
-int printf(const char *format, ...)
-{
+int printf(const char *format, ...) {
         va_list args;
         
         va_start( args, format );
         return print( 0, format, args );
 }
 
-int sprintf(char *out, const char *format, ...)
-{
+int sprintf(char *out, const char *format, ...) {
         va_list args;
         
         va_start( args, format );
@@ -190,8 +181,7 @@ int sprintf(char *out, const char *format, ...)
 }
 
 
-int snprintf( char *buf, unsigned int count, const char *format, ... )
-{
+int snprintf( char *buf, unsigned int count, const char *format, ... ) {
         va_list args;
         
         ( void ) count;

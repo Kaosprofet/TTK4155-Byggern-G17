@@ -14,12 +14,9 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
 #ifndef PRINTF-STDARG_H_
 #define PRINTF-STDARG_H_
 
-
 int printf(const char *format, ...);
-
 
 #endif /* PRINTF-STDARG_H_ */
