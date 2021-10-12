@@ -51,18 +51,19 @@ void can_controller_reset(void)
     setBit(PORTB, PB4);    //Raise chip-select
 }
 
-void can_set_mode(void)
+void can_set_mode(uint8_t can_mode)
 {
     clearBit(PORTB, PB4); //Lower chip-select
-    can_controller_write(0b11110000, 0b00000000);
+    can_controller_write(CAN_CTRL, can_mode);
     setBit(PORTB, PB4); //Raise chip-select
 }
 
-void can_controller_init(void)
+void can_controller_init(uint8_t can_mode)
 {
     spi_init();             // Initiate spi
     can_controller_reset(); // Reset the cancontroller
     _delay_ms(10);
+	can_set_mode(can_mode);
     // Disable global interrupts
     cli();
     // Interrupt on falling edge PD2

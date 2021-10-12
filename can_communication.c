@@ -11,7 +11,7 @@ void CAN_test(void){
 
 
 void CAN_com_init(uint8_t can_mode){
-	can_controller_init();
+	can_controller_init(can_mode);
 	write_CANCTRL(can_mode); //Setting the CAN controller to the specified mode
 	can_controller_write(CANInterrruptEnable, (RX0IE + RX1IE + TX0IE + TX1IE + TX2IE)); //Enables interrupt on all receive and transmit buffers. 
 }
