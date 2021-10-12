@@ -2,7 +2,7 @@
 #include "includes.h"
 #endif
 
-volatile int can_interrupt_flag = 0;
+volatile uint8_t can_interrupt_flag = 0;
 
 ISR(INT0_vect){
 	can_interrupt_flag = 1;
