@@ -41,6 +41,11 @@ void CAN_test(void){
 void CAN_com_init(uint8_t can_mode){
 	can_controller_init(can_mode);
 	can_controller_write(CANInterrruptEnable, 0x03); //Enables interrupt on all receive. 
+	
+	//Disable masks/interrupts on RXB0 and RXB1
+	can_controller_write(RXB0CTRL,RX_FilterOff);
+	can_controller_write(RXB1CTRL,RX_FilterOff);
+	
 	// Disable global interrupts
 	cli();
 	// Interrupt on falling edge PD2
