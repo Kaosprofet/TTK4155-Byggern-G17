@@ -5,9 +5,9 @@
  * Author : henri
  */ 
 
-
-#include "sam.h"
-#include "functions.h"
+#ifndef INCLUDES_H
+#include "includes.h"
+#endif
 
 
 #define LED_1 PIO_PA19
