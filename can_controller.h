@@ -83,6 +83,8 @@
 
 //Receive buffers
 #define RXB0CTRL 0x60
+#define RXB1CTRL 0x70
+#define RX_FilterOff 0b01100000
 
 //Receive buffer identifiers
 #define RXB0SIDH 0x61 //high
