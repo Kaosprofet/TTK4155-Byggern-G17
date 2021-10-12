@@ -99,5 +99,5 @@ void can_controller_bit_modify(uint8_t address, uint8_t mask, uint8_t data);
 void can_controller_reset(void);
 void can_controller_init(uint8_t can_mode);
 void can_set_mode(uint8_t can_mode);
-
+uint8_t setbitfunction(uint8_t byte, uint8_t bit);
 #endif

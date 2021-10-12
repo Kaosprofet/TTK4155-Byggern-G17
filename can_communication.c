@@ -5,15 +5,21 @@
 
 void CAN_test(void){
 	CAN_com_init(CAN_LOOPBACK);
-	can_message testmessage;
+	can_message testmessage1;
+	testmessage1.ID = 69;
+	testmessage1.data[0] = 69;
+	testmessage1.length = 1;
+	printf("Test1 ID: %d, Test1 length: %d, Test1 data: %d \n\r",testmessage1.ID, testmessage1.length, testmessage1.data[0]);
+	//printf("Interrupt flags before %d\n\r",can_controller_read(CANInterruptFlags));
+	CAN_sendmessage(&testmessage1);
+	//printf("Interrupt flags after %d\n\r",can_controller_read(CANInterruptFlags));
+	
 	can_message rmessage;
-		testmessage.ID = 69;
-		testmessage.data[0] = 69;
-		testmessage.length = 1;
-		
-		CAN_sendmessage(&testmessage);
-		rmessage = CAN_recieve_message();
-		printf("Data: %d \n\r",rmessage.data[0]);
+	can_get_message(0,&rmessage);
+	
+	//printf("test: %d \n\r",(can_controller_read(RXB0DLC)& 0xF));
+	printf("Received ID: %d, Received length: %d, Received data: %d \n\r",rmessage.ID, rmessage.length, rmessage.data[0]);
+	
 }
 
 
@@ -33,34 +39,32 @@ uint8_t CAN_STATUS(void){ return can_controller_read(CAN_STAT);}
 //Sends the inputted message
 void CAN_sendmessage(can_message* message){
 	static int can_buffer = 0;
-	
 	//Looping until we find a clear buffer
 	while(CAN_buffer_tx_clear(can_buffer)){
-		printf("Increasing buffer, buffer= %d \n\r",can_buffer);
 		can_buffer += 1;
 		if(can_buffer>2){can_buffer=0;}
 	}
-	
+	//printf("Sending to buffer: %d\n\r",can_buffer);
 	//Sending ID to the identifier buffer
 	uint8_t id = message->ID;
-		//ID high	
-		uint8_t ID_high = id/8;
-		can_controller_write(TXB0SIDH + 0x10*can_buffer, ID_high);
-		//ID low
-		uint8_t ID_low = id%8;
-		can_controller_write(TXB0SIDL + 0x10*can_buffer, ID_low);
+	//ID high	
+	can_controller_write(TXB0SIDH + 0x10*can_buffer, id/8);
+	//ID low
+	can_controller_write(TXB0SIDL + 0x10*can_buffer, id%8);
 	
 	//Sending the length to the length buffer
 	uint8_t L = message->length;
-		can_controller_write(TXB0DLC + 0x10*can_buffer, L);
+	can_controller_write(TXB0DLC + 0x10*can_buffer, L);
 	
 	//Sending the data
 	uint8_t* data2send = message->data;
 	for(int i = 0; i<L;i++){
-		can_controller_write(TXB0Dm + i + 0x10*can_buffer, data2send[i]);
+		uint8_t number = i + 0x10*can_buffer;
+		can_controller_write(TXB0Dm + number, data2send[i]);
 	}
+	
 	//Request to send
-	can_controller_request_to_send(RTS_TX0 + can_buffer);	
+	can_controller_request_to_send(can_buffer);
 }
 
 //Checks the interrupt flag of a buffer. Returns 1 of it is zero
@@ -100,6 +104,7 @@ can_message CAN_recieve_message(){
 		return B1_message;
 		
 	}
+	
 	//Checks if there is a message in buffer 1
 	if(checkBitmask(CANINTF,RX1IF)){
 		can_get_message(1,&B2_message);
