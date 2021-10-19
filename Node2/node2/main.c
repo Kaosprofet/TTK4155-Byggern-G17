@@ -12,6 +12,8 @@
 #define LED_1 PIO_PA19
 #define LED_2 PIO_PA20
 
+
+
 void led_test(void);
 void can_test(void);
 
@@ -47,6 +49,9 @@ void led_test(void) {
 void can_test(void) {
 	CAN_MESSAGE message;
 	can_encode_message(controller_id);
-	can_receive(&message,0);
-	can_decode_message(&message);
+	while (1) {
+		can_receive(&message,0);
+		can_decode_message(&message);
+		
+	}
 }
