@@ -36,6 +36,10 @@ void can_set_mode(uint8_t can_mode) {
     clearBit(PORTB, PB4); //Lower chip-select
     can_controller_write(CAN_CTRL, can_mode);
     setBit(PORTB, PB4); //Raise chip-select
+	uint8_t byte = can_controller_read(CAN_STAT);
+	if((byte & can_mode)!=can_mode){
+		printf("CAN ERROR: Mode was not set");
+	}
 }
 
 void can_controller_reset(void) {

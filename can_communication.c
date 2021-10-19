@@ -49,13 +49,18 @@ void CAN_test(void) {
 void CAN_test_normal(){
 	can_controller_init(CAN_NORMAL);
 	can_message testmessage1;
-	testmessage1.ID = 250;
+	testmessage1.ID = 1;
 	testmessage1.data[0] = 232;
 	testmessage1.length = 1;
 	printf("Test1 ID: %d, Test1 length: %d, Test1 data: %d \n\r",testmessage1.ID, testmessage1.length, testmessage1.data[0]);
 	CAN_sendmessage(&testmessage1);	
+	uint8_t byte = can_controller_read(CANInterruptFlags);
+	printf("CANINTF: %d\n\r",byte);
+	byte = can_controller_read(TXB0CTRL);
+	printf("TXBOCTRL: %d\n\r",byte);
 }
 
+//Reads from a specified TX buffer
 void CAN_test_Transmission(uint8_t buffernumber, can_message* message) {
 	message->length= can_controller_read(TXB0DLC+0x10*buffernumber);
 	uint8_t id_low = can_controller_read(TXB0SIDL);
@@ -82,7 +87,7 @@ void CAN_sendmessage(can_message* message) {
 		can_buffer += 1;
 		if(can_buffer>2){can_buffer=0;}
 	}
-	printf("Transmitting on buffer: %d\n\r",can_buffer);
+	//printf("Transmitting on buffer: %d\n\r",can_buffer);
 	//printf("Sending to buffer: %d\n\r",can_buffer);
 	//Sending ID to the identifier buffer
 	uint8_t id = message->ID;
