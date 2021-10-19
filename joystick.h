@@ -25,5 +25,6 @@ void printController(struct controllers *controller);			// Prints all values for
 signed int joystickPercent(uint8_t val, struct controllers *controller);						// Converts joystick ADC values to percent
 enum directions direction(signed int x_val, signed int y_val);	// Calculates joystick direction
 void calibrateJoystick(struct controllers *controller);
+void CAN_send_inputData(struct controllers *controller);
 
 #endif
