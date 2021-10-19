@@ -3,7 +3,6 @@
 #endif
 
 void spi_init(void) {
-    setBit(MCUCR, SRE);  //Enable peripherial pinmode
     setBit(DDRB, PB5);   //Enable MOSI as output
     setBit(DDRB, PB7);   //Enable SCK as output
     setBit(DDRB, PB4);   //Enable SS as output
@@ -17,7 +16,7 @@ void spi_init(void) {
 }
 
 char spi_read(void) {
-    SPDR = 0x00; //Writes an empty value to transfer
+    SPDR = 0xFF; //Writes an empty value to transfer
     waitUntilBitIsSet(SPSR, SPIF); //Waits until transfer is completed
     return SPDR; //Returns read value
 }
