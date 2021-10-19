@@ -12,13 +12,14 @@ int can_interrupt() {
 	else{return 0;}
 }
 
+//----------------------------TESTING-----------------------------------
 void CAN_test(void) {
 	can_controller_init(CAN_LOOPBACK); //initializes CAN i LOOPBACK-mode. 
 	
 	//Generates test message
 	can_message testmessage1;
-	testmessage1.ID = 69;
-	testmessage1.data[0] = 42;
+	testmessage1.ID = 10;
+	testmessage1.data[0] = 22;
 	testmessage1.length = 1;
 	printf("Test1 ID: %d, Test1 length: %d, Test1 data: %d \n\r",testmessage1.ID, testmessage1.length, testmessage1.data[0]);
 	
@@ -44,15 +45,14 @@ void CAN_test(void) {
 void CAN_test_normal(){
 	can_controller_init(CAN_NORMAL);
 	can_message testmessage1;
-	testmessage1.ID = 1;
-	testmessage1.data[0] = 232;
+	testmessage1.ID = 69;
+	testmessage1.data[0] = 123;
 	testmessage1.length = 1;
 	printf("Test1 ID: %d, Test1 length: %d, Test1 data: %d \n\r",testmessage1.ID, testmessage1.length, testmessage1.data[0]);
-	CAN_sendmessage(&testmessage1);	
-	uint8_t byte = can_controller_read(CANInterruptFlags);
-	printf("CANINTF: %d\n\r",byte);
-	byte = can_controller_read(TXB0CTRL);
-	printf("TXBOCTRL: %d\n\r",byte);
+	while(1){
+		CAN_sendmessage(&testmessage1);	
+	}
+	
 }
 
 //Reads from a specified TX buffer
