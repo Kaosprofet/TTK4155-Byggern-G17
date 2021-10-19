@@ -14,8 +14,7 @@
 
 #include <stdint.h>
 
-typedef struct can_message_t
-{
+typedef struct can_message_t {
 	uint16_t id;
 	char data_length;
 	char data[8];

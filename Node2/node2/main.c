@@ -13,14 +13,16 @@
 #define LED_2 PIO_PA20
 
 void led_test(void);
+void can_test(void);
 
 
 int main(void) {
     /* Initialize the SAM system */
     SystemInit();
 	
-	led_test();
+	//led_test();
 	
+	can_test();
 	
     while (1) {
 		
@@ -40,8 +42,9 @@ void led_test(void) {
 	
 	
 	while(1) {
-		toggleBit(PIOA, LED_1);
-		toggleBit(PIOA, LED_2);
-	}
-	
+
+	}	
+}
+void can_test(void) {
+	can_init_def_tx_rx_mb(CAN0->CAN_BR);
 }
