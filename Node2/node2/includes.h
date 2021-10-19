@@ -15,6 +15,7 @@
 #include "uart.h"
 #include "can_controller.h"
 #include "can_interrupt.h"
+#include "can_message.h"
 #include "printf.h"
 
 

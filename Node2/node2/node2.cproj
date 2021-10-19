@@ -192,6 +192,12 @@
     <Compile Include="can_interrupt.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="can_message.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="can_message.h">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Device_Startup\" />
