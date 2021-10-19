@@ -86,9 +86,16 @@ void can_controller_test(void){
 	}
 }
 
+
+
 int main(void) {
 	initGame();
-	CAN_test_normal();
+	can_controller_init(CAN_NORMAL);
 	//CAN_test();
-	//exercise3();
+	controllers controller1;
+	while(1){
+		updateController(&controller1);
+		CAN_send_inputData(&controller1);
+	}
+
 }
