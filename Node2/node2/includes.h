@@ -22,6 +22,6 @@ typedef struct coords {
 #include "can_interrupt.h"
 #include "can_message.h"
 #include "printf.h"
-
+#include "IR_driver.h"
 
 #endif
