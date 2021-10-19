@@ -89,5 +89,6 @@ void can_controller_test(void){
 int main(void) {
 	initGame();
 	CAN_test_normal();
+	//CAN_test();
 	//exercise3();
 }

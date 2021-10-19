@@ -37,7 +37,7 @@ void can_set_mode(uint8_t can_mode) {
     can_controller_write(CAN_CTRL, can_mode);
     setBit(PORTB, PB4); //Raise chip-select
 	uint8_t byte = can_controller_read(CAN_STAT);
-	if((byte & can_mode)!=can_mode){
+	if((byte & can_mode)!=can_mode){ //Error if the mode was not set
 		printf("CAN ERROR: Mode was not set");
 	}
 }
@@ -81,7 +81,8 @@ uint8_t can_controller_read(uint8_t address) {
 
 void can_controller_request_to_send(uint8_t address) {
     clearBit(PORTB, PB4);                   //Lower chip-select
-    spi_write(setbitfunction(0x80,address));//spi_write(address);
+    //spi_write(setbitfunction(0x80,address));//spi_write(address);
+	spi_write(0x81);
     setBit(PORTB, PB4);                     //Lower chip-select
 }
 

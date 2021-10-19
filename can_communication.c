@@ -12,36 +12,32 @@ int can_interrupt() {
 	else{return 0;}
 }
 
+//----------------------------TESTING-----------------------------------
 void CAN_test(void) {
-	can_controller_init(CAN_LOOPBACK);
-	uint8_t byte = can_controller_read(CAN_STAT);
-	printf("CANSTAT: %d\n\r",byte);
-	if((byte & CAN_LOOPBACK) == CAN_LOOPBACK){
-		printf("Loopback-mode is set\n\r");
-	}
+	can_controller_init(CAN_LOOPBACK); //initializes CAN i LOOPBACK-mode. 
+	
+	//Generates test message
 	can_message testmessage1;
-	testmessage1.ID = 250;
-	testmessage1.data[0] = 232;
+	testmessage1.ID = 10;
+	testmessage1.data[0] = 22;
 	testmessage1.length = 1;
 	printf("Test1 ID: %d, Test1 length: %d, Test1 data: %d \n\r",testmessage1.ID, testmessage1.length, testmessage1.data[0]);
-	//printf("Interrupt flags before %d\n\r",can_controller_read(CANInterruptFlags));
-	CAN_sendmessage(&testmessage1);
-	//printf("Interrupt flags after %d\n\r",can_controller_read(CANInterruptFlags));
 	
+	//Sends test message
+	CAN_sendmessage(&testmessage1);
+	
+	//Generates reception message-struct
 	can_message rmessage;
 	rmessage.ID = 0;
 	rmessage.data[0]=0;
 	rmessage.length = 0;
 	can_message* p = &rmessage;
-	_delay_ms(100);
-	can_get_message(0,p);
-	//
-	//CAN_test_Transmission(0,p);
-	printf("Rec ID: %d, Rec length: %d, Rec data: %d \n\r",rmessage.ID, rmessage.length, rmessage.data[0]);
+	//Waites for an interrupt flag to be set
 	while(1){
 		if(can_controller_read(CANInterruptFlags)>0){
-			can_get_message(0,p);
+			can_get_message(0,p); //reads from buffer 0.
 			printf("Rec ID: %d, Rec length: %d, Rec data: %d \n\r",rmessage.ID, rmessage.length, rmessage.data[0]);
+			break;
 		}
 	}
 }
@@ -49,15 +45,14 @@ void CAN_test(void) {
 void CAN_test_normal(){
 	can_controller_init(CAN_NORMAL);
 	can_message testmessage1;
-	testmessage1.ID = 1;
-	testmessage1.data[0] = 232;
+	testmessage1.ID = 69;
+	testmessage1.data[0] = 123;
 	testmessage1.length = 1;
 	printf("Test1 ID: %d, Test1 length: %d, Test1 data: %d \n\r",testmessage1.ID, testmessage1.length, testmessage1.data[0]);
-	CAN_sendmessage(&testmessage1);	
-	uint8_t byte = can_controller_read(CANInterruptFlags);
-	printf("CANINTF: %d\n\r",byte);
-	byte = can_controller_read(TXB0CTRL);
-	printf("TXBOCTRL: %d\n\r",byte);
+	while(1){
+		CAN_sendmessage(&testmessage1);	
+	}
+	
 }
 
 //Reads from a specified TX buffer
@@ -87,9 +82,7 @@ void CAN_sendmessage(can_message* message) {
 		can_buffer += 1;
 		if(can_buffer>2){can_buffer=0;}
 	}
-	//printf("Transmitting on buffer: %d\n\r",can_buffer);
-	//printf("Sending to buffer: %d\n\r",can_buffer);
-	//Sending ID to the identifier buffer
+
 	uint8_t id = message->ID;
 	
 	//ID high
@@ -102,7 +95,6 @@ void CAN_sendmessage(can_message* message) {
 	//Sending the length to the length buffer
 	uint8_t L = message->length;
 	can_controller_write(TXB0DLC + 0x10*can_buffer, L);
-	//can_controller_bit_modify(TXB0DLC + 0x10*can_buffer,0x0F,L-1);
 	
 	//Sending the data
 	uint8_t* data2send = message->data;
@@ -147,7 +139,6 @@ can_message CAN_recieve_message() {
 		can_get_message(0, &B1_message);
 		can_controller_bit_modify(CANInterruptFlags,RX0IF,0);
 		return B1_message;
-		
 	}
 	
 	//Checks if there is a message in buffer 1
