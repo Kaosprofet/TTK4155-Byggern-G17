@@ -14,6 +14,11 @@ int can_interrupt() {
 
 void CAN_test(void) {
 	can_controller_init(CAN_LOOPBACK);
+		uint8_t byte = can_controller_read(CAN_STAT);
+		printf("CANSTAT: %d\n\r",byte);
+		if((byte & CAN_LOOPBACK) == CAN_LOOPBACK){
+			printf("Loopback-mode is set\n\r");
+		}
 	can_message testmessage1;
 	testmessage1.ID = 250;
 	testmessage1.data[0] = 232;
@@ -23,6 +28,8 @@ void CAN_test(void) {
 	CAN_sendmessage(&testmessage1);
 	//printf("Interrupt flags after %d\n\r",can_controller_read(CANInterruptFlags));
 	
+
+	
 	can_message rmessage;
 	rmessage.ID = 0;
 	rmessage.data[0]=0;
@@ -30,7 +37,7 @@ void CAN_test(void) {
 	can_message* p = &rmessage;
 	can_get_message(0,p);
 	//CAN_test_Transmission(0,p);
-	printf("Rec ID: %d, Rec length: %d, Rec data: %d \n\r",rmessage.ID, rmessage.length, rmessage.data[0]);
+	//printf("Rec ID: %d, Rec length: %d, Rec data: %d \n\r",rmessage.ID, rmessage.length, rmessage.data[0]);
 	while(1){
 		if(can_controller_read(CANInterruptFlags)>0){
 			can_get_message(0,p);
