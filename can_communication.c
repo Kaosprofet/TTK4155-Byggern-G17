@@ -44,8 +44,6 @@ void CAN_test(void) {
 			printf("Rec ID: %d, Rec length: %d, Rec data: %d \n\r",rmessage.ID, rmessage.length, rmessage.data[0]);
 		}
 	}
-	//printf("test: %d\n\r",can_controller_read(RXB0DLC));
-	//printf("test: %d \n\r",can_controller_read(TXB0DLC));
 }
 
 void CAN_test_normal(){
