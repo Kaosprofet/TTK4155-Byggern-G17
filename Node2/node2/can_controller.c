@@ -22,8 +22,7 @@
  *
  * \retval Success(0) or failure(1)
  */
-uint8_t can_init_def_tx_rx_mb(uint32_t can_br)
-{
+uint8_t can_init_def_tx_rx_mb(uint32_t can_br) {
 	return can_init(can_br, 1, 2);
 }
 
@@ -40,8 +39,7 @@ uint8_t can_init_def_tx_rx_mb(uint32_t can_br)
  */
 
 
-uint8_t can_init(uint32_t can_br, uint8_t num_tx_mb, uint8_t num_rx_mb)
-{
+uint8_t can_init(uint32_t can_br, uint8_t num_tx_mb, uint8_t num_rx_mb) {
 	
 	//Make sure num_rx_mb and num_tx_mb is valid
 	if(num_rx_mb > 8 | num_tx_mb > 8 | num_rx_mb + num_tx_mb > 8)

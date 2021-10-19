@@ -7,11 +7,15 @@ void init_can() {
 	br = 125 << CAN_BR_BRP_Pos;
 	br |= 1 << CAN_BR_SJW_Pos;
 	br |= 3 << CAN_BR_PHASE1_Pos;
-	br |= 3 << CAN_BR_PROPAG;
+	br |= 3 << CAN_BR_PROPAG_Pos;
 	br |= 4 << CAN_BR_PHASE2_Pos;
 	uint8_t test = can_init_def_tx_rx_mb(br);
 	
 	if(test) {
-		printf("CAN initialization failed");
+		printf("CAN initialization failed\n\r");
+	}
+	else {
+		printf("CAN initialized\n\r");
 	}
 }
+

@@ -19,6 +19,9 @@ void can_test(void);
 int main(void) {
     /* Initialize the SAM system */
     SystemInit();
+	WDT->WDT_MR = WDT_MR_WDDIS;	// Watchdog disabled
+	configure_uart();
+	init_can();
 	
 	//led_test();
 	
@@ -39,12 +42,8 @@ void led_test(void) {
 	PIOA->PIO_PUDR |= LED_2;
 	
 	setBit(PIOA, LED_1);
-	
-	
-	while(1) {
 
-	}	
 }
 void can_test(void) {
-	can_init_def_tx_rx_mb(CAN0->CAN_BR);
+	
 }
