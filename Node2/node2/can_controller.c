@@ -74,8 +74,6 @@ uint8_t can_init(uint32_t can_br, uint8_t num_tx_mb, uint8_t num_rx_mb) {
 	PMC->PMC_PCR = PMC_PCR_EN | (0 << PMC_PCR_DIV_Pos) | PMC_PCR_CMD | (ID_CAN0 << PMC_PCR_PID_Pos); // DIV = 1(can clk = MCK/2), CMD = 1 (write), PID = 2B (CAN0)
 	PMC->PMC_PCER1 |= 1 << (ID_CAN0 - 32);
 	
-	ID_PWM
-	
 	//Set baudrate, Phase1, phase2 and propagation delay for can bus. Must match on all nodes!
 	CAN0->CAN_BR = can_br; 
 	
