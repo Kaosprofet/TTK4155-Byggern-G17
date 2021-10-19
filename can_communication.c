@@ -4,11 +4,7 @@
 
 volatile uint8_t can_interrupt_flag = 0;
 
-ISR(INT0_vect){
-	can_interrupt_flag = 1;
-}
-
-int can_interrupt(){
+int can_interrupt() {
 	if(can_interrupt_flag){
 		can_interrupt_flag = 0;
 		return 1;
@@ -16,7 +12,7 @@ int can_interrupt(){
 	else{return 0;}
 }
 
-void CAN_test(void){
+void CAN_test(void) {
 	can_controller_init(CAN_LOOPBACK);
 	can_message testmessage1;
 	testmessage1.ID = 250;
@@ -45,7 +41,7 @@ void CAN_test(void){
 	//printf("test: %d \n\r",can_controller_read(TXB0DLC));
 }
 
-void CAN_test_Transmission(uint8_t buffernumber, can_message* message){
+void CAN_test_Transmission(uint8_t buffernumber, can_message* message) {
 	message->length= can_controller_read(TXB0DLC+0x10*buffernumber);
 	uint8_t id_low = can_controller_read(TXB0SIDL);
 	uint8_t id_high = can_controller_read(TXB0SIDH);
@@ -55,20 +51,19 @@ void CAN_test_Transmission(uint8_t buffernumber, can_message* message){
 	}
 }
 
-
 //Sends the selected mode to CANCTRL register (Manual page 60)
-void write_CANCTRL(uint8_t can_mode){ can_controller_write(CAN_CTRL, can_mode); }
+void write_CANCTRL(uint8_t can_mode) { can_controller_write(CAN_CTRL, can_mode); }
 
 //Reads the status from the controller
-uint8_t CAN_STATUS(void){ return can_controller_read(CAN_STAT);}
+uint8_t CAN_STATUS(void) { return can_controller_read(CAN_STAT);}
 
 
 //-----------------------------------------------SENDING----------------------------------------------------------
 //Sends the inputted message
-void CAN_sendmessage(can_message* message){
+void CAN_sendmessage(can_message* message) {
 	static int can_buffer = 0;
 	//Looping until we find a clear buffer
-	while(CAN_buffer_tx_clear(can_buffer)){
+	while(CAN_buffer_tx_clear(can_buffer)) {
 		can_buffer += 1;
 		if(can_buffer>2){can_buffer=0;}
 	}
@@ -91,7 +86,7 @@ void CAN_sendmessage(can_message* message){
 	
 	//Sending the data
 	uint8_t* data2send = message->data;
-	for(int i = 0; i<L;i++){
+	for(int i = 0; i<L;i++) {
 		can_controller_write(TXB0Dm + i + 0x10*can_buffer, data2send[i]);
 	}
 	
@@ -100,19 +95,17 @@ void CAN_sendmessage(can_message* message){
 }
 
 //Checks the interrupt flag of a buffer. Returns 1 of it is zero
-int CAN_buffer_tx_clear(int can_buffer){
+int CAN_buffer_tx_clear(int can_buffer) {
 	uint8_t interrupt_flags = can_controller_read(CANInterruptFlags); //Reads the interrupt flags
 	uint8_t check_bit = can_buffer+2;
-	if(!bitIsSet(interrupt_flags,check_bit)){ return 0;}
+	if(!bitIsSet(interrupt_flags,check_bit)) { return 0;}
 	else{ return 1;}
 }
 
-
-
 //checks for errorflags
-int CAN_error_check(void){
+int CAN_error_check(void) {
 	uint8_t byte = can_controller_read(CANInterruptFlags);
-	if((byte & ERRIF) == ERRIF){ //Checks if the the error bit/flag is high
+	if((byte & ERRIF) == ERRIF) { //Checks if the the error bit/flag is high
 		printf("(!) CAN: Error detected\n\r");
 		return 1;
 	}
@@ -122,7 +115,7 @@ int CAN_error_check(void){
 //----------------------------------RECEIVING---------------------------------------------
 
 //Receives a message
-can_message CAN_recieve_message(){
+can_message CAN_recieve_message() {
 	can_message B1_message;
 	can_message B2_message;
 	
@@ -130,7 +123,7 @@ can_message CAN_recieve_message(){
 	uint8_t CANINTF = can_controller_read(CANInterruptFlags);
 
 	//Checks if there is a message in buffer 0
-	if(checkBitmask(CANINTF,RX0IF)){
+	if(checkBitmask(CANINTF,RX0IF)) {
 		can_get_message(0, &B1_message);
 		can_controller_bit_modify(CANInterruptFlags,RX0IF,0);
 		return B1_message;
@@ -138,7 +131,7 @@ can_message CAN_recieve_message(){
 	}
 	
 	//Checks if there is a message in buffer 1
-	if(checkBitmask(CANINTF,RX1IF)){
+	if(checkBitmask(CANINTF,RX1IF)) {
 		can_get_message(1,&B2_message);
 		can_controller_bit_modify(CANInterruptFlags,RX1IF,0);
 		return B2_message;
@@ -147,7 +140,7 @@ can_message CAN_recieve_message(){
 }
 
 //Get the message from a specified buffer
-void can_get_message(uint8_t buffernumber, can_message* message){
+void can_get_message(uint8_t buffernumber, can_message* message) {
 	//Getting the ID
 	uint8_t id_high = can_controller_read(RXB0SIDH + 0x10*buffernumber); //getting the lower part
 	uint8_t id_low = can_controller_read(RXB0SIDL + 0x10*buffernumber); //getting the higher part
@@ -157,23 +150,26 @@ void can_get_message(uint8_t buffernumber, can_message* message){
 	uint8_t l = can_controller_read(RXB0DLC + 0x10*buffernumber);
 	message->length = l&0b00001111;
 	
-	if(l>8){l=8;}
+	if(l>8) {l=8;}
 	//Getting the data
-	for(uint8_t i=0;i<l;i++){
+	for(uint8_t i=0;i<l;i++) {
 		message->data[i] = can_controller_read(RXB0DM + 0x10*buffernumber + i);
 	}
 }
 
-
-int CAN_buffer_rx_clear(int can_buffer){
+int CAN_buffer_rx_clear(int can_buffer) {
 	uint8_t interrupt_flags = can_controller_read(CANInterruptFlags); //Reads the interrupt flags
 	if(!bitIsSet(interrupt_flags,can_buffer)){ return 1;}
 	else{ return 0;}
 }
 
-int checkBitmask(int byte,int mask){
-	if((byte & mask) == mask){
+int checkBitmask(int byte,int mask) {
+	if((byte & mask) == mask) {
 		return 1;
 	}
 	else {return 0;}
+}
+
+ISR(INT0_vect) {
+	can_interrupt_flag = 1;
 }
