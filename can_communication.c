@@ -33,7 +33,7 @@ void CAN_test(void){
 	rmessage.length = 0;
 	can_message* p = &rmessage;
 	can_get_message(0,p);
-	//CAN_test_Transmission(0,p);
+	CAN_test_Transmission(0,p);
 	printf("Rec ID: %d, Rec length: %d, Rec data: %d \n\r",rmessage.ID, rmessage.length, rmessage.data[0]);
 	while(1){
 		if(can_controller_read(CANInterruptFlags)>0){
