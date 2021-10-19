@@ -27,7 +27,7 @@ void init_can() {
 void can_encode_message(uint8_t ID) {
 	CAN_MESSAGE message;
 	if (ID == controller_id) {
-		message.id = 20;
+		message.id = controller_id;
 		message.data_length = 5;
 		message.data[0] = joystick.x;
 		message.data[1] = joystick.y;
