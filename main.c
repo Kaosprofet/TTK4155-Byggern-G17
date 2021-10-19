@@ -86,9 +86,20 @@ void can_controller_test(void){
 	}
 }
 
+void testCanJoystick(void){
+	can_controller_init(CAN_NORMAL);
+	//CAN_test();
+	controllers controller1;
+	calibrateJoystick(&controller1);
+	while(1){
+		updateController(&controller1);
+		printController(&controller1);
+		CAN_send_inputData(&controller1);
+		_delay_ms(50);
+	}	
+}
+
 int main(void) {
 	initGame();
-	CAN_test_normal();
-	//CAN_test();
-	//exercise3();
+	testCanJoystick();
 }

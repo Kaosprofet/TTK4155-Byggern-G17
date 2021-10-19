@@ -7,7 +7,7 @@ enum directions {
 	UP, DOWN, LEFT, RIGHT, NEUTRAL
 };
 
-struct controllers {											// Full struct for controller
+typedef struct controllers {											// Full struct for controller
 	signed int x_zero;
 	signed int y_zero;
 	volatile signed int org_x_val;
@@ -17,7 +17,7 @@ struct controllers {											// Full struct for controller
 	volatile enum directions dir;
 	volatile uint8_t slider1_val;
 	volatile uint8_t slider2_val;
-};
+} controllers;
 
 void initButton(void);											// Initializes booth buttons
 void updateController(struct controllers *controller);			// Updates all values for controller

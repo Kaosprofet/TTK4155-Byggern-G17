@@ -72,7 +72,7 @@ void bootStartMenu(struct controllers *controller) {
 		
 		oled_pos(7,100);
 		oled_print("select");
-		
+		//CAN_send_inputData(controller);
 		updateController(controller);
 	
 		if (abs(controller->y_val) > joystickMenuTreshold && abs(lastJoystickYVal) < joystickMenuTreshold) {

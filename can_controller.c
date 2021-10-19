@@ -49,8 +49,7 @@ void can_controller_reset(void) {
 }
 
 uint8_t setbitfunction(uint8_t byte, uint8_t bit){
-	uint8_t bits[8]={1,2,4,8,16,32,64,128};
-	byte += bits[bit]; 
+	byte = byte + (1<<(bit+1)); 
 }
 
 void can_controller_bit_modify(uint8_t address, uint8_t mask, uint8_t data) {
