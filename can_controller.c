@@ -2,6 +2,33 @@
 #include "includes.h"
 #endif
 
+
+void can_controller_init(uint8_t can_mode) {
+	spi_init();             // Initiate spi
+	can_controller_reset(); // Reset the cancontroller
+	_delay_ms(10);
+	can_set_mode(can_mode);
+	
+	can_controller_write(CANInterrruptEnable, 0x03); //Enables interrupt on all receive.
+		
+	//Disable masks/filters on RXB0 and RXB1
+	can_controller_write(RXB0CTRL,RX_FilterOff);
+	can_controller_write(RXB1CTRL,RX_FilterOff);
+	can_controller_write(TXB0DLC,0);
+	can_controller_write(TXB0DLC + 0x10,0);
+	can_controller_write(TXB0DLC + 0x20,0);
+	// Disable global interrupts
+	cli();
+	// Interrupt on falling edge PD2
+	setBit(MCUCR, ISC01);
+	clearBit(MCUCR, ISC00);
+	// Enable interrupt on PD2
+	setBit(GICR, INT0);
+	// Enable global interrupts
+	sei();
+
+}
+
 uint8_t can_controller_read(uint8_t address)
 {
     clearBit(PORTB, PB4);       //Lower chip-select
@@ -58,14 +85,7 @@ void can_set_mode(uint8_t can_mode)
     setBit(PORTB, PB4); //Raise chip-select
 }
 
-void can_controller_init(uint8_t can_mode)
-{
-    spi_init();             // Initiate spi
-    can_controller_reset(); // Reset the cancontroller
-    _delay_ms(10);
-	can_set_mode(can_mode);
 
-}
 
 uint8_t setbitfunction(uint8_t byte, uint8_t bit){
 	uint8_t bits[8]={1,2,4,8,16,32,64,128};

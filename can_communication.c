@@ -17,7 +17,7 @@ int can_interrupt(){
 }
 
 void CAN_test(void){
-	CAN_com_init(CAN_LOOPBACK);
+	can_controller_init(CAN_LOOPBACK);
 	can_message testmessage1;
 	testmessage1.ID = 250;
 	testmessage1.data[0] = 232;
@@ -55,27 +55,6 @@ void CAN_test_Transmission(uint8_t buffernumber, can_message* message){
 	}
 }
 
-void CAN_com_init(uint8_t can_mode){
-	can_controller_init(can_mode);
-	can_controller_write(CANInterrruptEnable, 0x03); //Enables interrupt on all receive. 
-	
-	//Disable masks/filters on RXB0 and RXB1
-	can_controller_write(RXB0CTRL,RX_FilterOff);
-	can_controller_write(RXB1CTRL,RX_FilterOff);
-	can_controller_write(TXB0DLC,0);
-	can_controller_write(TXB0DLC + 0x10,0);
-	can_controller_write(TXB0DLC + 0x20,0);
-	// Disable global interrupts
-	cli();
-	// Interrupt on falling edge PD2
-	setBit(MCUCR, ISC01);
-	clearBit(MCUCR, ISC00);
-	// Enable interrupt on PD2
-	setBit(GICR, INT0);
-	// Enable global interrupts
-	sei();
-	
-}
 
 //Sends the selected mode to CANCTRL register (Manual page 60)
 void write_CANCTRL(uint8_t can_mode){ can_controller_write(CAN_CTRL, can_mode); }
