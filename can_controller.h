@@ -96,6 +96,11 @@
 //Receive buffer data byte
 #define RXB0DM 0x66
 
+//Timing buffers
+#define CNF1 0x2A
+#define CNF2 0x29
+#define CNF3 0x28
+
 void can_controller_init(uint8_t can_mode);
 void can_controller_reset(void);
 

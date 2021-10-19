@@ -6,16 +6,22 @@ void can_controller_init(uint8_t can_mode) {
 	spi_init();             // Initiate spi
 	can_controller_reset(); // Reset the cancontroller
 	_delay_ms(10);
-	can_set_mode(can_mode);
+	
+	//Timing
+	can_controller_write(CNF1,(1<<6)|(11<<0));
+	can_controller_write(CNF2, (1<<7)|(1<<6)|(3<<3)|(3<<0));
+	can_controller_write(CNF3,4<<0);
 	
 	can_controller_write(CANInterrruptEnable, 0x03); //Enables interrupt on all receive.
-		
+	
 	//Disable masks/filters on RXB0 and RXB1
 	can_controller_write(RXB0CTRL,RX_FilterOff);
 	can_controller_write(RXB1CTRL,RX_FilterOff);
 	can_controller_write(TXB0DLC,0);
 	can_controller_write(TXB0DLC + 0x10,0);
 	can_controller_write(TXB0DLC + 0x20,0);
+	
+	can_set_mode(can_mode);
 	
 	cli();  // Disable global interrupts
 	// Interrupt on falling edge PD2
