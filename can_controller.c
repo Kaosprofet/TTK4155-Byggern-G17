@@ -7,6 +7,7 @@ void can_controller_init(uint8_t can_mode) {
 	can_controller_reset(); // Reset the cancontroller
 	_delay_ms(10);
 	
+	can_set_mode(CAN_CONFIG);
 	//Timing
 	can_controller_write(CNF1,(1<<6)|(11<<0));
 	can_controller_write(CNF2, (1<<7)|(1<<6)|(3<<3)|(3<<0));
@@ -23,7 +24,6 @@ void can_controller_init(uint8_t can_mode) {
 	can_controller_write(TXB0DLC + 0x20,0);
 	
 	can_set_mode(can_mode);
-	
 	cli();  // Disable global interrupts
 	// Interrupt on falling edge PD2
 	setBit(MCUCR, ISC01);
