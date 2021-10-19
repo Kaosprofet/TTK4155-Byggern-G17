@@ -66,11 +66,6 @@ void CAN_test_Transmission(uint8_t buffernumber, can_message* message) {
 	}
 }
 
-//Sends the selected mode to CANCTRL register (Manual page 60)
-void write_CANCTRL(uint8_t can_mode) { can_controller_write(CAN_CTRL, can_mode); }
-
-//Reads the status from the controller
-uint8_t CAN_STATUS(void) { return can_controller_read(CAN_STAT);}
 
 
 //-----------------------------------------------SENDING----------------------------------------------------------
@@ -98,15 +93,11 @@ void CAN_sendmessage(can_message* message) {
 	
 	//Sending the data
 	uint8_t* data2send = message->data;
-	for(int i = 0; i<L;i++) {
-		can_controller_write(TXB0Dm + i + 0x10*can_buffer, data2send[i]);
+	for(int i = 0; i<L;i++) { can_controller_write(TXB0Dm + i + 0x10*can_buffer, data2send[i]);
 	}
-	
 	//Request to send
 	can_controller_request_to_send(can_buffer);
-	
-	//CAN_buffer_trans_complete(can_buffer);
-	//while(!((can_controller_read(TXB0CTRL+0x10*can_buffer) & TXREQ)==TXREQ)){}
+
 }
 
 //Checks the interrupt flag of a buffer. Returns 1 of it is zero
@@ -117,14 +108,6 @@ int CAN_buffer_tx_clear(int can_buffer) {
 	else{ return 1;}
 }
 
-//Clears buffer interrupt flag
-void CAN_buffer_trans_complete(uint8_t buffernumber){
-	uint8_t byte = can_controller_read(CANInterruptFlags);
-	if((byte&TX0IF)==TX0IF){
-		byte = byte - (TX0IF<<buffernumber);
-		can_controller_write(CANInterruptFlags,byte);
-	}
-}
 
 //checks for errorflags
 int CAN_error_check(void) {
