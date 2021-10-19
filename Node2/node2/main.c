@@ -45,5 +45,8 @@ void led_test(void) {
 
 }
 void can_test(void) {
-	
+	CAN_MESSAGE message;
+	can_encode_message(controller_id);
+	can_receive(&message,0);
+	can_decode_message(&message);
 }

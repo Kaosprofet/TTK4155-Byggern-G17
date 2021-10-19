@@ -10,6 +10,11 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+typedef struct coords {
+	int8_t x,y;
+} coords;
+
+
 #include "sam.h"
 #include "functions.h"
 #include "uart.h"
