@@ -72,3 +72,15 @@ signed int joystickPercent(uint8_t val, struct controllers *controller) {
 	}
 	return 0;
 }
+
+void CAN_send_inputData(struct controllers *controller){
+	can_message manInput;
+	manInput.ID = CAN_ID_ManInputData;
+	manInput.data[0] = controller->x_val;
+	manInput.data[1] = controller->y_val;
+	manInput.data[2] = bitIsSet(PIND,PD4); //Button1
+	manInput.data[3] = controller->slider1_val;
+	manInput.data[4] = controller->slider2_val;
+	manInput.length = 5;
+	CAN_sendmessage(&manInput);
+}
