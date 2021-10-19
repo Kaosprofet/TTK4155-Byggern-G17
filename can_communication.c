@@ -78,10 +78,10 @@ uint8_t CAN_STATUS(void) { return can_controller_read(CAN_STAT);}
 void CAN_sendmessage(can_message* message) {
 	static int can_buffer = 0;
 	//Looping until we find a clear buffer
-	while(CAN_buffer_tx_clear(can_buffer)) {
-		can_buffer += 1;
-		if(can_buffer>2){can_buffer=0;}
-	}
+	//while(CAN_buffer_tx_clear(can_buffer)) {
+		//can_buffer += 1;
+		//if(can_buffer>2){can_buffer=0;}
+	//}
 
 	uint8_t id = message->ID;
 	
@@ -104,6 +104,9 @@ void CAN_sendmessage(can_message* message) {
 	
 	//Request to send
 	can_controller_request_to_send(can_buffer);
+	
+	//CAN_buffer_trans_complete(can_buffer);
+	//while(!((can_controller_read(TXB0CTRL+0x10*can_buffer) & TXREQ)==TXREQ)){}
 }
 
 //Checks the interrupt flag of a buffer. Returns 1 of it is zero
@@ -112,6 +115,15 @@ int CAN_buffer_tx_clear(int can_buffer) {
 	uint8_t check_bit = can_buffer+2;
 	if(!bitIsSet(interrupt_flags,check_bit)) { return 0;}
 	else{ return 1;}
+}
+
+//Clears buffer interrupt flag
+void CAN_buffer_trans_complete(uint8_t buffernumber){
+	uint8_t byte = can_controller_read(CANInterruptFlags);
+	if((byte&TX0IF)==TX0IF){
+		byte = byte - (TX0IF<<buffernumber);
+		can_controller_write(CANInterruptFlags,byte);
+	}
 }
 
 //checks for errorflags
