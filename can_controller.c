@@ -13,6 +13,7 @@ void can_controller_init(uint8_t can_mode) {
 	//Disable masks/filters on RXB0 and RXB1
 	can_controller_write(RXB0CTRL,RX_FilterOff);
 	can_controller_write(RXB1CTRL,RX_FilterOff);
+	//Restets the data length registers to make sure Remote Transmission is turned off
 	can_controller_write(TXB0DLC,0);
 	can_controller_write(TXB0DLC + 0x10,0);
 	can_controller_write(TXB0DLC + 0x20,0);
