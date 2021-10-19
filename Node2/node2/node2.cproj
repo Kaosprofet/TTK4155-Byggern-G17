@@ -159,6 +159,10 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+      </Compile>
+        <Compile Include="includes.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Device_Startup\startup_sam3xa.c">
       <SubType>compile</SubType>
     </Compile>
@@ -202,6 +206,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="servo.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="IR_driver.h">
+      <SubType>compile</SubType>
+    </Compile>
+        <Compile Include="IR_driver.c">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>

@@ -4,7 +4,7 @@
 
 void can_controller_init(uint8_t can_mode) {
 	spi_init();             // Initiate spi
-	can_controller_reset(); // Reset the cancontroller
+	can_controller_reset(); // Reset the can controller
 	_delay_ms(10);
 	
 	can_set_mode(CAN_CONFIG);
@@ -13,7 +13,7 @@ void can_controller_init(uint8_t can_mode) {
 	can_controller_write(CNF2, (1<<7)|(1<<6)|(3<<3)|(3<<0));
 	can_controller_write(CNF3,4<<0);
 	
-	can_controller_write(CANInterrruptEnable, 0x03); //Enables interrupt on all receive.
+	can_controller_write(CANInterrruptEnable, 0x1F); //Enables interrupt on all receive and transmit.
 	
 	//Disable masks/filters on RXB0 and RXB1
 	can_controller_write(RXB0CTRL,RX_FilterOff);

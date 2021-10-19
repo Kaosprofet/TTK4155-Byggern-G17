@@ -96,7 +96,9 @@ void testCanJoystick(void){
 		printController(&controller1);
 		CAN_send_inputData(&controller1);
 		_delay_ms(50);
-	}	
+	}
+	
+
 }
 
 int main(void) {
