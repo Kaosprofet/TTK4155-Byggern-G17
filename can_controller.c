@@ -16,15 +16,13 @@ void can_controller_init(uint8_t can_mode) {
 	can_controller_write(TXB0DLC,0);
 	can_controller_write(TXB0DLC + 0x10,0);
 	can_controller_write(TXB0DLC + 0x20,0);
-	// Disable global interrupts
-	cli();
+	
+	cli();  // Disable global interrupts
 	// Interrupt on falling edge PD2
 	setBit(MCUCR, ISC01);
 	clearBit(MCUCR, ISC00);
-	// Enable interrupt on PD2
-	setBit(GICR, INT0);
-	// Enable global interrupts
-	sei();
+	setBit(GICR, INT0); // Enable interrupt on PD2
+	sei();              // Enable global interrupts
 }
 
 void can_set_mode(uint8_t can_mode) {
@@ -54,16 +52,16 @@ void can_controller_bit_modify(uint8_t address, uint8_t mask, uint8_t data) {
 }
 
 uint8_t can_controller_read_status(void) {
-    clearBit(PORTB, PB4);  //Lower chip-select
-    spi_write(0b10100000); //OP code for reading tx/rx register status
+    clearBit(PORTB, PB4);   //Lower chip-select
+    spi_write(0b10100000);  //OP code for reading tx/rx register status
     uint8_t status = spi_read();
-    setBit(PORTB, PB4); //Lower chip-select
+    setBit(PORTB, PB4);     //Lower chip-select
     return status;
 }
 
 uint8_t can_controller_read(uint8_t address) {
     clearBit(PORTB, PB4);       //Lower chip-select
-    spi_write(CAN_READ);      //Read data from register beginning at selected address
+    spi_write(CAN_READ);        //Read data from register beginning at selected address
     spi_write(address);         //The address from where to begin reading data
     uint8_t value = spi_read(); //Reads data
     setBit(PORTB, PB4);         //Raise chip-select
@@ -71,16 +69,15 @@ uint8_t can_controller_read(uint8_t address) {
 }
 
 void can_controller_request_to_send(uint8_t address) {
-    clearBit(PORTB, PB4); //Lower chip-select
-    spi_write(setbitfunction(0x80,address));
-    //spi_write(address);
-    setBit(PORTB, PB4); //Lower chip-select
+    clearBit(PORTB, PB4);                   //Lower chip-select
+    spi_write(setbitfunction(0x80,address));//spi_write(address);
+    setBit(PORTB, PB4);                     //Lower chip-select
 }
 
 void can_controller_write(uint8_t address, uint8_t data) {
-    clearBit(PORTB, PB4);  //Lower chip-select
-    spi_write(CAN_WRITE); //OP code for writing data to specified register
-    spi_write(address);    //The address from where to begin writing data
-    spi_write(data);       //The data to write data
-    setBit(PORTB, PB4);    //Raise chip-select
+    clearBit(PORTB, PB4);   //Lower chip-select
+    spi_write(CAN_WRITE);   //OP code for writing data to specified register
+    spi_write(address);     //The address from where to begin writing data
+    spi_write(data);        //The data to write data
+    setBit(PORTB, PB4);     //Raise chip-select
 }
