@@ -204,6 +204,12 @@
     <Compile Include="servo.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="IR_driver.h">
+      <SubType>compile</SubType>
+    </Compile>
+        <Compile Include="IR_driver.c">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Device_Startup\" />
