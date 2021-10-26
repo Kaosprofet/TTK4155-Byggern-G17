@@ -213,6 +213,12 @@
     <Compile Include="IR_driver.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="timer_counter.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="timer_counter.h">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Device_Startup\" />
