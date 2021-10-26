@@ -29,6 +29,5 @@ Controller controller;
 #include "printf.h"
 #include "IR_driver.h"
 #include "servo.h"
-#include "timer_counter.h"
 
 #endif

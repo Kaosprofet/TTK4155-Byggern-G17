@@ -8,7 +8,7 @@
 static int32_t pwm_center = 3950;
 
 void init_servo(void) {
-
+	
 	// Disable interrupts
 	PIOC->PIO_IDR = PIO_PC19B_PWMH5;
 
@@ -22,9 +22,6 @@ void init_servo(void) {
 	PMC->PMC_PCR = PMC_PCR_EN | (0 << PMC_PCR_DIV_Pos) | PMC_PCR_CMD | (ID_PWM << PMC_PCR_PID_Pos);
 	PMC->PMC_PCER1 |= 1 << (ID_PWM - 32);
 
-	//Enable PWM (Vet ikke hva vi har definert som enable)
-	PWM->PWM_ENA = PWM_ENA_CHID5;
-
 	//Chanel mode (Her setter vi divisorverdien)
 	PWM->PWM_CH_NUM[5].PWM_CMR = PWM_CMR_CPOL|PWM_CMR_CPRE_MCK_DIV_32;
 
@@ -35,6 +32,8 @@ void init_servo(void) {
 	PWM->PWM_CH_NUM[5].PWM_CDTY = pwm_center;
 
 
+	//Enable PWM (Vet ikke hva vi har definert som enable)
+	PWM->PWM_ENA = PWM_ENA_CHID5;
 }
 
 void position_servo(int8_t position) {
