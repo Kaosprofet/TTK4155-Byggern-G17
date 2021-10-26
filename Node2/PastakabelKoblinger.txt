@@ -5,11 +5,11 @@ Green - Servo YELLOW
 Red - Solonoid 1
 Brown/Dark gray - Solonoid 2
 
-Black - Photo +
-Gray - Photo -
+Black - Photo - (Signal)
+Gray - Photo +  (to GND through 10K)
 
-Blue - emitter +
-Yellow emitter -
+Blue - emitter + (5V)
+Yellow emitter - (to GND throug 47R)
 
 LEDIGE:
 Oransj 
