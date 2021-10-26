@@ -4,6 +4,6 @@
 #include <stdint.h>
 
 void init_servo(void);
-void position_servo(uint8_t position);
+void position_servo(int8_t position);
 
 #endif

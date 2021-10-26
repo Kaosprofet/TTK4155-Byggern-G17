@@ -8,6 +8,8 @@
 #define status_id 30
 #define pid_id 40
 
+
+
 void init_can(void);
 void can_encode_message(uint8_t ID);
 void can_decode_message(CAN_MESSAGE* message);
