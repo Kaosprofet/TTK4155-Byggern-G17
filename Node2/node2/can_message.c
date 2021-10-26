@@ -2,10 +2,6 @@
 #include "includes.h"
 #endif
 
-coords joystick;
-uint8_t button_state;
-uint8_t slider_1_val;
-uint8_t slider_2_val;
 
 void init_can() {
 	uint32_t br;
@@ -29,11 +25,11 @@ void can_encode_message(uint8_t ID) {
 	if (ID == controller_id) {
 		message.id = controller_id;
 		message.data_length = 5;
-		message.data[0] = joystick.x;
-		message.data[1] = joystick.y;
-		message.data[2] = button_state;
-		message.data[3] = slider_1_val;
-		message.data[4] = slider_2_val;
+		message.data[0] = controller.x;
+		message.data[1] = controller.y;
+		message.data[2] = controller.button_state;
+		message.data[3] = controller.slider_1_val;
+		message.data[4] = controller.slider_2_val;
 	}
 	else if (ID == status_id) {
 		
@@ -44,12 +40,12 @@ void can_encode_message(uint8_t ID) {
 void can_decode_message(CAN_MESSAGE *message) {
 	//Controller data
 	if (message->id == controller_id) {  
-		joystick.x = (uint8_t)message->data[0];
-		joystick.y = (uint8_t)message->data[1];
-		button_state = message->data[2];
-		slider_1_val = message->data[3];
-		slider_2_val = message->data[4];
-		printf("Joystick: X = %4d Y = %4d Sliders: 1 = %3d 2 = %3d  Buttons: 1 = %d\n\r", joystick.x, joystick.y, slider_1_val, slider_2_val,  button_state);
+		controller.x = message->data[0];
+		controller.y = message->data[1];
+		controller.button_state = message->data[2];
+		controller.slider_1_val = message->data[3];
+		controller.slider_2_val = message->data[4];
+		//printf("Joystick: X = %4d Y = %4d Sliders: 1 = %3d 2 = %3d  Buttons: 1 = %d\n\r", controller.x, controller.y, controller.slider_1_val, controller.slider_2_val,  controller.button_state);
 	}
 	else if (message->id == status_id) {
 		
