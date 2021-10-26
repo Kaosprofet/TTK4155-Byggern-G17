@@ -1,0 +1,24 @@
+White - Servo BLACK
+Purple - Servo RED
+Green - Servo YELLOW
+
+Red - Solonoid 1
+Brown/Dark gray - Solonoid 2
+
+Black - Photo +
+Gray - Photo -
+
+Blue - emitter +
+Yellow emitter -
+
+LEDIGE:
+Oransj 
+
+
+
+Kobling på breadboard:
+- Oransj på 1
+.
+.
+.
+- Svart på 8
