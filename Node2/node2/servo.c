@@ -10,6 +10,12 @@ void init_servo(void) {
 	
 	// Disable interrupts
 	PIOC->PIO_IDR = PIO_PC19B_PWMH5;
+
+	// select timer 0
+	PIOC->PIO_ABSR |= PIO_PC19B_PWM5;
+
+	//Disable parallel io
+	PIOC->PIO_PDR = PIO_PC19B_PWM5;
 	
 	//Enable Clock for PWM in PMC
 	PMC->PMC_PCR = PMC_PCR_EN | (0 << PMC_PCR_DIV_Pos) | PMC_PCR_CMD | (ID_PWM << PMC_PCR_PID_Pos);
