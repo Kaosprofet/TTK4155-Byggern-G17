@@ -5,7 +5,7 @@
 #define servo_max 150
 #define servo_min -150
 #define servo_offset 0
-static int32_t pwm_center = 3950;
+static int32_t pwm_center = 3500;
 
 void init_servo(void) {
 	
@@ -40,7 +40,7 @@ void position_servo(int8_t position) {
 	position = position + servo_offset;
 	//printf("Position is %d\n\r",position);
 	
-	uint32_t pos = pwm_center + position*15.5;
+	uint32_t pos = pwm_center + position*15;
 	//printf("Position is %d, new position is: %d\n\r",position, pos);
 	
 	
