@@ -24,14 +24,17 @@ int main(void) {
 	WDT->WDT_MR = WDT_MR_WDDIS;	// Watchdog disabled
 	configure_uart();
 	init_can();
-	
-	//led_test();
-	
-	//can_test();
-
 	init_servo();
 	
+	//led_test();
+	//can_test();
+	
+	
     while (1) {
+		CAN_MESSAGE message;
+		can_receive(&message,0);
+		can_decode_message(&message);
+		position_servo(controller.x);
 		
     }
 }
