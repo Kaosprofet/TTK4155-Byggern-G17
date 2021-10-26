@@ -25,17 +25,18 @@ int main(void) {
 	configure_uart();
 	init_can();
 	init_servo();
+	IR_init();
 	
 	//led_test();
 	//can_test();
 	
 	
     while (1) {
-		CAN_MESSAGE message;
-		can_receive(&message,0);
-		can_decode_message(&message);
-		position_servo(controller.x);
-		
+		//CAN_MESSAGE message;
+		//can_receive(&message,0);
+		//can_decode_message(&message);
+		//position_servo(controller.x);
+		//IR_print();
     }
 }
 

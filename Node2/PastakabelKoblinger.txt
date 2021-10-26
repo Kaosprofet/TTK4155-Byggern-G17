@@ -1,20 +1,30 @@
+
+
+------ Servo ----------
 White - Servo BLACK
 Purple - Servo RED
 Green - Servo YELLOW
 
+------ Solonoid -------
 Red - Solonoid 1
 Brown/Dark gray - Solonoid 2
 
-Black - Photo +
-Gray - Photo -
 
-Blue - emitter +
-Yellow emitter -
+------ IR ------------ 
+(Pinne 1) Black - Photodiode + (Signal, to GND through 10K)
+(Pinne 3) Gray - Photodiode -  (5V)
 
+(Pinne 5) Blue - emitter + (5V)
+(Pinne 7) Yellow emitter - (to GND throug 47R)
+
+------ div -----------
 LEDIGE:
 Oransj 
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 6423336d7941ca7f6dbe02116f48df9ba7f3497b
 
 Kobling på breadboard:
 - Oransj på 1
