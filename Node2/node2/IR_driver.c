@@ -19,7 +19,7 @@ void IR_init(void){
 	ADC_init();
 }
 
-
+//Running average filter
 uint16_t IR_filteredValue(void){
 	//Moving all values in the running register
 	for(int i = 0; i<filterLength-1;i++){ IR_raf[i+1] = IR_raf[i];}
@@ -37,4 +37,8 @@ int IR_blocked(void){
 	uint16_t ir_value = IR_filteredValue();
 	if(ir_value < IR_BLOCK_THRESHOLD){ return 1;}
 	else {return 0;}
+}
+
+void IR_print(void){
+	printf("_IR_ Raw value: %d  Filtered value: %d   Blocked: %d \n\r",ADC_read(),IR_filteredValue(),IR_blocked());
 }
