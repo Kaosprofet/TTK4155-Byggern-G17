@@ -23,5 +23,6 @@ typedef struct coords {
 #include "can_message.h"
 #include "printf.h"
 #include "IR_driver.h"
+#include "servo.h"
 
 #endif
