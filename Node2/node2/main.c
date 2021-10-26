@@ -27,7 +27,9 @@ int main(void) {
 	
 	//led_test();
 	
-	can_test();
+	//can_test();
+
+	init_servo();
 	
     while (1) {
 		
