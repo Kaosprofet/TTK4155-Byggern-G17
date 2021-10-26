@@ -30,13 +30,16 @@ int main(void) {
 	//led_test();
 	//can_test();
 	
-	
+	uint8_t counter = 1;
     while (1) {
 		//CAN_MESSAGE message;
 		//can_receive(&message,0);
 		//can_decode_message(&message);
 		//position_servo(controller.x);
-		//IR_print();
+		if(IR_blocked()){
+			printf("penis %d\n\r",counter);
+			counter +=1;	
+		}
     }
 }
 
