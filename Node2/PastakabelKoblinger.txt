@@ -14,7 +14,7 @@ Yellow emitter - (to GND throug 47R)
 LEDIGE:
 Oransj 
 
-
+penis
 
 Kobling på breadboard:
 - Oransj på 1
