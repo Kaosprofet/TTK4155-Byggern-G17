@@ -11,3 +11,14 @@ Gray - Photo -
 Blue - emitter +
 Yellow emitter -
 
+LEDIGE:
+Oransj 
+
+
+
+Kobling på breadboard:
+- Oransj på 1
+.
+.
+.
+- Svart på 8
