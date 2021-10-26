@@ -10,25 +10,31 @@ void ADC_init(void){
 	ADC->ADC_CR = ADC_CR_START; //Starts ADC conversion
 }
 
-/*
+
 uint16_t ADC_read(void){ 
-	return ADC->ADC_CR[0];
+	return ADC->ADC_CDR[0]; //Reads the last ADC converted ADC data. 
 	}
 	
-*/
 void IR_init(void){
 	ADC_init();
 }
 
-uint8_t IR_raw(void){
+
+uint16_t IR_filteredValue(void){
+	//Moving all values in the running register
+	for(int i = 0; i<filterLength-1;i++){ IR_raf[i+1] = IR_raf[i];}
+		
+	//Adding the latest value	
+	IR_raf[0] = ADC_read();
 	
+	//Summarizes the the last values and returns the average
+	uint32_t sum = 0;
+	for(int j=0; j<filterLength;j++){ sum += IR_raf[j];}
+	return sum/filterLength;
 }
 
-uint8_t digitalFilter(uint8_t ir_value){
-	
-}
-
-int IR_blocked(uint8_t ir_value){
+int IR_blocked(void){
+	uint16_t ir_value = IR_filteredValue();
 	if(ir_value < IR_BLOCK_THRESHOLD){ return 1;}
 	else {return 0;}
 }
