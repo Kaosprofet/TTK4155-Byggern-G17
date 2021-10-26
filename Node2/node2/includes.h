@@ -10,10 +10,15 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-typedef struct coords {
-	int8_t x,y;
-} coords;
+typedef struct Controller {
+	int8_t x;
+	int8_t y;
+	uint8_t button_state;
+	uint8_t slider_1_val;
+	uint8_t slider_2_val;
+} Controller;
 
+Controller controller;
 
 #include "sam.h"
 #include "functions.h"
