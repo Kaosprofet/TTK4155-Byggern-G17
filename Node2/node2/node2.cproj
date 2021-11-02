@@ -201,24 +201,6 @@
     <Compile Include="can_message.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="servo.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="servo.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="PI_controller.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="PI_controller.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="solenoid.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="solenoid.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="game_board_driver.h">
       <SubType>compile</SubType>
     </Compile>
