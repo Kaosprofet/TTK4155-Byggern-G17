@@ -2,6 +2,42 @@
 #include "includes.h"
 #endif
 
+void init_game_board(void){
+	IR_init();
+	init_servo();
+	solenoid_init();
+}
+
+//------------------------PI CONTROLLER -------------
+
+uint16_t PI_controller(uint16_t r, uint16_t y){
+	uint16_t e = r - y;
+	//Shifting the array of error values
+	for(int i = 0; i<N-1;i++){ e_vec[i+1] = e_vec[i];}
+	e_vec[0] = e; //Adding the last value;
+	uint16_t e_sum = 0;
+	//Calculation the sum
+	for(int j=0; j<N;j++){ e_sum += e_vec[j];}
+	return Kp*e+Ti*e_sum;
+}
+
+
+
+//-------------------------SOLENOID-----------------------------------
+
+void solenoid_init(void){
+	
+}
+
+void solenoidControll(void){
+	uint8_t button = controller.button_state;
+	if(button > 0){
+		//extend
+	}
+	else {
+		//retract
+	}
+}
 
 // -----------------------------------------------IR---------------------------------------------
 //Pin 44 at PC19
@@ -63,4 +99,52 @@ int IR_blocked(void){
 
 void IR_print(void){
 	printf("_IR_ Raw value: %d  Filtered value: %d   Blocked: %d \n\r",ADC_read(),IR_filteredValue(),IR_blocked());
+}
+
+//---------------------------SERVO ---------------------------
+
+#define servo_max 150
+#define servo_min -150
+#define servo_offset 0
+static int32_t pwm_center = 3500;
+
+void init_servo(void) {
+	
+	// Disable interrupts
+	PIOC->PIO_IDR = PIO_PC19B_PWMH5;
+
+	// select timer 0
+	PIOC->PIO_ABSR |= PIO_PC19B_PWMH5;
+
+	//Disable parallel io
+	PIOC->PIO_PDR = PIO_PC19B_PWMH5;
+	
+	//Enable Clock for PWM in PMC
+	PMC->PMC_PCR = PMC_PCR_EN | (0 << PMC_PCR_DIV_Pos) | PMC_PCR_CMD | (ID_PWM << PMC_PCR_PID_Pos);
+	PMC->PMC_PCER1 |= 1 << (ID_PWM - 32);
+
+	//Chanel mode (Her setter vi divisorverdien)
+	PWM->PWM_CH_NUM[5].PWM_CMR = PWM_CMR_CPOL|PWM_CMR_CPRE_MCK_DIV_32;
+
+	//Period
+	PWM->PWM_CH_NUM[5].PWM_CPRD = 52500;
+
+	//Center pos
+	PWM->PWM_CH_NUM[5].PWM_CDTY = pwm_center;
+
+
+	//Enable PWM (Vet ikke hva vi har definert som enable)
+	PWM->PWM_ENA = PWM_ENA_CHID5;
+}
+
+void position_servo(int8_t position) {
+	position = position + servo_offset;
+	//printf("Position is %d\n\r",position);
+	
+	uint32_t pos = pwm_center + position*15;
+	//printf("Position is %d, new position is: %d\n\r",position, pos);
+	
+	
+	PWM->PWM_CH_NUM[5].PWM_CDTY = pos;
+	//printf("Value of pwm_center - position is %d\n\r",(PWM->PWM_CH_NUM[5].PWM_CDTY));
 }
