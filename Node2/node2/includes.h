@@ -21,6 +21,13 @@ typedef struct Controller {
 
 Controller controller;
 
+typedef struct Game {
+	uint8_t game_status;
+	uint8_t score; 
+} Game;
+
+Game game;
+
 #include "sam.h"
 #include "functions.h"
 #include "uart.h"
