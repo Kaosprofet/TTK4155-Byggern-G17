@@ -213,7 +213,7 @@
     <Compile Include="IR_driver.c">
       <SubType>compile</SubType>
     </Compile>
-        <Compile Include="PI_controller.c">
+    <Compile Include="PI_controller.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="PI_controller.h">
@@ -234,7 +234,7 @@
     <Compile Include="game.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="gamer.c">
+    <Compile Include="game.c">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
