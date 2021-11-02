@@ -13,7 +13,7 @@ void start_game(void) {
 		case(0):
 		break;
 		case(1):
-		run_game();
+		score = run_game();
 		break;
 		
 	}
@@ -29,10 +29,15 @@ uint32_t run_game(void) {
 		//can_decode_message();
 		//position_servo(controller.x);
 		score = score+1;
-		if (IR_blocked()) {break;}
+		IR_print();
+		if (IR_blocked()) {
+			//printf("break");
+			break;
+		}
 		printf("Score: %d\n\r", score);
-	return score;
+		//IR_print();
 	}
+	return score;
 }
 
 uint8_t calculate_score(uint32_t raw_score) {
