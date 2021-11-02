@@ -2,6 +2,7 @@
 #include "includes.h"
 #endif
 
+
 void init_game_board(void){
 	IR_init();
 	init_servo();
@@ -30,29 +31,26 @@ void solenoid_init(void){
 	PIOC->PIO_PER |= PIO_PC13;
 	PIOC->PIO_OER |= PIO_PC13;
 	PIOC->PIO_PUDR |= PIO_PC13;
-	//setBit(PIOC, PIO_PC13);
+	setBit(PIOC, PIO_PC13);
+	RTT->RTT_MR = 0x20; 
 }
 
 uint32_t solenoid_counter = 0;
-bool solenoid_extended = false;
-#define solenoid_hold 100
+uint8_t solenoid_extended = 0;
+#define solenoid_hold 50000
 void solenoidControll(void){
-	uint8_t button = controller.button_state;
-	if((button > 0) && (solenoid_extended==false)){
+	int8_t button = controller.button_state;
+	static uint32_t kick_time = 0;
+
+	if(button > 9){
 		//Extend
-		setBit(PIOC, PIO_PC13); //retract
-		solenoid_extended = true; 
-		solenoid_counter+=1;
+		clearBit(PIOC, PIO_PC13);
+		kick_time = RTT->RTT_VR+300;
+
+		while (RTT->RTT_VR < kick_time){}
 	}
 	else {
-		//Counts the number of iterations the solenoid is extended
-		if(solenoid_extended == true){solenoid_counter += 1;} 
-		//Retracts the solenoid when it reaches a threshold
-		if((solenoid_counter > solenoid_hold) && (solenoid_extended == true)){ 
-			clearBit(PIOC, PIO_PC13);
-			solenoid_counter = 0;
-			solenoid_extended = false;
-		}
+		setBit(PIOC, PIO_PC13);
 	}
 }
 
