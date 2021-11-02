@@ -14,8 +14,6 @@ void DAC_init(void){
 void DAC_set_output(void){
 	//printf("%d\n\r",controller.y);
 	uint16_t re_mapped_y= map(controller.y, -100, 100, 0, 4095);
-	if (!DACC_IER_TXRDY){
     DACC->DACC_CDR = re_mapped_y; //Sets the value in the DACC_CDR register to be the re_mapped_value.
-	}
-	printf("%d\n\r",DACC_ISR_EOC);
+	//printf("%d\n\r",DACC_ISR_EOC);
 }
