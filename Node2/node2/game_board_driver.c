@@ -32,15 +32,24 @@ void solenoid_init(void){
 	PIOC->PIO_PUDR |= PIO_PC13;
 }
 
+uint16_t solenoid_counter = 0;
+bool solenoid_extended = false;
+#define solenoid_hold 5000
 void solenoidControll(void){
 	uint8_t button = controller.button_state;
 	if(button > 0){
 		//Extend
 		setBit(PIOC, PIO_PC13);
+		solenoid_extended = true;
 	}
 	else {
-		//retract
-		clearBit(PIOC, PIO_PC13);
+		if(solenoid_counter == true){solenoid_counter += 1;}
+		if((solenoid_counter > solenoid_hold) && (solenoid_extended == true)){
+			//retract
+			clearBit(PIOC, PIO_PC13);
+			solenoid_counter = 0;
+			solenoid_extended = false;
+		}
 	}
 }
 
