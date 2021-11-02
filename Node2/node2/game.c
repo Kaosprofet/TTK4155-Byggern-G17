@@ -28,16 +28,19 @@ uint32_t run_game(void) {
 	while(1) {
 		can_decode_message();
 		position_servo(controller.x);
+		solenoidControll();
+		DAC_set_output();
 		//printf("x: %d, y: %d, button: %d, s1: %d, s2: %d\n\r", controller.x, controller.y, controller.button_state, controller.slider_1_val, controller.slider_2_val);
 		score = score+1;
+		printf("pinstate: %d\n\r", (PIOC->PIO_SODR & PIO_PC13));
 		//IR_print();
 		if (IR_blocked()) {
 			//printf("break");
-			break;
+			//break;
 		}
 		
 	}
-	printf("Score: %d\n\r", score);
+	//printf("Score: %d\n\r", score);
 	return score;
 }
 
