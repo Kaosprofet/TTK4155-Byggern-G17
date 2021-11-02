@@ -30,7 +30,7 @@ int main(void) {
 	//led_test();
 	//can_test();
 	
-	uint8_t counter = 1;
+	uint8_t counter = 0;
     while (1) {
 		//CAN_MESSAGE message;
 		//can_receive(&message,0);
@@ -40,6 +40,7 @@ int main(void) {
 			printf("penis %d\n\r",counter);
 			counter +=1;	
 		}
+	//IR_print();
     }
 }
 
