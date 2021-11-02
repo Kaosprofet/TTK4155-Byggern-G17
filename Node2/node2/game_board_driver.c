@@ -57,7 +57,9 @@ void ADC_init(void){
 
 
 uint16_t ADC_read(void){ 
-	return ADC->ADC_CDR[0]; //Reads the last ADC converted ADC data. 
+	uint16_t val = ADC->ADC_CDR[0];
+	if(val == 0){ val = IR_BLOCK_THRESHOLD}
+	return val; //Reads the last ADC converted ADC data. 
 	}
 	
 void IR_init(void){
