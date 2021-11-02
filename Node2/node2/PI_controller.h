@@ -1,6 +1,3 @@
-
-
-
 #ifndef PI_CONTROLLER_H_
 #define PI_CONTROLLER_H_
 #define Kp 1

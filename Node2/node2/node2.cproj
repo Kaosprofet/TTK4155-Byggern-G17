@@ -219,6 +219,12 @@
     <Compile Include="PI_controller.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="solenoid.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="solenoid.h">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Device_Startup\" />
