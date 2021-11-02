@@ -2,10 +2,16 @@
 #include "includes.h"
 #endif
 
-#define IR_DEBOUNCE_TIME 30;
+//#define IR_DEBOUNCE_TIME 2000;
+//bool ir_last_value;
+//uint32_t ir_debounce = 0;
 
-uint8_t ir_last_value;
-uint8_t ir_debounce = 0;
+#define IR_DIODE 23 //*
+//Pin 44 at PC19
+#define IR_BLOCK_THRESHOLD 500 //Defines the threshold for which IR_blocked returns 1
+#define filterLength 20 //Defines the length of RA-filter
+
+uint16_t IR_raf[filterLength];
 
 void ADC_init(void){
 	ADC->ADC_MR=ADC_MR_FREERUN;//Set ADC mode freerun (no clock prescaler)
@@ -41,16 +47,19 @@ uint16_t IR_filteredValue(void){
 int IR_blocked(void){
 	uint16_t ir_value = IR_filteredValue();
 	bool ir_value_triggered = (ir_value < IR_BLOCK_THRESHOLD);
-	if(ir_value_triggered && ir_last_value!=true && ir_debounce == 0) { 
-		ir_last_value = true;
-		ir_debounce = IR_DEBOUNCE_TIME; 
+	if(ir_value_triggered) { // && ir_last_value!=true && ir_debounce == 0
+		//ir_last_value = true;
+		//ir_debounce = IR_DEBOUNCE_TIME; 
 		return 1;
 	}
 	else {
-		if (ir_debounce != 0) {
-			ir_debounce = ir_debounce-1;
-		}
-		ir_last_value = false;
+		//if (ir_debounce != 0) {
+		//	ir_debounce = ir_debounce-1;
+		//	//printf("%d\n\r",ir_debounce);
+		//}
+		//if (ir_debounce == 0 && ir_value_triggered != true) {
+		//	ir_last_value = false;
+		//}
 		return 0;
 	}
 }
