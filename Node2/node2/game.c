@@ -26,17 +26,18 @@ uint32_t run_game(void) {
 	uint32_t score = 0;
 		
 	while(1) {
-		//can_decode_message();
-		//position_servo(controller.x);
+		can_decode_message();
+		position_servo(controller.x);
+		//printf("x: %d, y: %d, button: %d, s1: %d, s2: %d\n\r", controller.x, controller.y, controller.button_state, controller.slider_1_val, controller.slider_2_val);
 		score = score+1;
-		IR_print();
+		//IR_print();
 		if (IR_blocked()) {
 			//printf("break");
 			break;
 		}
-		printf("Score: %d\n\r", score);
-		//IR_print();
+		
 	}
+	printf("Score: %d\n\r", score);
 	return score;
 }
 
