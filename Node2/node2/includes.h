@@ -38,5 +38,6 @@ Game game;
 #include "IR_driver.h"
 #include "servo.h"
 #include "PI_controller.h"
+#include "solenoid.h"
 
 #endif

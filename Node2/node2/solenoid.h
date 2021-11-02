@@ -1,6 +1,8 @@
 #ifndef SOLENOID_H_
 #define SOLENOID_H_
-uint16_t solenoid_counter;
+
+
+void solenoid_init(void);
 
 void solenoidPush(void);
 
