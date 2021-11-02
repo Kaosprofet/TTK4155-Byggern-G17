@@ -24,9 +24,8 @@ int main(void) {
 	WDT->WDT_MR = WDT_MR_WDDIS;	// Watchdog disabled
 	configure_uart();
 	init_can();
-	init_servo();
-	IR_init();
-	
+	init_game_board();
+	DAC_init();
 	//led_test();
 	//can_test();
 	start_game();
