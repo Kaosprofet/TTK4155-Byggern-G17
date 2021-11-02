@@ -30,23 +30,26 @@ void solenoid_init(void){
 	PIOC->PIO_PER |= PIO_PC13;
 	PIOC->PIO_OER |= PIO_PC13;
 	PIOC->PIO_PUDR |= PIO_PC13;
+	setBit(PIOC, PIO_PC13);
 }
 
-uint16_t solenoid_counter = 0;
+uint32_t solenoid_counter = 0;
 bool solenoid_extended = false;
 #define solenoid_hold 5000
 void solenoidControll(void){
 	uint8_t button = controller.button_state;
-	if(button > 0){
+	if((button > 0) && (solenoid_extended==false)){
 		//Extend
-		setBit(PIOC, PIO_PC13);
-		solenoid_extended = true;
+		clearBit(PIOC, PIO_PC13); //retract
+		solenoid_extended = true; 
+		solenoid_counter+=1;
 	}
 	else {
-		if(solenoid_counter == true){solenoid_counter += 1;}
-		if((solenoid_counter > solenoid_hold) && (solenoid_extended == true)){
-			//retract
-			clearBit(PIOC, PIO_PC13);
+		//Counts the number of iterations the solenoid is extended
+		if(solenoid_extended == true){solenoid_counter += 1;} 
+		//Retracts the solenoid when it reaches a threshold
+		if((solenoid_counter > solenoid_hold) && (solenoid_extended == true)){ 
+			setBit(PIOC, PIO_PC13);
 			solenoid_counter = 0;
 			solenoid_extended = false;
 		}
@@ -136,30 +139,21 @@ void IR_print(void){
 static int32_t pwm_center = 3500;
 
 void init_servo(void) {
-	
 	// Disable interrupts
 	PIOC->PIO_IDR = PIO_PC19B_PWMH5;
-
 	// select timer 0
 	PIOC->PIO_ABSR |= PIO_PC19B_PWMH5;
-
 	//Disable parallel io
 	PIOC->PIO_PDR = PIO_PC19B_PWMH5;
-	
 	//Enable Clock for PWM in PMC
 	PMC->PMC_PCR = PMC_PCR_EN | (0 << PMC_PCR_DIV_Pos) | PMC_PCR_CMD | (ID_PWM << PMC_PCR_PID_Pos);
 	PMC->PMC_PCER1 |= 1 << (ID_PWM - 32);
-
 	//Chanel mode (Her setter vi divisorverdien)
 	PWM->PWM_CH_NUM[5].PWM_CMR = PWM_CMR_CPOL|PWM_CMR_CPRE_MCK_DIV_32;
-
 	//Period
 	PWM->PWM_CH_NUM[5].PWM_CPRD = 52500;
-
 	//Center pos
 	PWM->PWM_CH_NUM[5].PWM_CDTY = pwm_center;
-
-
 	//Enable PWM (Vet ikke hva vi har definert som enable)
 	PWM->PWM_ENA = PWM_ENA_CHID5;
 }
