@@ -26,7 +26,8 @@ int main(void) {
 	init_can();
 	init_game_board();
 	DAC_init();
-	//led_test();
+	controller.button_state=0;
+	led_test();
 	//can_test();
 	start_game();
 }
@@ -40,7 +41,7 @@ void led_test(void) {
 	PIOA->PIO_OER |= LED_2;
 	PIOA->PIO_PUDR |= LED_2;
 	
-	setBit(PIOA, LED_1);
+	//setBit(PIOA, LED_1);
 
 }
 void can_test(void) {
