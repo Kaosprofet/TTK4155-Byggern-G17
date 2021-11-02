@@ -12,6 +12,6 @@
 
 void init_can(void);
 void can_encode_message(uint8_t ID);
-void can_decode_message(CAN_MESSAGE* message);
+void can_decode_message(void);
 
 #endif
