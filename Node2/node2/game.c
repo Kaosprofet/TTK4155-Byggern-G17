@@ -5,6 +5,7 @@
 void start_game(void) {
 	uint32_t score = 0;
 	
+	game.game_status = 1;
 		
 	can_decode_message();
 	
@@ -17,18 +18,19 @@ void start_game(void) {
 		
 	}
 	game.score = calculate_score(score);
-	can_encode_message(30);
+	//can_encode_message(30);
+	printf("8bit score: %d\n\r", game.score);
 }
 
 uint32_t run_game(void) {
 	uint32_t score = 0;
-	bool game_over = 0;	
 		
-	while(game_over != true) {
-		can_decode_message();
-		position_servo(controller.x);
+	while(1) {
+		//can_decode_message();
+		//position_servo(controller.x);
 		score = score+1;
 		if (IR_blocked()) {break;}
+		printf("Score: %d\n\r", score);
 	return score;
 	}
 }
