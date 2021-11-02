@@ -6,9 +6,10 @@ void init_game_board(void){
 	IR_init();
 	init_servo();
 	solenoid_init();
+	motor_controll_init();
 }
 
-//------------------------PI CONTROLLER -------------
+//------------------------PI CONTROLLER --------------------------
 
 uint16_t PI_controller(uint16_t r, uint16_t y){
 	uint16_t e = r - y;
