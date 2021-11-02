@@ -6,7 +6,7 @@ void init_game_board(void){
 	IR_init();
 	init_servo();
 	solenoid_init();
-	motor_controll_init();
+	//motor_controll_init();
 }
 
 //------------------------PI CONTROLLER --------------------------
@@ -30,17 +30,17 @@ void solenoid_init(void){
 	PIOC->PIO_PER |= PIO_PC13;
 	PIOC->PIO_OER |= PIO_PC13;
 	PIOC->PIO_PUDR |= PIO_PC13;
-	setBit(PIOC, PIO_PC13);
+	//setBit(PIOC, PIO_PC13);
 }
 
 uint32_t solenoid_counter = 0;
 bool solenoid_extended = false;
-#define solenoid_hold 5000
+#define solenoid_hold 100
 void solenoidControll(void){
 	uint8_t button = controller.button_state;
 	if((button > 0) && (solenoid_extended==false)){
 		//Extend
-		clearBit(PIOC, PIO_PC13); //retract
+		setBit(PIOC, PIO_PC13); //retract
 		solenoid_extended = true; 
 		solenoid_counter+=1;
 	}
@@ -49,7 +49,7 @@ void solenoidControll(void){
 		if(solenoid_extended == true){solenoid_counter += 1;} 
 		//Retracts the solenoid when it reaches a threshold
 		if((solenoid_counter > solenoid_hold) && (solenoid_extended == true)){ 
-			setBit(PIOC, PIO_PC13);
+			clearBit(PIOC, PIO_PC13);
 			solenoid_counter = 0;
 			solenoid_extended = false;
 		}

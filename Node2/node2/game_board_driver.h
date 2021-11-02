@@ -28,7 +28,7 @@ uint16_t e_vec[N];
 uint16_t PI_controller(uint16_t r, uint16_t y);
 
 //Motor controller
-void motor_controll_init();
+void motor_controll_init(void);
 void motor_controll(void);
 
 #endif	
