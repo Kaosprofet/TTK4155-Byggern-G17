@@ -39,5 +39,6 @@ Game game;
 #include "servo.h"
 #include "PI_controller.h"
 #include "solenoid.h"
+#include "game.h"
 
 #endif
