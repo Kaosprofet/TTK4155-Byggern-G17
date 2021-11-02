@@ -2,6 +2,11 @@
 #include "includes.h"
 #endif
 
+#define IR_DEBOUNCE_TIME 30;
+
+uint8_t ir_last_value;
+uint8_t ir_debounce = 0;
+
 void ADC_init(void){
 	ADC->ADC_MR=ADC_MR_FREERUN;//Set ADC mode freerun (no clock prescaler)
 	ADC->ADC_CHER = ADC_CHER_CH0; //Enable AD0 peripheral.
@@ -35,8 +40,19 @@ uint16_t IR_filteredValue(void){
 
 int IR_blocked(void){
 	uint16_t ir_value = IR_filteredValue();
-	if(ir_value < IR_BLOCK_THRESHOLD){ return 1;}
-	else {return 0;}
+	bool ir_value_triggered = (ir_value < IR_BLOCK_THRESHOLD);
+	if(ir_value_triggered && ir_last_value!=true && ir_debounce == 0) { 
+		ir_last_value = true;
+		ir_debounce = IR_DEBOUNCE_TIME; 
+		return 1;
+	}
+	else {
+		if (ir_debounce != 0) {
+			ir_debounce = ir_debounce-1;
+		}
+		ir_last_value = false;
+		return 0;
+	}
 }
 
 void IR_print(void){
