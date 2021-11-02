@@ -110,12 +110,15 @@ void menuSelection(struct controllers *controller) {
 void playMenu(struct controllers *controller) {
 	oled_reset();
 	oled_pos(3,0);
+	oled_print_centered("GOGOGO");
 	// Playing the game
 	while (1) {
-		oled_print("For ever a looser");
+		updateController(controller);
+		CAN_send_inputData(&controller);
+		_delay_ms(50);
 		// Break on back button
 		if (bitIsSet(PIND, PD3)) {
-			break;
+		//	break;
 		}
 	}
 }

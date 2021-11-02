@@ -33,4 +33,5 @@ void initGame() {
 	initSRAM();
 	initOLED();
 	initHighscore();
+	can_controller_init(CAN_NORMAL);
 }

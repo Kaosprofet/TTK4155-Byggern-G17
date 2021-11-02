@@ -9,6 +9,22 @@
 #include "includes.h"
 #endif
 
+void exercise1(void);
+int exercise2(void);
+void exercise3(void);
+void exercise4(void);
+void testChipSelect(void);
+void spi_test(void);
+void can_controller_test(void);
+void testCanJoystick(void);
+
+
+int main(void) {
+	playGame();
+	//testCanJoystick();
+}
+
+
 void exercise1(void) {
 	while (1) {
 		unsigned char data = receiveByte(); //Recives the inputted characters
@@ -33,6 +49,7 @@ int exercise2(void) {
 void exercise3(void) {
 	playGame();
 }
+
 void exercise4(void) {
 	oled_test();
 }
@@ -77,7 +94,7 @@ void spi_test(void) {
 	}
 }
 
-void can_controller_test(void){
+void can_controller_test(void) {
 	can_controller_init(CAN_LOOPBACK);
 	while (1) {
 		can_controller_write(0b00001111, 0b11111111);
@@ -86,7 +103,7 @@ void can_controller_test(void){
 	}
 }
 
-void testCanJoystick(void){
+void testCanJoystick(void) {
 	can_controller_init(CAN_NORMAL);
 	//CAN_test();
 	controllers controller1;
@@ -97,11 +114,4 @@ void testCanJoystick(void){
 		CAN_send_inputData(&controller1);
 		_delay_ms(50);
 	}
-	
-
-}
-
-int main(void) {
-	initGame();
-	testCanJoystick();
 }
