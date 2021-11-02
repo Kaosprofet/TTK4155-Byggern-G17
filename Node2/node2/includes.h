@@ -35,10 +35,10 @@ Game game;
 #include "can_interrupt.h"
 #include "can_message.h"
 #include "printf.h"
-#include "IR_driver.h"
 #include "servo.h"
 #include "PI_controller.h"
 #include "solenoid.h"
 #include "game.h"
+#include "game_board_driver.h"
 
 #endif
