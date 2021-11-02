@@ -213,6 +213,12 @@
     <Compile Include="game.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="DAC.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="DAC.h">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Device_Startup\" />
