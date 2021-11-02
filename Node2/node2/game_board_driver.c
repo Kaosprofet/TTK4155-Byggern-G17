@@ -32,7 +32,7 @@ void solenoid_init(void){
 	PIOC->PIO_PUDR |= PIO_PC13;
 }
 
-uint16_t solenoid_counter = 0;
+uint32_t solenoid_counter = 0;
 bool solenoid_extended = false;
 #define solenoid_hold 5000
 void solenoidControll(void){
@@ -40,11 +40,12 @@ void solenoidControll(void){
 	if(button > 0){
 		//Extend
 		setBit(PIOC, PIO_PC13);
-		solenoid_extended = true;
+		solenoid_extended = true; 
+		solenoid_counter+=1;
 	}
 	else {
-		if(solenoid_counter == true){solenoid_counter += 1;}
-		if((solenoid_counter > solenoid_hold) && (solenoid_extended == true)){
+		if(solenoid_extended == true){solenoid_counter += 1;} //Counts the number of iterations the solonoid is extended
+		if((solenoid_counter > solenoid_hold) && (solenoid_extended == true)){ //Retracts the solonoid when it reaches a threshold
 			//retract
 			clearBit(PIOC, PIO_PC13);
 			solenoid_counter = 0;
