@@ -213,6 +213,12 @@
     <Compile Include="IR_driver.c">
       <SubType>compile</SubType>
     </Compile>
+        <Compile Include="PI_controller.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="PI_controller.h">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Device_Startup\" />
