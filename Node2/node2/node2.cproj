@@ -225,10 +225,16 @@
     <Compile Include="solenoid.h">
       <SubType>compile</SubType>
     </Compile>
-        <Compile Include="game_board_driver.h">
-    <SubType>compile</SubType>
+    <Compile Include="game_board_driver.h">
+      <SubType>compile</SubType>
     </Compile>
     <Compile Include="game_board_driver.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="game.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="gamer.c">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
