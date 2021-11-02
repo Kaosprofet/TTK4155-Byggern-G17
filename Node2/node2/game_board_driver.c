@@ -27,16 +27,20 @@ uint16_t PI_controller(uint16_t r, uint16_t y){
 //-------------------------SOLENOID-----------------------------------
 
 void solenoid_init(void){
-	
+	PIOC->PIO_PER |= PIO_PC13;
+	PIOC->PIO_OER |= PIO_PC13;
+	PIOC->PIO_PUDR |= PIO_PC13;
 }
 
 void solenoidControll(void){
 	uint8_t button = controller.button_state;
 	if(button > 0){
-		//extend
+		//Extend
+		setBit(PIOC, PIO_PC13);
 	}
 	else {
 		//retract
+		clearBit(PIOC, PIO_PC13);
 	}
 }
 
