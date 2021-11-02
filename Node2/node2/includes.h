@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+
 typedef struct Controller {
 	int8_t x;
 	int8_t y;
@@ -19,7 +20,8 @@ typedef struct Controller {
 	uint8_t slider_2_val;
 } Controller;
 
-Controller controller;
+volatile Controller controller;
+
 
 typedef struct Game {
 	uint8_t game_status;
