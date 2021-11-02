@@ -30,5 +30,6 @@ Controller controller;
 #include "printf.h"
 #include "IR_driver.h"
 #include "servo.h"
+#include "PI_controller.h"
 
 #endif
