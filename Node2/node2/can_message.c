@@ -37,17 +37,20 @@ void can_encode_message(uint8_t ID) {
 	can_send(&message, 0);
 }
 
-void can_decode_message(CAN_MESSAGE *message) {
+void can_decode_message(void) {
+	CAN_MESSAGE message;
+	can_receive(&message,0);
+	
 	//Controller data
-	if (message->id == controller_id) {  
-		controller.x = message->data[0];
-		controller.y = message->data[1];
-		controller.button_state = message->data[2];
-		controller.slider_1_val = message->data[3];
-		controller.slider_2_val = message->data[4];
+	if (message.id == controller_id) {  
+		controller.x = message.data[0];
+		controller.y = message.data[1];
+		controller.button_state = message.data[2];
+		controller.slider_1_val = message.data[3];
+		controller.slider_2_val = message.data[4];
 		//printf("Joystick: X = %4d Y = %4d Sliders: 1 = %3d 2 = %3d  Buttons: 1 = %d\n\r", controller.x, controller.y, controller.slider_1_val, controller.slider_2_val,  controller.button_state);
 	}
-	else if (message->id == status_id) {
+	else if (message.id == status_id) {
 		
 	}
 }
