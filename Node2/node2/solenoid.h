@@ -4,6 +4,6 @@
 
 void solenoid_init(void);
 
-void solenoidPush(void);
+void solenoidControll(void); //Uses the button
 
 #endif
