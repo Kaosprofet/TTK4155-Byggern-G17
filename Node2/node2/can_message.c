@@ -32,7 +32,10 @@ void can_encode_message(uint8_t ID) {
 		message.data[4] = controller.slider_2_val;
 	}
 	else if (ID == status_id) {
-		
+		message.id = controller_id;
+		message.data_length = 2;
+		message.data[0] = game.game_status;
+		message.data[1] = game.score;
 	}
 	can_send(&message, 0);
 }

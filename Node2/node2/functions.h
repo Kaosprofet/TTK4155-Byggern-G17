@@ -6,3 +6,6 @@
 
 #define waitUntilBitIsSet(reg, bit) while(!bitIsSet(reg,bit))
 #define waitUntilBitIsClear(reg, bit) while(bitIsSet(reg,bit))
+
+#define map(input, input_min, input_max, output_min, output_max) ((input-input_min)*(output_max-output_min)/(input_max-input_min)+output_min)
+	
