@@ -2,6 +2,12 @@
 #include "includes.h"
 #endif
 
-void solenoidPush(void){
-	//Extend the solenoid
+void solenoidControll(void){
+	uint8_t button = controller.button_state;
+	if(button > 0){
+		//extend
+	}
+	else {
+		//retract
+	}
 }

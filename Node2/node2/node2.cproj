@@ -225,6 +225,12 @@
     <Compile Include="solenoid.h">
       <SubType>compile</SubType>
     </Compile>
+        <Compile Include="game_board_driver.h">
+    <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="game_board_driver.c">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Device_Startup\" />
