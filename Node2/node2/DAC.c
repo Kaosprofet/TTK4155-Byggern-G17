@@ -7,6 +7,7 @@ void DAC_init(void){
     DACC->DACC_MR=DACC_MR_TRGEN_DIS;//Set DAC mode freerun (no clock prescaler)
 	DACC->DACC_MR=DACC_MR_WORD_HALF;//Sets the DAC to read only [15-0] bits in the DACC_CDR register
     DACC->DACC_CHER = DACC_CHER_CH1; //DAC sends output on DAC 1
+	DACC->DACC_MR = DACC_MR_STARTUP_0; //Sets the DAC startup wait timer to 0
 }
 
 void DAC_set_output(void){
