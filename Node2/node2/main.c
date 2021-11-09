@@ -24,7 +24,6 @@ int main(void) {
 	//led_test();
 	//IR_test();
 	//can_test();
-	uint32_t k = 0;
 	start_game();
 	
 }
