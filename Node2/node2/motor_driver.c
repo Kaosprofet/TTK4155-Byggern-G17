@@ -72,7 +72,7 @@ int encoder_read(void){
 
 void motor_controll(void){
 	//Regulator
-	uint8_t r = map(controller.slider_2_val, 0,255, -3000,3000);
+	uint8_t r = map(controller.slider_2_val, 0,255, -3000,3000); //Remaps the slider position value
 	
 	uint16_t y = encoder_read();
 	uint16_t PI_out = PI_controller(r,y);
@@ -86,6 +86,7 @@ void motor_controll(void){
 		clearBit(PIOD,mDIR); 
 		DAC_out = -DAC_out;
 	}
-	
-	
+	//Writing output
+	DAC_set_output(DAC_out);
 }
+
