@@ -96,6 +96,7 @@ void menuSelection(void) {
 	switch(menuSelected){
 		case(0):
 		game.game_status = 1;
+		game.score = 0;
 		can_send_game_status();
 		playMenu();
 		check_score();
@@ -120,7 +121,8 @@ void playMenu(void) {
 		//printController(controller);
 		CAN_send_inputData();
 		CAN_recieve_message();
-		_delay_ms(50);
+		//printf("Score: %d\n\r",game.score);
+		_delay_ms(10);
 	}
 }
 void check_score(void) {
@@ -130,7 +132,7 @@ void check_score(void) {
 }
 
 // Highscore
-// Initierer til AAA 0 poeng, b�r ha en test som sjekker om vi ikke har non volatile minne og kan lagre mellom kj�ringer
+// Initierer til AAA 0 poeng
 void initHighscore(void) {
 	for (uint8_t i = 0; i < num_highscores*4; i = i + 4) {
 		writeSRAM(highscore_address+i, 0b00000000);

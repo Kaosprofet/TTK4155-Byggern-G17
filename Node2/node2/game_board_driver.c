@@ -27,7 +27,7 @@ void solenoidControll(void){
 	if(controller.button_state > 9) {
 		//Extend
 		clearBit(PIOC, PIO_PC13);
-		kick_time = RTT->RTT_VR+300;
+		kick_time = RTT->RTT_VR+200;
 		// wait 
 		while (RTT->RTT_VR < kick_time){}
 	}
