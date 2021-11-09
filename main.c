@@ -89,8 +89,8 @@ void testChipSelect(void) {
 void spi_test(void) {
 	spi_init();
 	while (1) {
-		spi_transfer(0b00000000); //command
-		spi_transfer(0b01111110); //data
+		//spi_transfer(0b00000000); //command
+		//spi_transfer(0b01111110); //data
 	}
 }
 
@@ -104,7 +104,7 @@ void can_controller_test(void) {
 }
 
 void testCanJoystick(void) {
-	can_controller_init(CAN_NORMAL);
+	initGame();
 	//CAN_test();
 	controllers controller1;
 	calibrateJoystick(&controller1);
