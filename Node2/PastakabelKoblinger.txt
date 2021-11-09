@@ -6,8 +6,10 @@ Purple - Servo RED
 Green - Servo YELLOW
 
 ------ Solonoid -------
-Red - Solonoid 1
-Brown/Dark gray - Solonoid 2
+Red - Solonoid 1 - Relay(3) 
+Signal - relay(4) - 1k - Pin 44
+
+Brown/Dark gray - Solonoid 2 - GND
 
 
 ------ IR ------------ 
@@ -21,10 +23,6 @@ Brown/Dark gray - Solonoid 2
 LEDIGE:
 Oransj 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 6423336d7941ca7f6dbe02116f48df9ba7f3497b
 
 Kobling på breadboard:
 - Oransj på 1
