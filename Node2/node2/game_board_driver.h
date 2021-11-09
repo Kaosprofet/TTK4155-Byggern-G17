@@ -20,11 +20,6 @@ void position_servo(int8_t position);
 void solenoid_init(void);
 void solenoidControll(void); //Uses the button
 
-//PI controller
-#define Kp 0.1
-#define Ti 100
-#define N 20
-uint16_t e_vec[N];
-uint16_t PI_controller(uint16_t r, uint16_t y);
+
 
 #endif	
