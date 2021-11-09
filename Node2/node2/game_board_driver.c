@@ -141,3 +141,4 @@ void position_servo(int8_t position) {
 	PWM->PWM_CH_NUM[5].PWM_CDTY = pos;
 	//printf("Value of pwm_center - position is %d\n\r",(PWM->PWM_CH_NUM[5].PWM_CDTY));
 }
+
