@@ -97,7 +97,7 @@ void menuSelection(void) {
 		case(0):
 		game.game_status = 1;
 		game.score = 0;
-		can_send_game_status();
+		CAN_send_game_status();
 		playMenu();
 		check_score();
 		break;
@@ -120,7 +120,7 @@ void playMenu(void) {
 		updateController();
 		//printController(controller);
 		CAN_send_inputData();
-		CAN_recieve_message();
+		CAN_decode_message();
 		//printf("Score: %d\n\r",game.score);
 		_delay_ms(10);
 	}
