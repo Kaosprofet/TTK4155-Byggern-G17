@@ -115,10 +115,11 @@ void playMenu(void) {
 	oled_pos(3,0);
 	oled_print_centered("GOGOGO");
 	// Playing the game, Break on back button
-	while (!bitIsSet(PIND, PD3)) {
+	while (!bitIsSet(PIND, PD3) || game.game_status) {
 		updateController();
 		//printController(controller);
 		CAN_send_inputData();
+		CAN_recieve_message();
 		_delay_ms(50);
 	}
 }
