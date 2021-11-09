@@ -126,6 +126,7 @@ void motor_controll(void){
 	//printf("Val: %d\n\r", controller.slider_2_val);
 }
 
-uint16_t JoystickSpeedControll(void){
-	
-	}
+uint16_t JoystickSpeedControll(uint16_t r){
+	int16_t joystickVal = controller.x;
+		
+}
