@@ -13,6 +13,7 @@
 #define LED_2 PIO_PA20
 
 void led_test(void);
+void IR_test(void);
 void can_test(void);
 void inits(void);
 
@@ -21,9 +22,11 @@ int main(void) {
 	inits();
 	
 	//led_test();
+	//IR_test();
 	//can_test();
 	
 	start_game();
+	
 }
 
 void inits(void) {
@@ -52,8 +55,14 @@ void led_test(void) {
 	setBit(PIOA, LED_2);
 	clearBit(PIOA,LED_1);
 	while(RTT->RTT_VR<RTT->RTT_VR+100){}
-
 }
+
+void IR_test(void) {
+	while(1){
+		IR_print();
+	}
+}
+
 void can_test(void) {
 	can_encode_message(controller_id);
 	while (1) {
