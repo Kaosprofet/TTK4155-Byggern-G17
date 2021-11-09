@@ -42,5 +42,6 @@ Game game;
 #include "game.h"
 #include "game_board_driver.h"
 #include "DAC.h"
+#include "motor_driver.h"
 
 #endif
