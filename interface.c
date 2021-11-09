@@ -16,6 +16,7 @@ char letters[4] = {'A', 'A', 'A', '\0'};
 
 uint8_t lastJoystickYVal = 0;
 uint8_t lastJoystickXVal = 0;
+uint8_t lowHighScore = 0;
 
 
 // Print startup screen
@@ -96,6 +97,7 @@ void menuSelection(void) {
 		case(0):
 		game.game_status = 1;
 		playMenu();
+		checkScore();
 		break;
 		case(1):
 		highscore();
@@ -107,7 +109,7 @@ void menuSelection(void) {
 }
 
 // The game segment
-void playMenu() {
+void playMenu(void) {
 	oled_reset();
 	oled_pos(3,0);
 	oled_print_centered("GOGOGO");
@@ -118,9 +120,11 @@ void playMenu() {
 		CAN_send_inputData();
 		_delay_ms(50);
 	}
-	// Test scoring system
-	// uint8_t score = 12;
-	// input_highscore(controller, score);
+}
+void check_score(void) {
+	if(game.score > lowHighScore) {
+		input_highscore(game.score);
+	}
 }
 
 // Highscore
@@ -276,7 +280,8 @@ void set_highscore(char name[], uint8_t value) {
 			}
 		}
 	}
-                                                                                                                                                                                                                                                                              
+	// Updates highscore threshold
+    lowHighScore = highscore[num_highscores-1];                                                                                                                                                                                                                                                                  
 	// Write new highscore to SRAM
 	for (uint8_t i = 0; i < num_highscores; i++) {
 		writeSRAM(highscore_address+i*4, highscore[i]);
