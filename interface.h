@@ -14,6 +14,7 @@ void changeChar(void);
 void menuSelection(void);		// Selecting behavior for the buttons on the main menu
 
 void playMenu(void);			// The game segment
+void check_score(void);         // Checks score against highscore
 void initHighscore(void);
 void highscore(void);			// Highscore
 void input_highscore(uint8_t score);
