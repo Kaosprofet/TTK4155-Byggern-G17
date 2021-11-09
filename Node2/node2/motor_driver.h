@@ -4,6 +4,6 @@
 void motor_controll_init(void);
 void motor_controll(void);
 
-uint16_t encoder_read(void);
+int encoder_read(void);
 
 #endif
