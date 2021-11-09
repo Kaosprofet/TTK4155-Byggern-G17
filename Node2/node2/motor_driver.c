@@ -10,8 +10,7 @@
 #define mNOT_OE PIO_PD0 //NOT_OE - PIN25 - PD0
 //---------INPUT-MJ2----------
 //DO0 to DO7 - PIN33 to PIN40 - PC1-PC8
-uint8_t motorDataPins[8] ={PIO_PC1, PIO_PC2, PIO_PC3, PIO_PC4, PIO_PC5, PIO_PC6, PIO_PC7, PIO_PC8};
-
+#define encoderDataMask (0xFF<<1)
 
 
 void motor_controll_init(void){
@@ -21,9 +20,9 @@ void motor_controll_init(void){
 	PIOD->PIO_OER |= mDIR|mEN|mSEL|mNOT_RST|mNOT_OE;
 	
 	//Enable PIO controll of the MJ2
-	PIOC ->PIO_PER |= PIO_PC1|PIO_PC2|PIO_PC3|PIO_PC4|PIO_PC5|PIO_PC6|PIO_PC7|PIO_PC8;
+	PIOC ->PIO_PER |= encoderDataMask;
 	//Setting as input
-	PIOC ->PIO_ODR |= PIO_PC1|PIO_PC2|PIO_PC3|PIO_PC4|PIO_PC5|PIO_PC6|PIO_PC7|PIO_PC8;
+	PIOC ->PIO_ODR |= encoderDataMask;
 	
 	//Enable clock on PIOC
 	PMC->PMC_PCR |= PMC_PCR_EN |PMC_PCR_DIV_PERIPH_DIV_MCK|(ID_PIOC <<PMC_PCR_PID_Pos);
@@ -37,6 +36,19 @@ uint16_t encoder_read(void){
 	//Set SEL low to get high byte
 	clearBit(PIOD, mSEL);
 	//wait 20 microseconds*
+	uint8_t encoder_msb =  readPin(PIOC,encoderDataMask)>>1; //Reads the data pins, bitshiftet back 1, since PC0 is not used
+	//Set SEL to high to get low byte
+	setBit(PIOD,mSEL);
+	//wait 20 microseconds*
+	uint8_t encoder_lsb = readPin(PIOC,encoderDataMask)>>1;
+	//Toggle !RST to reset encoder
+	toggleBit(PIOD,mNOT_RST);
+	//Set !OE high to disable output of encoder;
+	setBit(PIOD,mNOT_OE);
 	
-	uint8_t encoder_msb =  readPin(PIOC,(0xFF << DO0_IDX));
+	//Processing data, combining MSB and LSB
+	uint16_t encoder_data = (encoder_msb<<8)|encoder_lsb;
+	
+	return encoder_data
+		
 }
