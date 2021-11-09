@@ -10,4 +10,5 @@
 
 #define map(input, input_min, input_max, output_min, output_max) ((input-input_min)*(output_max-output_min)/(input_max-input_min)+output_min)
 
-#define _delay_ms(time) (while(RTT->RTT_VR<RTT->RTT_VR+time))
+#define _delay_ms(time) (while(RTT->RTT_VR<RTT->RTT_VR+time*1000))
+#define _delay_us(time) (while(RTT->RTT_VR<RTT->RTT_VR+time))
