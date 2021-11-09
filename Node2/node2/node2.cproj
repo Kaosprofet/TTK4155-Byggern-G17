@@ -225,6 +225,9 @@
     <Compile Include="motor_driver.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="functions.h">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Device_Startup\" />
