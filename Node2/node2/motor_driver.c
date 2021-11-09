@@ -11,7 +11,9 @@
 //---------INPUT-MJ2----------
 //DO0 to DO7 - PIN33 to PIN40 - PC1-PC8
 #define encoderDataMask (0xFF<<1)
+#define MOTOR_MAX 1000
 
+int16_t e_vec[N];
 
 void motor_controll_init(void){
 	//Enable PIO to controll the pins of the motor controller box MJ1
@@ -52,7 +54,6 @@ int encoder_read(void){
 	//Read LSB
 	uint8_t encoder_lsb = readPin(PIOC,encoderDataMask)>>1;
 	
-	//Toggle !RST to reset encoder
 	clearBit(PIOD,mNOT_RST);
 	setBit(PIOD,mNOT_RST);
 	
@@ -70,23 +71,38 @@ int encoder_read(void){
 	return -encoder_data;		
 }
 
+void encoder_reset(void){
+		//Toggle !RST to reset encoder
+		clearBit(PIOD,mNOT_RST);
+		setBit(PIOD,mNOT_RST);
+}
+
 void motor_controll(void){
 	//Regulator
-	uint8_t r = map(controller.slider_2_val, 0,255, -3000,3000); //Remaps the slider position value
+	int32_t r = map(controller.slider_2_val, 0,255, -3000,3000); //Remaps the slider position value
 	
-	uint16_t y = encoder_read();
-	uint16_t PI_out = PI_controller(r,y);
+	int32_t y = encoder_read();
+	//int32_t PI_out = PI_controller(r,y);
+	//printf("Reference: %d, encoder: %d, PI Output: %d\n\r",r,y,PI_out);
 	
-	uint16_t DAC_out = PI_out;
+	int32_t PI_out = 0;
+	uint16_t DAC_out = 0;
 	//Changing direction
 	if(PI_out>=0){ 
-		setBit(PIOD,mDIR);
+		clearBit(PIOD,mDIR);
+		DAC_out = -PI_out;
 	}
 	else{ 
-		clearBit(PIOD,mDIR); 
-		DAC_out = -DAC_out;
+		setBit(PIOD,mDIR); 
+		DAC_out = PI_out;
+	}
+	if(DAC_out>MOTOR_MAX){
+		DAC_out = MOTOR_MAX;
 	}
 	//Writing output
+	setBit(PIOD,mEN);
 	DAC_set_output(DAC_out);
+	printf("Slider %d, Reference: %d, encoder: %d, PI Output: %d, DAC Output: %d\n\r",controller.slider_2_val,r,y,PI_out,DAC_out);
+	//printf("Val: %d\n\r", controller.slider_2_val);
 }
 
