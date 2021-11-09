@@ -35,8 +35,7 @@ uint32_t run_game(void) {
 		score = score+1;
 		//IR_print();
 		if (IR_blocked()) {
-			//printf("break");
-			//break;
+			break;
 		}
 		
 	}
@@ -46,6 +45,6 @@ uint32_t run_game(void) {
 
 uint8_t calculate_score(uint32_t raw_score) {
 	// Calibrate better!
-	raw_score = raw_score/20000000; 
+	raw_score = map(raw_score, 0, 4294967295, 0, 255); 
 	return (uint8_t)raw_score;
 }

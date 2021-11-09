@@ -22,7 +22,6 @@ typedef struct Controller {
 
 volatile Controller controller;
 
-
 typedef struct Game {
 	uint8_t game_status;
 	uint8_t score; 
@@ -42,5 +41,6 @@ Game game;
 #include "solenoid.h"
 #include "game.h"
 #include "game_board_driver.h"
+#include "DAC.h"
 
 #endif

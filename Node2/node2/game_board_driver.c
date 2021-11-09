@@ -2,8 +2,7 @@
 #include "includes.h"
 #endif
 
-
-void init_game_board(void){
+void init_game_board(void) {
 	IR_init();
 	init_servo();
 	solenoid_init();
@@ -12,7 +11,7 @@ void init_game_board(void){
 
 //------------------------PI CONTROLLER --------------------------
 
-uint16_t PI_controller(uint16_t r, uint16_t y){
+uint16_t PI_controller(uint16_t r, uint16_t y) {
 	uint16_t e = r - y;
 	//Shifting the array of error values
 	for(int i = 0; i<N-1;i++){ e_vec[i+1] = e_vec[i];}
@@ -22,7 +21,6 @@ uint16_t PI_controller(uint16_t r, uint16_t y){
 	for(int j=0; j<N;j++){ e_sum += e_vec[j];}
 	return Kp*e+Ti*e_sum;
 }
-
 
 
 //-------------------------SOLENOID-----------------------------------
@@ -35,23 +33,17 @@ void solenoid_init(void){
 	RTT->RTT_MR = 0x20; 
 }
 
-uint32_t solenoid_counter = 0;
-uint8_t solenoid_extended = 0;
-#define solenoid_hold 50000
 void solenoidControll(void){
-	int8_t button = controller.button_state;
 	static uint32_t kick_time = 0;
 
-	if(button > 9){
+	if(controller.button_state > 9) {
 		//Extend
 		clearBit(PIOC, PIO_PC13);
 		kick_time = RTT->RTT_VR+300;
-
+		// wait 
 		while (RTT->RTT_VR < kick_time){}
 	}
-	else {
-		setBit(PIOC, PIO_PC13);
-	}
+	else {setBit(PIOC, PIO_PC13);}
 }
 
 // -----------------------------------------------IR---------------------------------------------
@@ -60,6 +52,7 @@ void solenoidControll(void){
 #define filterLength 20 //Defines the length of RA-filter
 
 uint16_t IR_raf[filterLength];
+uint8_t filter_charge = 0;
 
 void ADC_init(void){
 	ADC->ADC_MR=ADC_MR_FREERUN;//Set ADC mode freerun (no clock prescaler)
@@ -70,21 +63,18 @@ void ADC_init(void){
 }
 
 
-uint16_t ADC_read(void){ 
+uint16_t ADC_read(void) { 
 	uint16_t val = ADC->ADC_CDR[0];
 	if(val == 0){ val = IR_BLOCK_THRESHOLD;} //Initial zero protection
 	return val; //Reads the last ADC converted ADC data. 
 	}
 	
-void IR_init(void){
+void IR_init(void) {
 	ADC_init();
 }
 
 //Running average filter
-
-uint8_t filter_charge = 0;
-
-uint16_t IR_filteredValue(void){
+uint16_t IR_filteredValue(void) {
 	//Moving all values in the running register
 	for(int i = 0; i<filterLength-1;i++){ IR_raf[i+1] = IR_raf[i];}
 		
@@ -99,30 +89,16 @@ uint16_t IR_filteredValue(void){
 	if(filter_charge < filterLength){
 		filter_charge +=1;
 		return IR_BLOCK_THRESHOLD;
-		}
+	}
 	else {
 		return sum/filterLength;
 	}	
 }
 
-int IR_blocked(void){
+int IR_blocked(void) {
 	uint16_t ir_value = IR_filteredValue();
-	bool ir_value_triggered = (ir_value < IR_BLOCK_THRESHOLD);
-	if(ir_value_triggered) { // && ir_last_value!=true && ir_debounce == 0
-		//ir_last_value = true;
-		//ir_debounce = IR_DEBOUNCE_TIME; 
-		return 1;
-	}
-	else {
-		//if (ir_debounce != 0) {
-		//	ir_debounce = ir_debounce-1;
-		//	//printf("%d\n\r",ir_debounce);
-		//}
-		//if (ir_debounce == 0 && ir_value_triggered != true) {
-		//	ir_last_value = false;
-		//}
-		return 0;
-	}
+	if(ir_value < IR_BLOCK_THRESHOLD) {return 1;}
+	else {return 0;}
 }
 
 void IR_print(void){
@@ -130,7 +106,6 @@ void IR_print(void){
 }
 
 //---------------------------SERVO ---------------------------
-
 #define servo_max 150
 #define servo_min -150
 #define servo_offset 0
@@ -162,7 +137,6 @@ void position_servo(int8_t position) {
 	
 	uint32_t pos = pwm_center + position*15;
 	//printf("Position is %d, new position is: %d\n\r",position, pos);
-	
 	
 	PWM->PWM_CH_NUM[5].PWM_CDTY = pos;
 	//printf("Value of pwm_center - position is %d\n\r",(PWM->PWM_CH_NUM[5].PWM_CDTY));
