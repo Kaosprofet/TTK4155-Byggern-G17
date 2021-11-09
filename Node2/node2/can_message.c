@@ -57,6 +57,7 @@ void can_decode_message(void) {
 		//printf("Joystick: X = %4d Y = %4d Sliders: 1 = %3d 2 = %3d  Buttons: 1 = %d\n\r", controller.x, controller.y, controller.slider_1_val, controller.slider_2_val,  controller.button_state);
 	}
 	else if (message.id == status_id) {
-		
+		game.game_status = message.data[0];
+		game.score = message.data[1];
 	}
 }
