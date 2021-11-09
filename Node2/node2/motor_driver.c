@@ -72,13 +72,21 @@ int encoder_read(void){
 
 void motor_controll(void){
 	//Regulator
-	uint8_t r = controller.slider_2_val;
+	uint8_t r = map(controller.slider_2_val, 0,255, -3000,3000); //Remaps the slider position value
+	
 	uint16_t y = encoder_read();
 	uint16_t PI_out = PI_controller(r,y);
 	
+	uint16_t DAC_out = PI_out;
 	//Changing direction
-	if(PI_out>=0){ setBit(PIOD,mDIR);}
-	else{ clearBit(PIOD,mDIR); }
-	
-	
+	if(PI_out>=0){ 
+		setBit(PIOD,mDIR);
+	}
+	else{ 
+		clearBit(PIOD,mDIR); 
+		DAC_out = -DAC_out;
+	}
+	//Writing output
+	DAC_set_output(DAC_out);
 }
+

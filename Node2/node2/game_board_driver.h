@@ -21,7 +21,7 @@ void solenoid_init(void);
 void solenoidControll(void); //Uses the button
 
 //PI controller
-#define Kp 1
+#define Kp 0.1
 #define Ti 100
 #define N 20
 uint16_t e_vec[N];

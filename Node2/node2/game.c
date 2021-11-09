@@ -24,12 +24,12 @@ void start_game(void) {
 
 uint32_t run_game(void) {
 	uint32_t score = 0;
-		
+		motor_controll_init();
 	while(1) {
 		can_decode_message();
 		position_servo(controller.x);
 		solenoidControll();
-		DAC_set_output();
+		motor_controll();
 
 		//printf("x: %d, y: %d, button: %d, s1: %d, s2: %d\n\r", controller.x, controller.y, controller.button_state, controller.slider_1_val, controller.slider_2_val);
 		score = score+1;
