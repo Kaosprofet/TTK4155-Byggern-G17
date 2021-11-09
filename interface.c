@@ -96,6 +96,7 @@ void menuSelection(void) {
 	switch(menuSelected){
 		case(0):
 		game.game_status = 1;
+		can_send_game_status();
 		playMenu();
 		checkScore();
 		break;
