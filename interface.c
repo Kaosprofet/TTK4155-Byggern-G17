@@ -98,7 +98,7 @@ void menuSelection(void) {
 		game.game_status = 1;
 		can_send_game_status();
 		playMenu();
-		checkScore();
+		check_score();
 		break;
 		case(1):
 		highscore();
