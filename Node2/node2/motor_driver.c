@@ -11,9 +11,26 @@
 //---------INPUT-MJ2----------
 //DO0 to DO7 - PIN33 to PIN40 - PC1-PC8
 #define encoderDataMask (0xFF<<1)
-#define MOTOR_MAX 1000
+#define MOTOR_MAX 4000
 
-int16_t e_vec[N];
+//PI controller
+#define Kp 3
+#define Ti 0.8
+#define N 10
+int16_t error_vec[N];
+int16_t PI_controller(int16_t r, int16_t y){
+	int16_t e=r-y;
+	for(int i = 0; i<N-1;i++){
+		error_vec[i+1] = error_vec[i];
+	}
+	error_vec[0]= e; 
+	int32_t e_sum = 0;
+	for(int j=0; j<N;j++){
+		e_sum += error_vec[j];
+	}
+	return (Kp*e+Ti*e_sum);
+}
+
 
 void motor_controll_init(void){
 	//Enable PIO to controll the pins of the motor controller box MJ1
@@ -77,25 +94,28 @@ void encoder_reset(void){
 		setBit(PIOD,mNOT_RST);
 }
 
+
+//ENCODER 0 to 8941 
 void motor_controll(void){
 	//Regulator
-	int32_t r = map(controller.slider_2_val, 0,255, -3000,3000); //Remaps the slider position value
+	int32_t r = controller.slider_2_val; //Remaps the slider position value
 	
-	int32_t y = encoder_read();
+	int32_t y = map(encoder_read(),0,8941,0,255);
 	//int32_t PI_out = PI_controller(r,y);
 	//printf("Reference: %d, encoder: %d, PI Output: %d\n\r",r,y,PI_out);
 	
-	int32_t PI_out = 0;
+	int16_t PI_out = PI_controller(r,y);
 	uint16_t DAC_out = 0;
 	//Changing direction
 	if(PI_out>=0){ 
 		clearBit(PIOD,mDIR);
-		DAC_out = -PI_out;
+		DAC_out = PI_out;
 	}
 	else{ 
 		setBit(PIOD,mDIR); 
-		DAC_out = PI_out;
+		DAC_out = -PI_out;
 	}
+	
 	if(DAC_out>MOTOR_MAX){
 		DAC_out = MOTOR_MAX;
 	}
@@ -106,3 +126,6 @@ void motor_controll(void){
 	//printf("Val: %d\n\r", controller.slider_2_val);
 }
 
+uint16_t JoystickSpeedControll(void){
+	
+	}
