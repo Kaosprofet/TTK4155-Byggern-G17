@@ -35,7 +35,7 @@ void bootStartupScreen(void) {
 
 
 // Print start menu
-void bootStartMenu(struct controllers *controller) {
+void bootStartMenu(void) {
 	menuSelected = 0;
 	oled_reset();
 	oled_set_font(LARGE);
@@ -72,30 +72,30 @@ void bootStartMenu(struct controllers *controller) {
 		
 		oled_pos(7,100);
 		oled_print("select");
-		//CAN_send_inputData(controller);
-		updateController(controller);
-		//printController(controller);
+		//CAN_send_inputData();
+		updateController();
+		//printController();
 	
-		if (abs(controller->y_val) > joystickMenuTreshold && abs(lastJoystickYVal) < joystickMenuTreshold) {
-			moveArrow(controller);
+		if (abs(controller.y_val) > joystickMenuTreshold && abs(lastJoystickYVal) < joystickMenuTreshold) {
+			moveArrow();
 		}
 		
 		// Menu selection 
 		if (bitIsSet(PIND, PD4)) {break;}
 		
 		// update last joystick value
-		lastJoystickYVal = controller->y_val;
+		lastJoystickYVal = controller.y_val;
 	}
 	
 }
 
 
 // Selecting behavior for the buttons on the main menu
-void menuSelection(struct controllers *controller) {
+void menuSelection(void) {
 	switch(menuSelected){
 		case(0):
-		playMenu(controller);
-		//input_highscore(controller, score);
+		game.game_status = 1;
+		playMenu();
 		break;
 		case(1):
 		highscore();
@@ -107,15 +107,15 @@ void menuSelection(struct controllers *controller) {
 }
 
 // The game segment
-void playMenu(struct controllers *controller) {
+void playMenu() {
 	oled_reset();
 	oled_pos(3,0);
 	oled_print_centered("GOGOGO");
 	// Playing the game, Break on back button
 	while (!bitIsSet(PIND, PD3)) {
-		updateController(controller);
+		updateController();
 		//printController(controller);
-		CAN_send_inputData(controller);
+		CAN_send_inputData();
 		_delay_ms(50);
 	}
 	// Test scoring system
@@ -168,7 +168,7 @@ void highscore(void) {
 	}
 }
 
-void input_highscore(struct controllers *controller, uint8_t score) {
+void input_highscore(uint8_t score) {
 	letterSelected = 0;
 	for (uint8_t i = 0; i<3 ;i++) {letters[i] = 'A';};
 	
@@ -204,12 +204,12 @@ void input_highscore(struct controllers *controller, uint8_t score) {
 		oled_pos(3,0);
 		oled_print_centered(letters);
 		
-		updateController(controller);
-		if (abs(controller->x_val) > joystickMenuTreshold && abs(lastJoystickXVal) < joystickMenuTreshold) {
-			changeLetter(controller);
+		updateController();
+		if (abs(controller.x_val) > joystickMenuTreshold && abs(lastJoystickXVal) < joystickMenuTreshold) {
+			changeLetter();
 		}
-		if (abs(controller->y_val) > joystickMenuTreshold && abs(lastJoystickYVal) < joystickMenuTreshold) {
-			changeChar(controller);
+		if (abs(controller.y_val) > joystickMenuTreshold && abs(lastJoystickYVal) < joystickMenuTreshold) {
+			changeChar();
 		}
 		
 		// Indicator printing
@@ -226,8 +226,8 @@ void input_highscore(struct controllers *controller, uint8_t score) {
 			break;
 		}
 		
-		lastJoystickXVal = controller->x_val;
-		lastJoystickYVal = controller->y_val;
+		lastJoystickXVal = controller.x_val;
+		lastJoystickYVal = controller.y_val;
 	}
 	oled_pos(4,0);
 	oled_print_centered("   ");
@@ -292,31 +292,31 @@ void resetGame(void) {
 }
 
 // Determine movement direction
-void moveArrow(struct controllers *controller) {
-	if(controller->y_val > 0 && menuSelected>0) {
+void moveArrow(void) {
+	if(controller.y_val > 0 && menuSelected>0) {
 		menuSelected--;
 	}
-	else if(controller->y_val < 0 && menuSelected<2) {
+	else if(controller.y_val < 0 && menuSelected<2) {
 		menuSelected++;
 	}
 }
 
 // Change the selected letter in highscore
-void changeLetter(struct controllers *controller) {
-	if(controller->x_val > 0 && letterSelected<2) {
+void changeLetter(void) {
+	if(controller.x_val > 0 && letterSelected<2) {
 		letterSelected++;
 	}
-	else if(controller->x_val < 0 && letterSelected>0) {
+	else if(controller.x_val < 0 && letterSelected>0) {
 		letterSelected--;
 	}
 }
 
 // Change the selected letters character
-void changeChar(struct controllers *controller) {
-	if(controller->y_val > 0 && letters[letterSelected]>'A') {
+void changeChar(void) {
+	if(controller.y_val > 0 && letters[letterSelected]>'A') {
 		letters[letterSelected]--;
 	}
-	else if(controller->y_val < 0 && letters[letterSelected]<'Z') {
+	else if(controller.y_val < 0 && letters[letterSelected]<'Z') {
 		letters[letterSelected]++;
 	}
 }
