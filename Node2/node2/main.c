@@ -24,6 +24,7 @@ int main(void) {
 	//led_test();
 	//IR_test();
 	//can_test();
+	while(!game.game_status){can_decode_message();} //Wait to start game
 	start_game();
 	
 }
@@ -37,6 +38,7 @@ void inits(void) {
 	init_game_board();
 	DAC_init();
 	controller =  (Controller){0, 0, 0, 0, 0};
+	game.game_status = 0;
 }
 
 void led_test(void) {
