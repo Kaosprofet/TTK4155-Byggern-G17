@@ -18,6 +18,8 @@
 #define Ti 0.8
 #define N 10
 int16_t error_vec[N];
+int16_t MotorRef = 0;
+
 int16_t PI_controller(int16_t r, int16_t y){
 	int16_t e=r-y;
 	for(int i = 0; i<N-1;i++){
@@ -98,13 +100,15 @@ void encoder_reset(void){
 //ENCODER 0 to 8941 
 void motor_controll(void){
 	//Regulator
-	int32_t r = controller.slider_2_val; //Remaps the slider position value
+	//int32_t r = controller.slider_2_val; //Remaps the slider position value
 	
-	int32_t y = map(encoder_read(),0,8941,0,255);
+	MotorRef = JoystickSpeedControll(MotorRef);
+	
+	int16_t y = map(encoder_read(),0,8941,0,255);
 	//int32_t PI_out = PI_controller(r,y);
 	//printf("Reference: %d, encoder: %d, PI Output: %d\n\r",r,y,PI_out);
 	
-	int16_t PI_out = PI_controller(r,y);
+	int16_t PI_out = PI_controller(MotorRef,y);
 	uint16_t DAC_out = 0;
 	//Changing direction
 	if(PI_out>=0){ 
@@ -122,11 +126,27 @@ void motor_controll(void){
 	//Writing output
 	setBit(PIOD,mEN);
 	DAC_set_output(DAC_out);
-	printf("Slider %d, Reference: %d, encoder: %d, PI Output: %d, DAC Output: %d\n\r",controller.slider_2_val,r,y,PI_out,DAC_out);
+	//printf("Slider %d, Reference: %d, encoder: %d, PI Output: %d, DAC Output: %d\n\r",controller.slider_2_val,MotorRef,y,PI_out,DAC_out);
 	//printf("Val: %d\n\r", controller.slider_2_val);
 }
 
-uint16_t JoystickSpeedControll(uint16_t r){
+uint32_t joy_counter = 0;
+
+int16_t JoystickSpeedControll(int16_t r){
+	joy_counter +=1;
+	
 	int16_t joystickVal = controller.x;
-		
+	
+	if(joy_counter >= 3000000){
+		r += 1*joystickVal;
+		joy_counter = 0;
+	}
+	
+	if(r>255){
+		r= 255;
+	}
+	if(r<0){
+		r=0;
+	}
+	return r;
 }

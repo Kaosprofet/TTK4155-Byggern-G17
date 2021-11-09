@@ -10,4 +10,5 @@ void motor_controll(void);
 
 int encoder_read(void);
 
+int16_t JoystickSpeedControll(int16_t r);
 #endif
