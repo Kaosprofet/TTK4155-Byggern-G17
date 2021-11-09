@@ -3,28 +3,13 @@
 
 #include <avr/io.h>
 
-enum directions {
-	UP, DOWN, LEFT, RIGHT, NEUTRAL
-};
-
-typedef struct controllers {											// Full struct for controller
-	signed int x_zero;
-	signed int y_zero;
-	volatile signed int org_x_val;
-	volatile signed int org_y_val;
-	volatile signed int x_val;
-	volatile signed int y_val;
-	volatile enum directions dir;
-	volatile uint8_t slider1_val;
-	volatile uint8_t slider2_val;
-} controllers;
-
-void initButton(void);											// Initializes booth buttons
-void updateController(struct controllers *controller);			// Updates all values for controller
-void printController(struct controllers *controller);			// Prints all values for controller
-signed int joystickPercent(uint8_t val, struct controllers *controller);						// Converts joystick ADC values to percent
+void initButton(void);						// Initializes booth buttons
+void updateController(void);				// Updates all values for controller
+void printController(void);					// Prints all values for controller
+signed int joystickPercent(uint8_t val);	// Converts joystick ADC values to percent
+void calibrateJoystick(void);
+void CAN_send_inputData(void);					
 enum directions direction(signed int x_val, signed int y_val);	// Calculates joystick direction
-void calibrateJoystick(struct controllers *controller);
-void CAN_send_inputData(struct controllers *controller);
+
 
 #endif

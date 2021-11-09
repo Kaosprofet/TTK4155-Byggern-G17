@@ -30,25 +30,55 @@ void motor_controll_init(void){
 	
 }
 
-uint16_t encoder_read(void){
+int encoder_read(void){
 	//Set !OE low to enable output of encoder
 	clearBit(PIOD,mNOT_OE);
+	
 	//Set SEL low to get high byte
 	clearBit(PIOD, mSEL);
-	//wait 20 microseconds*
+	
+	//wait 20 microseconds
+	delay_us(30);
+	
+	//Read MSB
 	uint8_t encoder_msb =  readPin(PIOC,encoderDataMask)>>1; //Reads the data pins, bitshiftet back 1, since PC0 is not used
+	
 	//Set SEL to high to get low byte
 	setBit(PIOD,mSEL);
-	//wait 20 microseconds*
+	
+	//wait 20 microseconds
+	delay_us(30);
+	
+	//Read LSB
 	uint8_t encoder_lsb = readPin(PIOC,encoderDataMask)>>1;
+	
 	//Toggle !RST to reset encoder
-	toggleBit(PIOD,mNOT_RST);
+	clearBit(PIOD,mNOT_RST);
+	setBit(PIOD,mNOT_RST);
+	
 	//Set !OE high to disable output of encoder;
 	setBit(PIOD,mNOT_OE);
 	
 	//Processing data, combining MSB and LSB
 	uint16_t encoder_data = (encoder_msb<<8)|encoder_lsb;
 	
-	return encoder_data;
-		
+	//If the MSB is set, it is a negative number. Invert it
+	if (encoder_data&(0x8000)){
+		return ((uint16_t)(~encoder_data));
+	}
+	
+	return -encoder_data;		
+}
+
+void motor_controll(void){
+	//Regulator
+	uint8_t r = controller.slider_2_val;
+	uint16_t y = encoder_read();
+	uint16_t PI_out = PI_controller(r,y);
+	
+	//Changing direction
+	if(PI_out>=0){ setBit(PIOD,mDIR);}
+	else{ clearBit(PIOD,mDIR); }
+	
+	
 }

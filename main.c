@@ -106,12 +106,11 @@ void can_controller_test(void) {
 void testCanJoystick(void) {
 	initGame();
 	//CAN_test();
-	controllers controller1;
-	calibrateJoystick(&controller1);
+	calibrateJoystick();
 	while(1){
-		updateController(&controller1);
-		printController(&controller1);
-		CAN_send_inputData(&controller1);
+		updateController();
+		printController();
+		CAN_send_inputData();
 		_delay_ms(50);
 	}
 }

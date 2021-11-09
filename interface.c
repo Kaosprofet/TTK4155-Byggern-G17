@@ -35,7 +35,7 @@ void bootStartupScreen(void) {
 
 
 // Print start menu
-void bootStartMenu(struct controllers *controller) {
+void bootStartMenu(void) {
 	menuSelected = 0;
 	oled_reset();
 	oled_set_font(LARGE);
@@ -72,30 +72,30 @@ void bootStartMenu(struct controllers *controller) {
 		
 		oled_pos(7,100);
 		oled_print("select");
-		//CAN_send_inputData(controller);
-		updateController(controller);
-		printController(controller);
+		//CAN_send_inputData();
+		updateController();
+		//printController();
 	
-		if (abs(controller->y_val) > joystickMenuTreshold && abs(lastJoystickYVal) < joystickMenuTreshold) {
-			moveArrow(controller);
+		if (abs(controller.y_val) > joystickMenuTreshold && abs(lastJoystickYVal) < joystickMenuTreshold) {
+			moveArrow();
 		}
 		
 		// Menu selection 
 		if (bitIsSet(PIND, PD4)) {break;}
 		
 		// update last joystick value
-		lastJoystickYVal = controller->y_val;
+		lastJoystickYVal = controller.y_val;
 	}
 	
 }
 
 
 // Selecting behavior for the buttons on the main menu
-void menuSelection(struct controllers *controller) {
+void menuSelection(void) {
 	switch(menuSelected){
 		case(0):
-		playMenu(controller);
-		//input_highscore(controller, score);
+		game.game_status = 1;
+		playMenu();
 		break;
 		case(1):
 		highscore();
@@ -107,31 +107,31 @@ void menuSelection(struct controllers *controller) {
 }
 
 // The game segment
-void playMenu(struct controllers *controller) {
+void playMenu() {
 	oled_reset();
 	oled_pos(3,0);
 	oled_print_centered("GOGOGO");
 	// Playing the game, Break on back button
 	while (!bitIsSet(PIND, PD3)) {
-		updateController(controller);
-		printController(controller);
-		CAN_send_inputData(controller);
+		updateController();
+		//printController(controller);
+		CAN_send_inputData();
 		_delay_ms(50);
 	}
 	// Test scoring system
-	uint8_t score = 10;
-	input_highscore(controller, score);
+	// uint8_t score = 12;
+	// input_highscore(controller, score);
 }
 
 // Highscore
 // Initierer til AAA 0 poeng, b�r ha en test som sjekker om vi ikke har non volatile minne og kan lagre mellom kj�ringer
 void initHighscore(void) {
-		for (uint8_t i = 0; i < num_highscores*4; i = i + 4) {
-			writeSRAM(highscore_address+i, 0);
-			for (uint8_t j = 1; j <= num_highscore_char; j++) {
-				writeSRAM(highscore_address+i+j, 'A');
-			}
+	for (uint8_t i = 0; i < num_highscores*4; i = i + 4) {
+		writeSRAM(highscore_address+i, 0b00000000);
+		for (uint8_t j = 1; j <= num_highscore_char; j++) {
+			writeSRAM(highscore_address+i+j, 'A');
 		}
+	}
 }
 
 void highscore(void) {
@@ -144,13 +144,20 @@ void highscore(void) {
 	oled_draw_hline(128,0b00111100);
 	
 	for (uint8_t i = 0; i < num_highscores; i++) {
-		char high_score[10] = "";
+		char high_score[10];
 		for (uint8_t j = 1; j <= num_highscore_char; j++) {
 			high_score[j-1] = readSRAM(highscore_address+i*4+j);
 		}
 		high_score[num_highscore_char] = ' ';
-		high_score[num_highscore_char+1] = readSRAM(highscore_address+i*4)+'0';
-		high_score[num_highscore_char+2] = '\0';
+		
+		uint8_t score_dec = readSRAM(highscore_address+i*4);
+		
+		char score_char[3];
+		sprintf(score_char, "%d", (uint8_t)score_dec); 
+		high_score[num_highscore_char+1] = score_char[0];
+		high_score[num_highscore_char+2] = score_char[1];
+		high_score[num_highscore_char+3] = score_char[2];
+		high_score[num_highscore_char+4] = '\0';
 		oled_pos(i+2,0);
 		oled_print_left(high_score, highscore_offset);
 	}
@@ -161,7 +168,7 @@ void highscore(void) {
 	}
 }
 
-void input_highscore(struct controllers *controller, uint8_t score) {
+void input_highscore(uint8_t score) {
 	letterSelected = 0;
 	for (uint8_t i = 0; i<3 ;i++) {letters[i] = 'A';};
 	
@@ -197,12 +204,12 @@ void input_highscore(struct controllers *controller, uint8_t score) {
 		oled_pos(3,0);
 		oled_print_centered(letters);
 		
-		updateController(controller);
-		if (abs(controller->x_val) > joystickMenuTreshold && abs(lastJoystickXVal) < joystickMenuTreshold) {
-			changeLetter(controller);
+		updateController();
+		if (abs(controller.x_val) > joystickMenuTreshold && abs(lastJoystickXVal) < joystickMenuTreshold) {
+			changeLetter();
 		}
-		if (abs(controller->y_val) > joystickMenuTreshold && abs(lastJoystickYVal) < joystickMenuTreshold) {
-			changeChar(controller);
+		if (abs(controller.y_val) > joystickMenuTreshold && abs(lastJoystickYVal) < joystickMenuTreshold) {
+			changeChar();
 		}
 		
 		// Indicator printing
@@ -219,8 +226,8 @@ void input_highscore(struct controllers *controller, uint8_t score) {
 			break;
 		}
 		
-		lastJoystickXVal = controller->x_val;
-		lastJoystickYVal = controller->y_val;
+		lastJoystickXVal = controller.x_val;
+		lastJoystickYVal = controller.y_val;
 	}
 	oled_pos(4,0);
 	oled_print_centered("   ");
@@ -230,6 +237,7 @@ void input_highscore(struct controllers *controller, uint8_t score) {
 
 // Stores new highscore to memory
 void set_highscore(char name[], uint8_t value) {
+	
 	uint8_t highscore[num_highscores];
 	char names[num_highscores][num_highscore_char];
 	
@@ -240,13 +248,15 @@ void set_highscore(char name[], uint8_t value) {
 		for (uint8_t j = 1; j <= num_highscore_char; j++) {
 			names[i][j-1] = readSRAM(highscore_address+i*4+j);
 		}
-		printf("Name: %s Score: %d\n\r",names[i], highscore[i]);
+		printf("Name: %c%c%c Score: %d\n\r",names[i][0],names[i][1],names[i][2], highscore[i]);
 	}
 	
 	// Reorder highscore list for new highscore
-	for (uint8_t i = num_highscores-1; i >= 0; i--) {
-		if (highscore[i]<value) {
-			if (i==num_highscores) {			// If last name in high score discard old "last" place
+	
+	for (int8_t i = num_highscores-1; i >= 0; i--) {
+		// printf("highscore[i]: %d, new value: %d\n\r", highscore[i], value);
+		if ((uint8_t)highscore[i]<value) {
+			if (i==num_highscores-1) {			// If last name in high score discard old "last" place
 				highscore[i] = value;
 				for (uint8_t j = 0; j < num_highscore_char; j++) {
 					names[i][j] = name[j];
@@ -266,7 +276,7 @@ void set_highscore(char name[], uint8_t value) {
 			}
 		}
 	}
-	
+                                                                                                                                                                                                                                                                              
 	// Write new highscore to SRAM
 	for (uint8_t i = 0; i < num_highscores; i++) {
 		writeSRAM(highscore_address+i*4, highscore[i]);
@@ -274,7 +284,6 @@ void set_highscore(char name[], uint8_t value) {
 			writeSRAM(highscore_address+i*4+j, names[i][j-1]);
 		}
 	}
-	
 }
 
 // Reset highscore
@@ -283,31 +292,31 @@ void resetGame(void) {
 }
 
 // Determine movement direction
-void moveArrow(struct controllers *controller) {
-	if(controller->y_val > 0 && menuSelected>0) {
+void moveArrow(void) {
+	if(controller.y_val > 0 && menuSelected>0) {
 		menuSelected--;
 	}
-	else if(controller->y_val < 0 && menuSelected<2) {
+	else if(controller.y_val < 0 && menuSelected<2) {
 		menuSelected++;
 	}
 }
 
 // Change the selected letter in highscore
-void changeLetter(struct controllers *controller) {
-	if(controller->x_val > 0 && letterSelected<2) {
+void changeLetter(void) {
+	if(controller.x_val > 0 && letterSelected<2) {
 		letterSelected++;
 	}
-	else if(controller->x_val < 0 && letterSelected>0) {
+	else if(controller.x_val < 0 && letterSelected>0) {
 		letterSelected--;
 	}
 }
 
 // Change the selected letters character
-void changeChar(struct controllers *controller) {
-	if(controller->y_val > 0 && letters[letterSelected]>'A') {
+void changeChar(void) {
+	if(controller.y_val > 0 && letters[letterSelected]>'A') {
 		letters[letterSelected]--;
 	}
-	else if(controller->y_val < 0 && letters[letterSelected]<'Z') {
+	else if(controller.y_val < 0 && letters[letterSelected]<'Z') {
 		letters[letterSelected]++;
 	}
 }
