@@ -3,20 +3,20 @@
 
 #include <avr/io.h>
 
-void bootStartupScreen(void);							// Print startup screen
-void bootStartMenu(struct controllers *controller);								// Print start menu
+void bootStartupScreen(void);	// Print startup screen
+void bootStartMenu(void);		// Print start menu
 
-void moveArrow(struct controllers *controller);			// Determine movement direction
+void moveArrow(void);			// Determine movement direction
 
-void changeLetter(struct controllers *controller);
-void changeChar(struct controllers *controller);
+void changeLetter(void);
+void changeChar(void);
 
-void menuSelection(struct controllers *controller);		// Selecting behavior for the buttons on the main menu
+void menuSelection(void);		// Selecting behavior for the buttons on the main menu
 
-void playMenu(struct controllers *controller);			// The game segment
+void playMenu(void);			// The game segment
 void initHighscore(void);
-void highscore(void);									// Highscore
-void input_highscore(struct controllers *controller, uint8_t score);
+void highscore(void);			// Highscore
+void input_highscore(uint8_t score);
 void set_highscore(char name[], uint8_t value);
 void resetGame(void);									
 

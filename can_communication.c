@@ -119,10 +119,27 @@ int CAN_error_check(void) {
 	else {return 0;}
 }
 
+void can_send_game_status(void) {
+	can_message gameStatus;
+	gameStatus.ID = CAN_ID_GameStatus;
+	gameStatus.data[0] = game.game_status;
+	gameStatus.length = 1;
+	CAN_sendmessage(&gameStatus);
+}
+
 //----------------------------------RECEIVING---------------------------------------------
 
+ void CAN_recieve_message(void) {
+	 can_message message = CAN_fetch_message();
+	 
+	 if(message.ID == CAN_ID_GameStatus) {
+		 game.game_status = message.data[0];
+		 game.score = message.data[1];
+	 }
+ }
+            
 //Receives a message
-can_message CAN_recieve_message() {
+can_message CAN_fetch_message(void) {
 	can_message B1_message;
 	can_message B2_message;
 	

@@ -28,4 +28,27 @@
 #include "can_controller.h"
 #include "can_communication.h"
 
+enum directions {
+	UP, DOWN, LEFT, RIGHT, NEUTRAL
+};
 
+typedef struct Controller {											// Full struct for controller
+	signed int x_zero;
+	signed int y_zero;
+	volatile signed int org_x_val;
+	volatile signed int org_y_val;
+	volatile signed int x_val;
+	volatile signed int y_val;
+	volatile enum directions dir;
+	volatile uint8_t slider1_val;
+	volatile uint8_t slider2_val;
+} Controller;
+
+Controller controller;
+
+typedef struct Game {
+	uint8_t game_status;
+	uint8_t score;
+} Game;
+
+Game game;

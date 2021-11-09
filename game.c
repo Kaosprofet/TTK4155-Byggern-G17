@@ -5,17 +5,16 @@
 void playGame(void) {
 	// Initialize and allocate controller
 	initGame();
-	controllers controller;
-	calibrateJoystick(&controller);
+	calibrateJoystick();
 	
 	bootStartupScreen();
 	_delay_ms(2000);
 	
 	while(1) {	
 		// Starting in menu
-		bootStartMenu(&controller);
+		bootStartMenu();
 		// Go to selected part of game
-		menuSelection(&controller);
+		menuSelection();
 	}
 }
 
