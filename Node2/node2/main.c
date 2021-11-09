@@ -24,12 +24,8 @@ int main(void) {
 	//led_test();
 	//IR_test();
 	//can_test();
-	
-	//start_game();
-	while(1){
-		delay_us(10);
-		printf("penis\n\r");
-	}
+	uint32_t k = 0;
+	start_game();
 	
 }
 
