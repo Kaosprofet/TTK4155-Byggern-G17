@@ -74,7 +74,7 @@ void bootStartMenu(struct controllers *controller) {
 		oled_print("select");
 		//CAN_send_inputData(controller);
 		updateController(controller);
-		printController(controller);
+		//printController(controller);
 	
 		if (abs(controller->y_val) > joystickMenuTreshold && abs(lastJoystickYVal) < joystickMenuTreshold) {
 			moveArrow(controller);
@@ -114,24 +114,24 @@ void playMenu(struct controllers *controller) {
 	// Playing the game, Break on back button
 	while (!bitIsSet(PIND, PD3)) {
 		updateController(controller);
-		printController(controller);
+		//printController(controller);
 		CAN_send_inputData(controller);
 		_delay_ms(50);
 	}
 	// Test scoring system
-	uint8_t score = 10;
-	input_highscore(controller, score);
+	// uint8_t score = 12;
+	// input_highscore(controller, score);
 }
 
 // Highscore
 // Initierer til AAA 0 poeng, b�r ha en test som sjekker om vi ikke har non volatile minne og kan lagre mellom kj�ringer
 void initHighscore(void) {
-		for (uint8_t i = 0; i < num_highscores*4; i = i + 4) {
-			writeSRAM(highscore_address+i, 0);
-			for (uint8_t j = 1; j <= num_highscore_char; j++) {
-				writeSRAM(highscore_address+i+j, 'A');
-			}
+	for (uint8_t i = 0; i < num_highscores*4; i = i + 4) {
+		writeSRAM(highscore_address+i, 0b00000000);
+		for (uint8_t j = 1; j <= num_highscore_char; j++) {
+			writeSRAM(highscore_address+i+j, 'A');
 		}
+	}
 }
 
 void highscore(void) {
@@ -144,13 +144,20 @@ void highscore(void) {
 	oled_draw_hline(128,0b00111100);
 	
 	for (uint8_t i = 0; i < num_highscores; i++) {
-		char high_score[10] = "";
+		char high_score[10];
 		for (uint8_t j = 1; j <= num_highscore_char; j++) {
 			high_score[j-1] = readSRAM(highscore_address+i*4+j);
 		}
 		high_score[num_highscore_char] = ' ';
-		high_score[num_highscore_char+1] = readSRAM(highscore_address+i*4)+'0';
-		high_score[num_highscore_char+2] = '\0';
+		
+		uint8_t score_dec = readSRAM(highscore_address+i*4);
+		
+		char score_char[3];
+		sprintf(score_char, "%d", (uint8_t)score_dec); 
+		high_score[num_highscore_char+1] = score_char[0];
+		high_score[num_highscore_char+2] = score_char[1];
+		high_score[num_highscore_char+3] = score_char[2];
+		high_score[num_highscore_char+4] = '\0';
 		oled_pos(i+2,0);
 		oled_print_left(high_score, highscore_offset);
 	}
@@ -230,6 +237,7 @@ void input_highscore(struct controllers *controller, uint8_t score) {
 
 // Stores new highscore to memory
 void set_highscore(char name[], uint8_t value) {
+	
 	uint8_t highscore[num_highscores];
 	char names[num_highscores][num_highscore_char];
 	
@@ -240,13 +248,15 @@ void set_highscore(char name[], uint8_t value) {
 		for (uint8_t j = 1; j <= num_highscore_char; j++) {
 			names[i][j-1] = readSRAM(highscore_address+i*4+j);
 		}
-		printf("Name: %s Score: %d\n\r",names[i], highscore[i]);
+		printf("Name: %c%c%c Score: %d\n\r",names[i][0],names[i][1],names[i][2], highscore[i]);
 	}
 	
 	// Reorder highscore list for new highscore
-	for (uint8_t i = num_highscores-1; i >= 0; i--) {
-		if (highscore[i]<value) {
-			if (i==num_highscores) {			// If last name in high score discard old "last" place
+	
+	for (int8_t i = num_highscores-1; i >= 0; i--) {
+		// printf("highscore[i]: %d, new value: %d\n\r", highscore[i], value);
+		if ((uint8_t)highscore[i]<value) {
+			if (i==num_highscores-1) {			// If last name in high score discard old "last" place
 				highscore[i] = value;
 				for (uint8_t j = 0; j < num_highscore_char; j++) {
 					names[i][j] = name[j];
@@ -266,7 +276,7 @@ void set_highscore(char name[], uint8_t value) {
 			}
 		}
 	}
-	
+                                                                                                                                                                                                                                                                              
 	// Write new highscore to SRAM
 	for (uint8_t i = 0; i < num_highscores; i++) {
 		writeSRAM(highscore_address+i*4, highscore[i]);
@@ -274,7 +284,6 @@ void set_highscore(char name[], uint8_t value) {
 			writeSRAM(highscore_address+i*4+j, names[i][j-1]);
 		}
 	}
-	
 }
 
 // Reset highscore
