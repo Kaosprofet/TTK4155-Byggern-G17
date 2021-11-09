@@ -14,7 +14,8 @@ extern volatile uint8_t can_interrupt_flag;
 typedef struct{unsigned int ID; uint8_t length; uint8_t data[8];} can_message;
 void CAN_test(void); //Sends a message in LOOPBACK mode
 void CAN_sendmessage(can_message* message); // sends message-struct
-can_message CAN_recieve_message(void); //receives data
+can_message CAN_fetch_message(void); //receives data
 void CAN_test_normal(void); //Sends an arbitrary message for tests with node 2
+void can_send_game_status(void);
 
 #endif
