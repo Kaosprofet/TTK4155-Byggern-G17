@@ -1,6 +1,7 @@
 #define setBit(reg, bit) (reg->PIO_SODR = bit)
 #define clearBit(reg, bit) (reg->PIO_CODR = bit)
 #define bitIsSet(reg, bit) (reg->PIO_ODSR & bit)
+#define readPin(reg,mask) ((reg->PIO_PDSR & mask) >> DO0_IDX)
 
 #define toggleBit(reg, bit) (bitIsSet(reg, bit) ? clearBit(reg, bit) : setBit(reg, bit))
 
