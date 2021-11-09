@@ -49,6 +49,6 @@ uint16_t encoder_read(void){
 	//Processing data, combining MSB and LSB
 	uint16_t encoder_data = (encoder_msb<<8)|encoder_lsb;
 	
-	return encoder_data
+	return encoder_data;
 		
 }
