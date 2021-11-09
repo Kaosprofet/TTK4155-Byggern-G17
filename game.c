@@ -2,9 +2,6 @@
 #include "includes.h"
 #endif
 
-
-
-
 void playGame(void) {
 	// Initialize and allocate controller
 	initGame();
@@ -14,11 +11,7 @@ void playGame(void) {
 	bootStartupScreen();
 	_delay_ms(2000);
 	
-	while(1) {
-		// update and print controller each loop
-		//updateController(controller);
-		//printController(controller);
-		
+	while(1) {	
 		// Starting in menu
 		bootStartMenu(&controller);
 		// Go to selected part of game

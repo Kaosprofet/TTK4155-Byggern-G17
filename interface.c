@@ -74,6 +74,7 @@ void bootStartMenu(struct controllers *controller) {
 		oled_print("select");
 		//CAN_send_inputData(controller);
 		updateController(controller);
+		printController(controller);
 	
 		if (abs(controller->y_val) > joystickMenuTreshold && abs(lastJoystickYVal) < joystickMenuTreshold) {
 			moveArrow(controller);
@@ -91,11 +92,10 @@ void bootStartMenu(struct controllers *controller) {
 
 // Selecting behavior for the buttons on the main menu
 void menuSelection(struct controllers *controller) {
-	uint8_t score = 10;
 	switch(menuSelected){
 		case(0):
-		//playMenu(controller);
-		input_highscore(controller, score);
+		playMenu(controller);
+		//input_highscore(controller, score);
 		break;
 		case(1):
 		highscore();
@@ -111,16 +111,16 @@ void playMenu(struct controllers *controller) {
 	oled_reset();
 	oled_pos(3,0);
 	oled_print_centered("GOGOGO");
-	// Playing the game
-	while (1) {
+	// Playing the game, Break on back button
+	while (!bitIsSet(PIND, PD3)) {
 		updateController(controller);
-		CAN_send_inputData(&controller);
+		printController(controller);
+		CAN_send_inputData(controller);
 		_delay_ms(50);
-		// Break on back button
-		if (bitIsSet(PIND, PD3)) {
-		//	break;
-		}
 	}
+	// Test scoring system
+	uint8_t score = 10;
+	input_highscore(controller, score);
 }
 
 // Highscore
@@ -242,7 +242,7 @@ void set_highscore(char name[], uint8_t value) {
 		}
 		printf("Name: %s Score: %d\n\r",names[i], highscore[i]);
 	}
-	/*
+	
 	// Reorder highscore list for new highscore
 	for (uint8_t i = num_highscores-1; i >= 0; i--) {
 		if (highscore[i]<value) {
@@ -268,14 +268,13 @@ void set_highscore(char name[], uint8_t value) {
 	}
 	
 	// Write new highscore to SRAM
-	
 	for (uint8_t i = 0; i < num_highscores; i++) {
 		writeSRAM(highscore_address+i*4, highscore[i]);
 		for (uint8_t j = 1; j <= num_highscore_char; j++) {
 			writeSRAM(highscore_address+i*4+j, names[i][j-1]);
 		}
 	}
-	*/
+	
 }
 
 // Reset highscore
