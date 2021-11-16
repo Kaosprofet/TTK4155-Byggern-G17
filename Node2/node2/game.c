@@ -8,7 +8,13 @@ void start_game(void) {
 	can_decode_message();
 	delay_ms(20);
 	
-	while(!game.game_status) {can_decode_message();} // Wait until game is starting
+	while(!game.game_status) { // Wait until game is starting
+		can_decode_message();
+		delay_ms(20);
+	} 
+
+	can_encode_message(status_id);
+	delay_ms(20);
 
 	score = run_game();
 
