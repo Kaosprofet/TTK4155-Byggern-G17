@@ -141,6 +141,7 @@ void playMenu(void) {
 	}
 }
 void check_score(void) {
+	printf("Score: %d\n\r", game.score);
 	if(game.score > lowHighScore) {
 		input_highscore(game.score);
 	}
