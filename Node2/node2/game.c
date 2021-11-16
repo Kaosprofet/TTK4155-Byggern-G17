@@ -17,6 +17,7 @@ void start_game(void) {
 	}
 	game.score = calculate_score(score);
 	can_encode_message(status_id);
+	delay_ms(10);
 	printf("8bit score: %d\n\r", game.score);
 }
 
@@ -27,6 +28,7 @@ uint32_t run_game(void) {
 		motor_controll_init();
 	while(1) {
 		can_decode_message();
+		delay_ms(10);
 		servo_slider_controll();
 		solenoidControll();
 		motor_controll();                           

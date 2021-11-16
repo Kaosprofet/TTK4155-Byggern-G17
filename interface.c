@@ -98,6 +98,7 @@ void menuSelection(void) {
 		game.game_status = 1;
 		game.score = 0;
 		CAN_send_game_status();
+		_delay_ms(100);
 		playMenu();
 		check_score();
 		break;
@@ -125,10 +126,11 @@ void playMenu(void) {
 		//printf("Score: %d\n\r",game.score);
 		_delay_ms(10);
 		//printf("Game Mode: %d\n\r", game.game_status);
-		if(!game.game_status){
+		printf("Game Mode: %d\n\r", game.game_status);
+		/*if(!game.game_status){
 			printf("Game Mode: %d\n\r", game.game_status);
-			break;
-		}
+			//break;
+		}*/
 	}
 }
 void check_score(void) {
