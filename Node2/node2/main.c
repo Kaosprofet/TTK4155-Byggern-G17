@@ -105,7 +105,7 @@ void can_com_status_test(void){
 	//venter på ok
 	uint8_t cond = 1;
 	while(cond){
-		can_receive(&rx1,0);
+		rx1 = CAN0_Handler();
 		printf("ID: %d, DATA: %d\n\r", rx1.id, rx1.data);
 		if(rx1.id == 1 && rx1.data[0] == 69){
 			cond =0;
