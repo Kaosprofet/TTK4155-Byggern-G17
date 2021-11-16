@@ -27,7 +27,7 @@ uint32_t run_game(void) {
 		motor_controll_init();
 	while(1) {
 		can_decode_message();
-		position_servo(controller.x);
+		servo_slider_controll();
 		solenoidControll();
 		motor_controll();                           
 		
