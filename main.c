@@ -20,10 +20,10 @@ void testCanJoystick(void);
 void interuptTest(void);
 
 int main(void) {
-	//playGame();
+	playGame();
 	//testCanJoystick();
 	//CAN_test_recieve();
-	interuptTest();
+	//interuptTest();
 }
 
 void interuptTest(void) {
