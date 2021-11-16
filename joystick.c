@@ -82,5 +82,5 @@ void CAN_send_inputData(void){
 	manInput.data[3] = controller.slider1_val; //Slider 1 value %
 	manInput.data[4] = controller.slider2_val; //Slider 2 value %
 	manInput.length = 5; 
-	CAN_sendmessage(&manInput); //Sends the message
+	CAN_send_message(&manInput); //Sends the message
 }

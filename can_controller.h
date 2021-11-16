@@ -101,14 +101,14 @@
 #define CNF2 0x29
 #define CNF3 0x28
 
-void can_controller_init(uint8_t can_mode);
+void CAN_controller_init(uint8_t can_mode);
 void can_controller_reset(void);
 
 
-uint8_t can_controller_read(uint8_t address);
-void can_controller_write(uint8_t address, uint8_t data);
+uint8_t CAN_controller_read(uint8_t address);
+void CAN_controller_write(uint8_t address, uint8_t data);
 
-void can_controller_request_to_send(uint8_t address);
+void CAN_controller_request_to_send(uint8_t address);
 uint8_t can_controller_read_status(void);
 void can_controller_bit_modify(uint8_t address, uint8_t mask, uint8_t data);
 void can_set_mode(uint8_t can_mode);
