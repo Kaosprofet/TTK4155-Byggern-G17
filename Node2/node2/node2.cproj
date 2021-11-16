@@ -243,6 +243,9 @@
     <Compile Include="music.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="music.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="songs.h">
       <SubType>compile</SubType>
     </Compile>

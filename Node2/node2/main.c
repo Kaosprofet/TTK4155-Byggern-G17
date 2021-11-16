@@ -20,7 +20,6 @@ void inits(void);
 
 int main(void) {
 	inits();
-	
 	//led_test();
 	//IR_test();
 	//can_test();
@@ -42,6 +41,7 @@ void inits(void) {
 	init_can();
 	init_game_board();
 	DAC_init();
+	music_pwm_init();
 	controller =  (Controller){0, 0, 0, 0, 0};
 	game.game_status = 0;
 }
@@ -103,7 +103,7 @@ void can_com_status_test(void){
 	printf("Sent first message \n\r ");
 	CAN_MESSAGE rx1;
 	
-	//venter på ok
+	//venter pï¿½ ok
 	uint8_t cond = 1;
 	while(cond){
 		CAN0_Handler();

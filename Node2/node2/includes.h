@@ -45,5 +45,6 @@ Game game;
 #include "timer.h"
 #include "songs.h"
 #include "pwm_music.h"
+#include "music.h"
 
 #endif
