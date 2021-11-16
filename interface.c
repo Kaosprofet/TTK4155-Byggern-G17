@@ -99,7 +99,6 @@ void menuSelection(void) {
 		game.score = 0;
 		CAN_send_game_status();
 		_delay_ms(100);
-		game.game_status = 0;
 		playMenu();
 		check_score();
 		break;
@@ -117,11 +116,11 @@ void playMenu(void) {
 	oled_reset();
 	oled_pos(3,0);
 	
-	while(!game.game_status) {
-		//printf("wait: ");
-		CAN_decode_message();
-		//_delay_ms(20);
-	}
+	//while(!game.game_status) {
+	//	//printf("wait: ");
+	//	CAN_decode_message();
+	//	//_delay_ms(20);
+	//}
 	
 	oled_print_centered("GOGOGO");
 	// Playing the game, Break on back button or game
@@ -129,10 +128,10 @@ void playMenu(void) {
 		updateController();
 		//printController(controller);
 		CAN_send_inputData();
-		//_delay_ms(30);
+		_delay_ms(30);
 		CAN_decode_message();
 		//printf("Score: %d\n\r",game.score);
-		//_delay_ms(30);
+		_delay_ms(30);
 		//printf("Game Mode: %d\n\r", game.game_status);
 		//printf("Game Mode: %d\n\r", game.game_status);
 		if(!game.game_status){
