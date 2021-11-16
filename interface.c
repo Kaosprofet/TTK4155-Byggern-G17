@@ -121,12 +121,12 @@ void playMenu(void) {
 		updateController();
 		//printController(controller);
 		CAN_send_inputData();
-		_delay_ms(10);
+		_delay_ms(30);
 		CAN_decode_message();
 		//printf("Score: %d\n\r",game.score);
-		_delay_ms(10);
+		_delay_ms(30);
 		//printf("Game Mode: %d\n\r", game.game_status);
-		printf("Game Mode: %d\n\r", game.game_status);
+		//printf("Game Mode: %d\n\r", game.game_status);
 		if(!game.game_status){
 			//printf("Game Over\n\r");
 			//break;
