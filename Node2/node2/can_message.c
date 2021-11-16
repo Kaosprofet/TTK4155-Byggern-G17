@@ -35,6 +35,7 @@ void can_encode_message(uint8_t ID) {
 		message.data_length = 2;
 		message.data[0] = game.game_status;
 		message.data[1] = game.score;
+		printf("Sending game status: %d\n\r",game.game_status);
 	}
 	can_send(&message, 0);
 }
@@ -57,5 +58,6 @@ void can_decode_message(void) {
 	else if (message.id == status_id) {
 		game.game_status = message.data[0];
 		game.score = message.data[1];
+		printf("Got game status: %d\n\r",game.game_status);
 	}
 }
