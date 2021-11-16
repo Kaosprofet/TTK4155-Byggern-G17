@@ -20,6 +20,7 @@ void updateController(void) {
 	controller.slider2_val = *(p+3);
 	
 	controller.dir = direction(controller.x_val, controller.y_val);
+	_delay_ms(10);
 }
 
 void printController(void) { 
