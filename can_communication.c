@@ -164,7 +164,8 @@ can_message CAN_receive_message(void) {
 	can_message B1_message;
 	
 	CAN_get_message(0, &B1_message);
-	can_controller_bit_modify(CANInterruptFlags,RX0IF,0);
+	CAN_controller_write(CANInterruptFlags, 0x00);
+	//can_controller_bit_modify(CANInterruptFlags,RX0IF,0);
 	/*can_message B2_message;
 	
 	//Getting the interrupt flags

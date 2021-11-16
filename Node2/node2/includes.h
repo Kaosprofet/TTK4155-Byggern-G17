@@ -43,5 +43,7 @@ Game game;
 #include "DAC.h"
 #include "motor_driver.h"
 #include "timer.h"
+#include "songs.h"
+#include "pwm_music.h"
 
 #endif
