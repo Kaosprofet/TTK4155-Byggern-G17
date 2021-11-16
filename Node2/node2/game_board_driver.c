@@ -130,3 +130,7 @@ void position_servo(int8_t position) {
 	//printf("Value of pwm_center - position is %d\n\r",(PWM->PWM_CH_NUM[5].PWM_CDTY));
 }
 
+void servo_controll(void){
+	int8_t angle = map(controller.slider_2_val,255,0,-100,100);
+	position_servo(angle);
+}
