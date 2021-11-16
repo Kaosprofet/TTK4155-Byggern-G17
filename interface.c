@@ -118,6 +118,7 @@ void playMenu(void) {
 	oled_pos(3,0);
 	
 	while(!game.game_status) {
+		printf("wait: ");
 		CAN_decode_message();
 		_delay_ms(20);
 	}

@@ -150,9 +150,11 @@ void CAN_send_game_status(void) {
 		 
 		 if(message.ID == CAN_ID_GameStatus) {
 			 game.game_status = message.data[0];
-			 printf("node2 game mode: %d\n\r", game.game_status);
+			 printf("node2 game mode: %d, ", game.game_status);
 			 game.score = message.data[1];
 		 }
+		 printf("ID: %d, Length: %d, Data 1: %d, Data 2: %d\n\r", message.ID, message.length, message.data[0], message.data[1]);
+		 _delay_ms(30);
 	 }
  }
             
