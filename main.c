@@ -20,8 +20,10 @@ void testCanJoystick(void);
 
 
 int main(void) {
-	playGame();
+	//playGame();
 	//testCanJoystick();
+	initGame();
+	CAN_test_recieve();
 }
 
 

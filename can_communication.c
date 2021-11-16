@@ -66,6 +66,14 @@ void CAN_test_Transmission(uint8_t buffernumber, can_message* message) {
 	}
 }
 
+void CAN_test_recieve() {
+	while(1) {
+		can_message message =  CAN_receive_message();
+		printf("ID: %d, Length: %d, Data: %d\n\r", message.ID, message.length, message.data[0]);
+		_delay_ms(50);
+	}
+}
+
 
 
 //-----------------------------------------------SENDING----------------------------------------------------------
