@@ -142,7 +142,7 @@ int16_t JoystickSpeedControll(int16_t r){
 	int16_t joystickVal = controller.x;
 	
 	if(joy_counter >= 300){
-		r += joystickVal;
+		r += joystickVal*10000;
 		joy_counter = 0;
 	}
 	
