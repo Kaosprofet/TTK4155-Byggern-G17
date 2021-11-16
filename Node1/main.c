@@ -10,40 +10,17 @@
 #endif
 
 void exercise1(void);
-int exercise2(void);
+void exercise2(void);
 void exercise3(void);
 void exercise4(void);
 void testChipSelect(void);
-void spi_test(void);
 void can_controller_test(void);
 void testCanJoystick(void);
 void interuptTest(void);
 
 int main(void) {
 	playGame();
-	//testCanJoystick();
-	//CAN_test_recieve();
-	//interuptTest();
 }
-
-void interuptTest(void) {
-	initGame();
-	while(1) {
-		if (can_interrupt_flag) {
-			can_message message = CAN_receive_message();
-			printf("Message ID: %d, Length %d, Data, %d\n\r", message.ID, message.length, message.data[0]);		
-			
-			can_message TXmessage;
-			TXmessage.ID = message.data[0];
-			TXmessage.length = 1;
-			TXmessage.data[0] = 69;
-			CAN_send_message(&TXmessage);
-
-			can_interrupt_flag = 0;
-		}
-	}
-}
-
 
 void exercise1(void) {
 	while (1) {
@@ -52,7 +29,7 @@ void exercise1(void) {
 	}
 }
 
-int exercise2(void) {
+void exercise2(void) {
 	//enableEMI(); //Enabeling external memory interface
 	setBit(DDRE, PE1); //Enabling PE1 for output
 	setBit(DDRA, PA0);
@@ -106,14 +83,6 @@ void testChipSelect(void) {
 	}
 }
 
-void spi_test(void) {
-	spi_init();
-	while (1) {
-		//spi_transfer(0b00000000); //command
-		//spi_transfer(0b01111110); //data
-	}
-}
-
 void can_controller_test(void) {
 	CAN_controller_init(CAN_LOOPBACK);
 	while (1) {
@@ -125,7 +94,6 @@ void can_controller_test(void) {
 
 void testCanJoystick(void) {
 	initGame();
-	//CAN_test();
 	calibrateJoystick();
 	while(1){
 		updateController();
@@ -135,3 +103,20 @@ void testCanJoystick(void) {
 	}
 }
 
+void interuptTest(void) {
+	initGame();
+	while(1) {
+		if (can_interrupt_flag) {
+			can_message message = CAN_receive_message();
+			printf("Message ID: %d, Length %d, Data, %d\n\r", message.ID, message.length, message.data[0]);
+			
+			can_message TXmessage;
+			TXmessage.ID = message.data[0];
+			TXmessage.length = 1;
+			TXmessage.data[0] = 69;
+			CAN_send_message(&TXmessage);
+
+			can_interrupt_flag = 0;
+		}
+	}
+}

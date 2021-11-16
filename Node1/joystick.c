@@ -27,7 +27,8 @@ void printController(void) {
 	printf("Joystick: X = %4d Y = %4d X_org = %4d T_org = %4d dir = %d  Sliders: 1 = %3d 2 = %3d  Buttons: 1 = %d 2 = %d\n\r", controller.x_val, controller.y_val, controller.org_x_val, controller.org_y_val, controller.dir, controller.slider1_val, controller.slider2_val,  (bool)bitIsSet(PIND, PD3),  (bool)bitIsSet(PIND, PD4));
 }
 
- enum directions direction(signed int x_val, signed int y_val) {
+// Calculate the joystick direction
+enum directions direction(signed int x_val, signed int y_val) {
 	signed int deadzone = 20;
 	signed int zero = 0;
 	
@@ -50,6 +51,7 @@ void printController(void) {
 	return NEUTRAL;
 }
 
+// Measures the zero point of the joystick at startup
 void calibrateJoystick(void) {
 	uint8_t *p;
 	p = readADC();
@@ -74,6 +76,7 @@ signed int joystickPercent(uint8_t val) {
 	return 0;
 }
 
+// Packages the controller data and sends it as a mesage
 void CAN_send_inputData(void){
 	can_message manInput;
 	manInput.ID = CAN_ID_ManInputData;

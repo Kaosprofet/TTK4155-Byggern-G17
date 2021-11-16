@@ -32,7 +32,6 @@ void oled_test(void){
 		oled_penis();
 }
 
-
 //Writes the input command to the command register of the OLED
 void writeCMD(uint8_t cmd){
 	OLED_CMD_val[0] = cmd;
@@ -83,11 +82,9 @@ void initOLED(void){
 	for(uint8_t i=0; i <(num_commands); i++){
 		writeCMD(RecInitCommands[i]);
 	}
-	
 }
+
 // ------------------------------------- Typing, writing and drawing things on the screen --------------------
-
-
 
 void oled_set_font(fonts font){
 	switch(font){
@@ -101,12 +98,9 @@ void oled_set_font(fonts font){
 			selected_font = 4;
 			break;
 	}
-	//return selected_font; // trengs vel ikke?
 };
 
-
-//Typing characters
-
+// Typing characters
 void oled_type(uint8_t c){
 	int printChar = c-32;
 	switch(selected_font){
@@ -127,8 +121,7 @@ void oled_type(uint8_t c){
 				writeDATA(pgm_read_word(&(font8[printChar][d])));
 				position.col +=8;
 				}
-			break;
-			
+			break;		
 	}
 }
 void oled_printf(char* data, ...){
@@ -180,14 +173,12 @@ void oled_draw_hline(int length, int thickness){
 	}
 }
 
-
 void oled_draw_box(uint8_t xpos, uint8_t ypos, uint8_t w, uint8_t h, uint8_t thickness){
 	uint8_t start_page = ypos/8;
 	uint8_t extra_top = ypos - start_page*8;
 	uint8_t needed_pages = (extra_top + h +(8-1))/8;
 	uint8_t extra_bottomn = needed_pages*8 - (extra_top + h);
 	uint8_t total_height = extra_top + h + extra_bottomn;
-	
 	
 	bool raw_square[total_height][w];
 	for(int h1=0; h1<total_height; h1++){
@@ -248,6 +239,7 @@ void oled_walking(uint8_t row, uint8_t col){
 		_delay_ms(80);
 	}
 }
+
 void oled_walkingDeletesAPage(uint8_t page){
 	int col=0;
 	oled_goto_page(page);
@@ -263,7 +255,6 @@ void oled_walkingDeletesAPage(uint8_t page){
 			col +=1;
 		}
 	}
-	
 }
 
 //Draws a line between two coordinates
@@ -276,7 +267,6 @@ void oled_draw_line(uint8_t startx,uint8_t starty,uint8_t endx,uint8_t endy){
 		oled_draw_pixel(x,y);
 	}
 }
-
 
 //Draws a pixel in the OLED coordinate space
 void oled_draw_pixel(uint8_t x,uint8_t y){
@@ -314,7 +304,6 @@ void oled_reset(void){
 
 
 //----------------------------------------------------- Position related -----------------------------------------------------
-
 
 void set_addressing_mode(modes mode){
 	writeCMD(0x20); //Tells the OLED that we are going to change the address mode

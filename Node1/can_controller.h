@@ -104,7 +104,6 @@
 void CAN_controller_init(uint8_t can_mode);
 void can_controller_reset(void);
 
-
 uint8_t CAN_controller_read(uint8_t address);
 void CAN_controller_write(uint8_t address, uint8_t data);
 

@@ -5,7 +5,6 @@
 void playGame(void) {
 	// Initialize and allocate controller
 	initGame();
-	calibrateJoystick();
 	
 	bootStartupScreen();
 	_delay_ms(2000);
@@ -18,6 +17,7 @@ void playGame(void) {
 	}
 }
 
+// Initialise all parts needed for game
 void initGame() {
 	initButton();
 	initADC();
@@ -26,4 +26,6 @@ void initGame() {
 	initOLED();
 	initHighscore();
 	CAN_controller_init(CAN_NORMAL);
+	
+	calibrateJoystick();
 }

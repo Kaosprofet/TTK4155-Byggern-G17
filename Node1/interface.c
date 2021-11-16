@@ -9,15 +9,14 @@
 #define highscore_offset 30
 #define joystickMenuTreshold 50
 
+char letters[4] = {'A', 'A', 'A', '\0'};
+
 uint8_t menuSelected;
 uint8_t letterSelected;
-
-char letters[4] = {'A', 'A', 'A', '\0'};
 
 uint8_t lastJoystickYVal = 0;
 uint8_t lastJoystickXVal = 0;
 uint8_t lowHighScore = 0;
-
 
 // Print startup screen
 void bootStartupScreen(void) {
@@ -73,9 +72,8 @@ void bootStartMenu(void) {
 		
 		oled_pos(7,100);
 		oled_print("select");
-		//CAN_send_inputData();
+
 		updateController();
-		//printController();
 	
 		if (abs(controller.y_val) > joystickMenuTreshold && abs(lastJoystickYVal) < joystickMenuTreshold) {
 			moveArrow();
@@ -87,9 +85,7 @@ void bootStartMenu(void) {
 		// update last joystick value
 		lastJoystickYVal = controller.y_val;
 	}
-	
 }
-
 
 // Selecting behavior for the buttons on the main menu
 void menuSelection(void) {
@@ -116,30 +112,24 @@ void playMenu(void) {
 	oled_reset();
 	oled_pos(3,0);
 	
-	//while(!game.game_status) {
-	//	//printf("wait: ");
-	//	CAN_decode_message();
-	//	//_delay_ms(20);
-	//}
-	
 	oled_print_centered("GOGOGO");
+	
 	// Playing the game, Break on back button or game
 	while (!bitIsSet(PIND, PD3)) { //  || game.game_status
 		updateController();
-		//printController(controller);
+		
 		CAN_send_inputData();
 		_delay_ms(30);
 		CAN_decode_message();
-		//printf("Score: %d\n\r",game.score);
 		_delay_ms(30);
-		//printf("Game Mode: %d\n\r", game.game_status);
-		//printf("Game Mode: %d\n\r", game.game_status);
+
 		if(!game.game_status){
 			printf("Game Over\n\r");
 			break;
 		}
 	}
 }
+
 void check_score(void) {
 	printf("Score: %d\n\r", game.score);
 	if(game.score > lowHighScore) {
@@ -266,7 +256,6 @@ void set_highscore(char name[], uint8_t value) {
 	char names[num_highscores][num_highscore_char];
 	
 	// Collecting highscore from SRAM
-	
 	for (uint8_t i = 0; i < num_highscores; i++) {
 		highscore[i] = readSRAM(highscore_address+i*4);
 		for (uint8_t j = 1; j <= num_highscore_char; j++) {
@@ -300,6 +289,7 @@ void set_highscore(char name[], uint8_t value) {
 			}
 		}
 	}
+
 	// Updates highscore threshold
     lowHighScore = highscore[num_highscores-1];                                                                                                                                                                                                                                                                  
 	// Write new highscore to SRAM

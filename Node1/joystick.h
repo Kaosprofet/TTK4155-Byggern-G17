@@ -11,5 +11,4 @@ void calibrateJoystick(void);
 void CAN_send_inputData(void);					
 enum directions direction(signed int x_val, signed int y_val);	// Calculates joystick direction
 
-
 #endif

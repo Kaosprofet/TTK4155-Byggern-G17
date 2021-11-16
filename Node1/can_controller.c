@@ -10,6 +10,7 @@ void CAN_controller_init(uint8_t can_mode) {
 	_delay_ms(10);
 	
 	can_set_mode(CAN_CONFIG);
+	
 	//Timing
 	CAN_controller_write(CNF1,(1<<6)|(11<<0));
 	CAN_controller_write(CNF2, (1<<7)|(1<<6)|(3<<3)|(3<<0));
@@ -21,7 +22,8 @@ void CAN_controller_init(uint8_t can_mode) {
 	//Disable masks/filters on RXB0 and RXB1
 	CAN_controller_write(RXB0CTRL,RX_FilterOff);
 	CAN_controller_write(RXB1CTRL,RX_FilterOff);
-	//Restets the data length registers to make sure Remote Transmission is turned off
+	
+	//Resets the data length registers to make sure Remote Transmission is turned off
 	CAN_controller_write(TXB0DLC,0);
 	CAN_controller_write(TXB0DLC + 0x10,0);
 	CAN_controller_write(TXB0DLC + 0x20,0);
