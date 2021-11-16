@@ -24,7 +24,11 @@ int main(void) {
 	//led_test();
 	//IR_test();
 	//can_test();
-	while(!game.game_status){can_decode_message();} //Wait to start game
+	game.game_status=0;
+	while(!game.game_status){
+		can_decode_message();
+		delay_ms(10);
+	} //Wait to start game
 	start_game();
 }
 
