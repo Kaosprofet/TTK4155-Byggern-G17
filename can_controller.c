@@ -15,7 +15,7 @@ void CAN_controller_init(uint8_t can_mode) {
 	CAN_controller_write(CNF2, (1<<7)|(1<<6)|(3<<3)|(3<<0));
 	CAN_controller_write(CNF3,4<<0);
 	
-	CAN_controller_write(CANInterrruptEnable, 0x1F); //Enables interrupt on all receive and transmit.
+	CAN_controller_write(CANInterrruptEnable, 0x3); //Enables interrupt on all receive and transmit.
 	CAN_controller_write(CANInterruptFlags, 0x00);
 	
 	//Disable masks/filters on RXB0 and RXB1
@@ -28,7 +28,7 @@ void CAN_controller_init(uint8_t can_mode) {
 	
 	can_set_mode(can_mode);
 	cli();  // Disable global interrupts
-	setBit(DDRD,PD2);
+	clearBit(DDRD,PD2);
 	// Interrupt on falling edge PD2
 	setBit(MCUCR, ISC01);
 	clearBit(MCUCR, ISC00);

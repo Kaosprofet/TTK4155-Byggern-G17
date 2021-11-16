@@ -21,10 +21,12 @@
  *
  * \retval 
  */
-void CAN0_Handler( void ) {
+
+
+
+void CAN0_Handler(void) {
 	if(DEBUG_INTERRUPT)printf("CAN0 interrupt\n\r");
 	char can_sr = CAN0->CAN_SR; 
-	
 	//RX interrupt
 	//Only mailbox 1 and 2 specified for receiving
 	if(can_sr & (CAN_SR_MB1 | CAN_SR_MB2) ) {
@@ -47,6 +49,7 @@ void CAN0_Handler( void ) {
 			if(DEBUG_INTERRUPT)printf("%d ", message.data[i]);
 		}
 		if(DEBUG_INTERRUPT)printf("\n\r");
+		rx_message = message;
 	}
 	
 	if(can_sr & CAN_SR_MB0) {
@@ -66,4 +69,5 @@ void CAN0_Handler( void ) {
 	
 	NVIC_ClearPendingIRQ(ID_CAN0);
 	//sei();*/
+	
 }

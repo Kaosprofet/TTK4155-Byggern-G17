@@ -42,10 +42,8 @@ void can_encode_message(uint8_t ID) {
 
 void can_decode_message(void) {
 	CAN_MESSAGE message;
-	if(can_receive(&message,0)){
-		//printf("no message");
-	}
-	
+	CAN0_Handler();
+
 	//Controller data
 	if (message.id == controller_id) {  
 		controller.x = message.data[0];

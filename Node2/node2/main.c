@@ -24,12 +24,13 @@ int main(void) {
 	//led_test();
 	//IR_test();
 	//can_test();
-	game.game_status=0;
-	while(!game.game_status){
-		can_decode_message();
-		delay_ms(10);
-	} //Wait to start game
-	start_game();
+	//game.game_status=0;
+	//while(!game.game_status){
+	//	can_decode_message();
+	//	delay_ms(10);
+	//} //Wait to start game
+	//start_game();
+	can_com_status_test();
 }
 
 void inits(void) {
@@ -81,4 +82,36 @@ void can_test_send(void){
 	message.data_length = 1;
 	message.data[0] = 5;
 	can_send(&message,0);
+}
+
+void can_com_status_test(void){
+	CAN_MESSAGE m1;
+	m1.id = 1;
+	m1.data_length = 1;
+	m1.data[0] = 1;
+	CAN_MESSAGE m2;
+	m2.id = 2;
+	m2.data_length = 1;
+	m2.data[0] = 2;
+	CAN_MESSAGE m3;
+	m2.id = 3;
+	m2.data_length = 1;
+	m2.data[0] = 3;
+	
+	can_send(&m1,0);
+	printf("Sent first message \n\r ");
+	CAN_MESSAGE rx1;
+	
+	//venter på ok
+	uint8_t cond = 1;
+	while(cond){
+		CAN0_Handler();
+		rx1 = rx_message;
+		printf("ID: %d, DATA: %d\n\r", rx1.id, rx1.data);
+		if(rx1.id == 1 && rx1.data[0] == 69){
+			cond =0;
+		}
+	}
+	printf("Got ok \n\r");
+	
 }

@@ -145,7 +145,7 @@ void CAN_send_game_status(void) {
 //----------------------------------RECEIVING---------------------------------------------
 
  void CAN_decode_message(void) {
-	 if (1) {  //CAN_buffer_rx0_clear
+	 if (can_interrupt_flag) {  //CAN_buffer_rx0_clear
 		 can_message message = CAN_receive_message();
 		 
 		 if(message.ID == CAN_ID_GameStatus) {
@@ -155,6 +155,7 @@ void CAN_send_game_status(void) {
 		 }
 		 printf("ID: %d, Length: %d, Data 1: %d, Data 2: %d\n\r", message.ID, message.length, message.data[0], message.data[1]);
 		 _delay_ms(30);
+		 can_interrupt_flag = 0;
 	 }
  }
             
@@ -163,7 +164,8 @@ can_message CAN_receive_message(void) {
 	can_message B1_message;
 	
 	CAN_get_message(0, &B1_message);
-	can_controller_bit_modify(CANInterruptFlags,RX0IF,0);
+	CAN_controller_write(CANInterruptFlags, 0x00);
+	//can_controller_bit_modify(CANInterruptFlags,RX0IF,0);
 	/*can_message B2_message;
 	
 	//Getting the interrupt flags
