@@ -145,7 +145,7 @@ void CAN_send_game_status(void) {
 //----------------------------------RECEIVING---------------------------------------------
 
  void CAN_decode_message(void) {
-	 if (CAN_buffer_rx0_clear()) {
+	 if (1) {  //CAN_buffer_rx0_clear
 		 can_message message = CAN_receive_message();
 		 
 		 if(message.ID == CAN_ID_GameStatus) {

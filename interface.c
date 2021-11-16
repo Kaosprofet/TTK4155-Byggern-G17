@@ -99,6 +99,7 @@ void menuSelection(void) {
 		game.score = 0;
 		CAN_send_game_status();
 		_delay_ms(100);
+		game.game_status = 0;
 		playMenu();
 		check_score();
 		break;
@@ -115,6 +116,12 @@ void menuSelection(void) {
 void playMenu(void) {
 	oled_reset();
 	oled_pos(3,0);
+	
+	while(!game.game_status) {
+		CAN_decode_message();
+		_delay_ms(20);
+	}
+	
 	oled_print_centered("GOGOGO");
 	// Playing the game, Break on back button or game
 	while (!bitIsSet(PIND, PD3)) { //  || game.game_status
