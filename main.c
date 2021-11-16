@@ -38,7 +38,7 @@ void interuptTest(void) {
 			can_message TXmessage;
 			TXmessage.ID = message.data[0];
 			TXmessage.length = 1;
-			TXmessage.data[1] = 69;
+			TXmessage.data[0] = 69;
 			CAN_send_message(&TXmessage);
 			_delay_ms(20);
 			/*
