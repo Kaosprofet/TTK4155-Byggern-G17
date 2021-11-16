@@ -128,7 +128,7 @@ void playMenu(void) {
 		//printf("Game Mode: %d\n\r", game.game_status);
 		printf("Game Mode: %d\n\r", game.game_status);
 		if(!game.game_status){
-			printf("Game Over\n\r");
+			//printf("Game Over\n\r");
 			//break;
 		}
 	}
