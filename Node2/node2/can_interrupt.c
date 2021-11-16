@@ -47,6 +47,8 @@ CAN_MESSAGE CAN0_Handler( void ) {
 			if(DEBUG_INTERRUPT)printf("%d ", message.data[i]);
 		}
 		if(DEBUG_INTERRUPT)printf("\n\r");
+
+		return message;
 	}
 	
 	if(can_sr & CAN_SR_MB0) {
@@ -66,5 +68,5 @@ CAN_MESSAGE CAN0_Handler( void ) {
 	
 	NVIC_ClearPendingIRQ(ID_CAN0);
 	//sei();*/
-	return message;
+	
 }
