@@ -11,6 +11,6 @@
 
 #ifndef CAN_INTERRUPT_H_
 #define CAN_INTERRUPT_H_
-CAN_MESSAGE CAN0_Handler( void );
+void CAN0_Handler(CAN_MESSAGE *message);
 
 #endif /* CAN_INTERRUPT_H_ */

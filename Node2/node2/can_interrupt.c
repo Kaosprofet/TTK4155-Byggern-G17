@@ -21,34 +21,32 @@
  *
  * \retval 
  */
-CAN_MESSAGE CAN0_Handler( void ) {
+void CAN0_Handler(CAN_MESSAGE *message) {
 	if(DEBUG_INTERRUPT)printf("CAN0 interrupt\n\r");
 	char can_sr = CAN0->CAN_SR; 
 	
 	//RX interrupt
 	//Only mailbox 1 and 2 specified for receiving
 	if(can_sr & (CAN_SR_MB1 | CAN_SR_MB2) ) {
-		CAN_MESSAGE message;
+		//CAN_MESSAGE message;
 		
 		if(can_sr & CAN_SR_MB1)	{ //Mailbox 1 event
-			can_receive(&message, 1);
+			can_receive(message, 1);
 
 		}
 		else if(can_sr & CAN_SR_MB2) { //Mailbox 2 event
-			can_receive(&message, 2);
+			can_receive(message, 2);
 		}
 		else {
 			printf("CAN0 message arrived in non-used mailbox\n\r");
 		}
 
-		if(DEBUG_INTERRUPT)printf("message id: %d\n\r", message.id);
-		if(DEBUG_INTERRUPT)printf("message data length: %d\n\r", message.data_length);
-		for (int i = 0; i < message.data_length; i++) {
-			if(DEBUG_INTERRUPT)printf("%d ", message.data[i]);
+		if(DEBUG_INTERRUPT)printf("message id: %d\n\r", message->id);
+		if(DEBUG_INTERRUPT)printf("message data length: %d\n\r", message->data_length);
+		for (int i = 0; i < message->data_length; i++) {
+			if(DEBUG_INTERRUPT)printf("%d ", message->data[i]);
 		}
 		if(DEBUG_INTERRUPT)printf("\n\r");
-
-		return message;
 	}
 	
 	if(can_sr & CAN_SR_MB0) {
