@@ -6,9 +6,9 @@
 extern volatile uint8_t can_interrupt_flag;
 
 //Defining IDs
-#define CAN_ID_ManInputData 20
+#define CAN_ID_GameStatus 20
+#define CAN_ID_ManInputData 30
 #define CAN_ID_PID_paramters 40
-#define CAN_ID_GameStatus 30
 #define CAN_ID_Music 1
 
 typedef struct{
