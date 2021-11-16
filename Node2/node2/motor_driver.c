@@ -18,7 +18,7 @@
 #define Ti 1
 #define N 10
 int16_t error_vec[N];
-int16_t MotorRef = 0;
+
 
 int16_t PI_controller(int16_t r, int16_t y){
 	int16_t e=r-y;
@@ -97,18 +97,22 @@ void encoder_reset(void){
 }
 
 
+uint32_t MotorRef = 0;
+#define motor_ref_max 4294968295
+
 //ENCODER 0 to 8941 
 void motor_controll(void){
 	//Regulator
 	//int32_t r = controller.slider_2_val; //Remaps the slider position value
 	
 	MotorRef = JoystickSpeedControll(MotorRef);
+	uint8_t reg_ref = map(MotorRef,0,motor_ref_max,0,255);
 	
 	int16_t y = map(encoder_read(),0,10000,0,255);
 	//int32_t PI_out = PI_controller(r,y);
 	//printf("Reference: %d, encoder: %d, PI Output: %d\n\r",r,y,PI_out);
 	
-	int16_t PI_out = PI_controller(MotorRef,y);
+	int16_t PI_out = PI_controller(reg_ref,y);
 	uint16_t DAC_out = 0;
 	//Changing direction
 	if(PI_out>=0){ 
@@ -142,8 +146,8 @@ int16_t JoystickSpeedControll(int16_t r){
 		joy_counter = 0;
 	}
 	
-	if(r>255){
-		r= 255;
+	if(r>motor_ref_max){
+		r= motor_ref_max;
 	}
 	if(r<0){
 		r=0;
