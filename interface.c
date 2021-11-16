@@ -127,10 +127,10 @@ void playMenu(void) {
 		_delay_ms(10);
 		//printf("Game Mode: %d\n\r", game.game_status);
 		printf("Game Mode: %d\n\r", game.game_status);
-		/*if(!game.game_status){
-			printf("Game Mode: %d\n\r", game.game_status);
+		if(!game.game_status){
+			printf("Game Over\n\r");
 			//break;
-		}*/
+		}
 	}
 }
 void check_score(void) {
