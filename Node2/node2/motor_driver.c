@@ -15,7 +15,7 @@
 
 //PI controller
 #define Kp 3
-#define Ti 0.8
+#define Ti 1
 #define N 10
 int16_t error_vec[N];
 int16_t MotorRef = 0;
@@ -104,7 +104,7 @@ void motor_controll(void){
 	
 	MotorRef = JoystickSpeedControll(MotorRef);
 	
-	int16_t y = map(encoder_read(),0,8941,0,255);
+	int16_t y = map(encoder_read(),0,10000,0,255);
 	//int32_t PI_out = PI_controller(r,y);
 	//printf("Reference: %d, encoder: %d, PI Output: %d\n\r",r,y,PI_out);
 	
@@ -137,8 +137,8 @@ int16_t JoystickSpeedControll(int16_t r){
 	
 	int16_t joystickVal = controller.x;
 	
-	if(joy_counter >= 3000000){
-		r += 1*joystickVal;
+	if(joy_counter >= 300){
+		r += joystickVal;
 		joy_counter = 0;
 	}
 	
