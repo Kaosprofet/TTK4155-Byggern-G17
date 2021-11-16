@@ -41,21 +41,20 @@ void can_encode_message(uint8_t ID) {
 }
 
 void can_decode_message(void) {
-	CAN_MESSAGE message;
 	CAN0_Handler();
 
 	//Controller data
-	if (message.id == controller_id) {  
-		controller.x = message.data[0];
-		controller.y = message.data[1];
-		controller.button_state = message.data[2];
-		controller.slider_1_val = message.data[3];
-		controller.slider_2_val = message.data[4];
+	if (rx_message.id == controller_id) {  
+		controller.x = rx_message.data[0];
+		controller.y = rx_message.data[1];
+		controller.button_state = rx_message.data[2];
+		controller.slider_1_val = rx_message.data[3];
+		controller.slider_2_val = rx_message.data[4];
 		//printf("Joystick: X = %4d Y = %4d Sliders: 1 = %3d 2 = %3d  Buttons: 1 = %d\n\r", controller.x, controller.y, controller.slider_1_val, controller.slider_2_val,  controller.button_state);
 	}
-	else if (message.id == status_id) {
-		game.game_status = message.data[0];
-		game.score = message.data[1];
+	else if (rx_message.id == status_id) {
+		game.game_status = rx_message.data[0];
+		game.score = rx_message.data[1];
 		printf("Got game status: %d\n\r",game.game_status);
 	}
 }

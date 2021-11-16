@@ -5,14 +5,6 @@
 void start_game(void) {
 	uint32_t score = 0;
 		 
-	can_decode_message();
-	delay_ms(20);
-	
-	while(!game.game_status) { // Wait until game is starting
-		can_decode_message();
-		delay_ms(20);
-	} 
-
 	can_encode_message(status_id);
 	delay_ms(20);
 
@@ -30,7 +22,7 @@ uint32_t run_game(void) {
 	uint32_t score = 0;
 		motor_controll_init();
 	while(1) {
-		can_decode_message();
+		CAN0_Handler(); //Listening for CAN messages. 
 		delay_ms(10);
 		servo_slider_controll();
 		solenoidControll();
