@@ -4,8 +4,8 @@
 #include <stdint.h>
 
 #define music_id 1
-#define controller_id 20
-#define status_id 30
+#define controller_id 30
+#define status_id 20
 #define pid_id 40
 
 
