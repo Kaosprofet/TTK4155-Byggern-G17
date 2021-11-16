@@ -234,6 +234,18 @@
     <Compile Include="timer.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="pwm_music.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="pwm_music.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="music.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="songs.h">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Device_Startup\" />

@@ -25,12 +25,13 @@ int main(void) {
 	//IR_test();
 	//can_test();
 	//game.game_status=0;
-	//while(!game.game_status){
-	//	can_decode_message();
-	//	delay_ms(10);
-	//} //Wait to start game
-	//start_game();
-	can_com_status_test();
+	while(!game.game_status){
+		CAN0_Handler();
+		//printf("Status: %d \n\r", game.game_status);
+	} //Wait to start game
+	printf("Starting game\n\r");
+	start_game();
+	//can_com_status_test();
 }
 
 void inits(void) {
@@ -106,9 +107,8 @@ void can_com_status_test(void){
 	uint8_t cond = 1;
 	while(cond){
 		CAN0_Handler();
-		rx1 = rx_message;
-		printf("ID: %d, DATA: %d\n\r", rx1.id, rx1.data);
-		if(rx1.id == 1 && rx1.data[0] == 69){
+		//printf("ID: %d, DATA: %d\n\r", rx1.id, rx1.data);
+		if(rx_message.id == 1 && rx_message.data[0]==69){
 			cond =0;
 		}
 	}

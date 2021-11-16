@@ -13,6 +13,6 @@
 #define CAN_INTERRUPT_H_
 void CAN0_Handler(void);
 
-CAN_MESSAGE rx_message;
+volatile CAN_MESSAGE rx_message;
 
 #endif /* CAN_INTERRUPT_H_ */
