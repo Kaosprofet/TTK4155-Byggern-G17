@@ -26,7 +26,6 @@ int main(void) {
 	//can_test();
 	while(!game.game_status){can_decode_message();} //Wait to start game
 	start_game();
-	
 }
 
 void inits(void) {
@@ -70,4 +69,12 @@ void can_test(void) {
 		can_decode_message();
 
 	}
+}
+
+void can_test_send(void){
+	CAN_MESSAGE message;
+	message.id = 20;
+	message.data_length = 1;
+	message.data[0] = 5;
+	can_send(&message,0);
 }
