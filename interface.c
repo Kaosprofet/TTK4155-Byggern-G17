@@ -120,7 +120,7 @@ void playMenu(void) {
 	while(!game.game_status) {
 		//printf("wait: ");
 		CAN_decode_message();
-		_delay_ms(20);
+		//_delay_ms(20);
 	}
 	
 	oled_print_centered("GOGOGO");
@@ -129,15 +129,15 @@ void playMenu(void) {
 		updateController();
 		//printController(controller);
 		CAN_send_inputData();
-		_delay_ms(30);
+		//_delay_ms(30);
 		CAN_decode_message();
 		//printf("Score: %d\n\r",game.score);
-		_delay_ms(30);
+		//_delay_ms(30);
 		//printf("Game Mode: %d\n\r", game.game_status);
 		//printf("Game Mode: %d\n\r", game.game_status);
 		if(!game.game_status){
-			//printf("Game Over\n\r");
-			//break;
+			printf("Game Over\n\r");
+			break;
 		}
 	}
 }

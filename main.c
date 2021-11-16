@@ -28,45 +28,17 @@ int main(void) {
 
 void interuptTest(void) {
 	initGame();
-	uint8_t i = 1;
 	while(1) {
 		if (can_interrupt_flag) {
 			can_message message = CAN_receive_message();
-			_delay_ms(20);
-			printf("Message ID: %d, Length %d, Data, %d\n\r", message.ID, message.length, message.data[0]);
+			printf("Message ID: %d, Length %d, Data, %d\n\r", message.ID, message.length, message.data[0]);		
 			
 			can_message TXmessage;
 			TXmessage.ID = message.data[0];
 			TXmessage.length = 1;
 			TXmessage.data[0] = 69;
 			CAN_send_message(&TXmessage);
-			_delay_ms(20);
-			/*
-			if(message.data[0] == 1 ) {
-				can_message TXmessage;
-				TXmessage.ID = 1;
-				TXmessage.length = 1;
-				TXmessage.data[1] = 69;
-				CAN_send_message(&TXmessage);
-				_delay_ms(20);
-			}
-			else if(message.data[0]==2) {
-				can_message TXmessage;
-				TXmessage.ID = 2;
-				TXmessage.length = 1;
-				TXmessage.data[1] = 69;
-				CAN_send_message(&TXmessage);
-				_delay_ms(20);
-			}
-			else if(message.data[0]==3) {
-				can_message TXmessage;
-				TXmessage.ID = 3;
-				TXmessage.length = 1;
-				TXmessage.data[1] = 69;
-				CAN_send_message(&TXmessage);
-				_delay_ms(20);
-			}
-			*/
+
 			can_interrupt_flag = 0;
 		}
 	}

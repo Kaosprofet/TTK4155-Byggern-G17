@@ -50,9 +50,8 @@ void CAN_test_normal(){
 	testmessage1.length = 1;
 	printf("Test1 ID: %d, Test1 length: %d, Test1 data: %d \n\r",testmessage1.ID, testmessage1.length, testmessage1.data[0]);
 	while(1){
-		CAN_send_message(&testmessage1);	
+		CAN_send_message(&testmessage1);
 	}
-	
 }
 
 //Reads from a specified TX buffer
@@ -139,6 +138,7 @@ void CAN_send_game_status(void) {
 	gameStatus.ID = CAN_ID_GameStatus;
 	gameStatus.data[0] = game.game_status;
 	gameStatus.length = 1;
+	printf("Sending game status\n\r");
 	CAN_send_message(&gameStatus);
 }
 
@@ -153,7 +153,7 @@ void CAN_send_game_status(void) {
 			 printf("node2 game mode: %d, ", game.game_status);
 			 game.score = message.data[1];
 		 }
-		 printf("ID: %d, Length: %d, Data 1: %d, Data 2: %d\n\r", message.ID, message.length, message.data[0], message.data[1]);
+		 printf("Message ID: %d, Length: %d, Data 1: %d, Data 2: %d\n\r", message.ID, message.length, message.data[0], message.data[1]);
 		 _delay_ms(30);
 		 can_interrupt_flag = 0;
 	 }
