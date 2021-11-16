@@ -28,11 +28,11 @@ void init_servo(void) {
 	//Period
 	PWM->PWM_CH_NUM[5].PWM_CPRD = 52500;
 
-	//Center pos
+	//Sets PWM value to Center pos
 	PWM->PWM_CH_NUM[5].PWM_CDTY = pwm_center;
 
 
-	//Enable PWM (Vet ikke hva vi har definert som enable)
+	//Enable PWM 
 	PWM->PWM_ENA = PWM_ENA_CHID5;
 }
 
