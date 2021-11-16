@@ -141,7 +141,9 @@ void CAN_send_game_status(void) {
 //Receives a message
 can_message CAN_receive_message(void) {
 	can_message B1_message;
-	can_message B2_message;
+	
+	CAN_get_message(0, &B1_message);
+	/*can_message B2_message;
 	
 	//Getting the interrupt flags
 	uint8_t CANINTF = CAN_controller_read(CANInterruptFlags);
@@ -159,6 +161,7 @@ can_message CAN_receive_message(void) {
 		can_controller_bit_modify(CANInterruptFlags,RX1IF,0);
 		return B2_message;
 	}
+	*/
 	return B1_message;
 }
 
