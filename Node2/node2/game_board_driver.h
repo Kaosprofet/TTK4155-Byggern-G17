@@ -15,6 +15,7 @@ void IR_print(void); //Printing to UART for testing purposes
 //Servo 
 void init_servo(void);
 void position_servo(int8_t position);
+void servo_slider_controll(void); 
 
 //Solenoid
 void solenoid_init(void);
