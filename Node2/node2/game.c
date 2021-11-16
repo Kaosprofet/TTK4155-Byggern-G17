@@ -6,15 +6,12 @@ void start_game(void) {
 	uint32_t score = 0;
 		 
 	can_decode_message();
+	delay_ms(20);
 	
-	switch(game.game_status) {
-		case(0):
-		break;
-		case(1):
-		score = run_game();
-		break;
-		
-	}
+	while(!game.game_status) {can_decode_message();} // Wait until game is starting
+
+	score = run_game();
+
 	game.score = calculate_score(score);
 	can_encode_message(status_id);
 	delay_ms(10);
