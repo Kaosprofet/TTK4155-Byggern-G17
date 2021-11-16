@@ -17,7 +17,7 @@ void start_game(void) {
 	}
 	game.score = calculate_score(score);
 	can_encode_message(status_id);
-	//printf("8bit score: %d\n\r", game.score);
+	printf("8bit score: %d\n\r", game.score);
 }
 
 uint32_t run_game(void) {
