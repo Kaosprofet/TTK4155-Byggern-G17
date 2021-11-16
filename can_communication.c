@@ -116,6 +116,12 @@ int CAN_buffer_tx_clear(int can_buffer) {
 	if(!bitIsSet(interrupt_flags,check_bit)) { return 0;}
 	else{ return 1;}
 }
+int CAN_buffer_rx0_clear(void) {
+	uint8_t interrupt_flags = CAN_controller_read(CANInterruptFlags); //Reads the interrupt flags
+	uint8_t check_bit = RX0IF;
+	if(!bitIsSet(interrupt_flags,check_bit)) { return 0;}
+	else{ return 1;}
+}
 
 
 //checks for errorflags
@@ -140,7 +146,7 @@ void CAN_send_game_status(void) {
 
  void CAN_decode_message(void) {
 	 
-	 if (CAN_controller_read(CANInterruptFlags)&RX0IF) {
+	 if (CAN_buffer_rx0_clear()) {
 		 can_message message = CAN_receive_message();
 		 if(message.ID == CAN_ID_GameStatus) {
 			 game.game_status = message.data[0];
