@@ -41,7 +41,8 @@ void can_encode_message(uint8_t ID) {
 }
 
 void can_decode_message(void) {
-	CAN_MESSAGE message = CAN0_Handler(void);
+	CAN_MESSAGE message;
+	CAN0_Handler(&message);
 
 	//Controller data
 	if (message.id == controller_id) {  
