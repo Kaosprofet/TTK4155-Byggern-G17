@@ -145,16 +145,15 @@ void CAN_send_game_status(void) {
 //----------------------------------RECEIVING---------------------------------------------
 
  void CAN_decode_message(void) {
-	 
 	 if (CAN_buffer_rx0_clear()) {
 		 can_message message = CAN_receive_message();
+		 
 		 if(message.ID == CAN_ID_GameStatus) {
 			 game.game_status = message.data[0];
 			 printf("node2 game mode: %d\n\r", game.game_status);
 			 game.score = message.data[1];
 		 }
 	 }
-	 
  }
             
 //Receives a message
