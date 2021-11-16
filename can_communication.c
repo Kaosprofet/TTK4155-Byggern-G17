@@ -143,6 +143,7 @@ void CAN_send_game_status(void) {
 	 
 	 if(message.ID == CAN_ID_GameStatus) {
 		 game.game_status = message.data[0];
+		 printf("node2 game mode: %d\n\r", game.game_status);
 		 game.score = message.data[1];
 	 }
  }
