@@ -21,7 +21,7 @@
  *
  * \retval 
  */
-void CAN0_Handler( void ) {
+CAN_MESSAGE CAN0_Handler( void ) {
 	if(DEBUG_INTERRUPT)printf("CAN0 interrupt\n\r");
 	char can_sr = CAN0->CAN_SR; 
 	
@@ -66,4 +66,5 @@ void CAN0_Handler( void ) {
 	
 	NVIC_ClearPendingIRQ(ID_CAN0);
 	//sei();*/
+	return message;
 }

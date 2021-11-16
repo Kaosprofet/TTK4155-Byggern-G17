@@ -28,7 +28,7 @@ void CAN_controller_init(uint8_t can_mode) {
 	
 	can_set_mode(can_mode);
 	cli();  // Disable global interrupts
-	setBit(DDRD,PD2);
+	clearBit(DDRD,PD2);
 	// Interrupt on falling edge PD2
 	setBit(MCUCR, ISC01);
 	clearBit(MCUCR, ISC00);
