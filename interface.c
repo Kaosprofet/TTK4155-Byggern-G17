@@ -116,7 +116,7 @@ void playMenu(void) {
 	oled_pos(3,0);
 	oled_print_centered("GOGOGO");
 	// Playing the game, Break on back button or game
-	while (!bitIsSet(PIND, PD3) || game.game_status) {
+	while (!bitIsSet(PIND, PD3)) { //  || game.game_status
 		updateController();
 		//printController(controller);
 		CAN_send_inputData();
@@ -124,6 +124,11 @@ void playMenu(void) {
 		CAN_decode_message();
 		//printf("Score: %d\n\r",game.score);
 		_delay_ms(10);
+		//printf("Game Mode: %d\n\r", game.game_status);
+		if(!game.game_status){
+			printf("Game Mode: %d\n\r", game.game_status);
+			break;
+		}
 	}
 }
 void check_score(void) {
