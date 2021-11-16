@@ -2,6 +2,8 @@
 #include "includes.h"
 #endif
 
+static uint8_t can_new_message_flag = 0;
+
 void CAN_controller_init(uint8_t can_mode) {
 	spi_init();             // Initiate spi
 	can_controller_reset(); // Reset the can controller
