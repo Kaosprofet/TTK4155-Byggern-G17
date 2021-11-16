@@ -1,23 +1,23 @@
 
 
 ------ Servo ----------
-White - Servo BLACK
-Purple - Servo RED
-Green - Servo YELLOW
+White - Servo BLACK (Pinne 2)
+Purple - Servo RED  (Pinne 4)
+Green - Servo YELLOW (Pinne 6)
 
 ------ Solonoid -------
 Red - Solonoid 1 - Relay(3) 
 Signal - relay(4) - 1k - Pin 44
-
+ 
 Brown/Dark gray - Solonoid 2 - GND
 
 
 ------ IR ------------ 
-(Pinne 1) Black - Photodiode + (Signal, to GND through 10K)
-(Pinne 3) Gray - Photodiode -  (5V)
+(Pinne 10) Black - Photodiode + (Signal, to GND through 10K)
+(Pinne 8) Gray - Photodiode -  (5V)
 
-(Pinne 5) Blue - emitter + (5V)
-(Pinne 7) Yellow emitter - (to GND throug 47R)
+(Pinne 6) Blue - emitter + (5V)
+(Pinne 4) Yellow emitter - (to GND throug 47R)
 
 ------ div -----------
 LEDIGE:
