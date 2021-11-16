@@ -2,7 +2,6 @@
 #include "includes.h"
 #endif
 
-
 void init_can() {
 	uint32_t br;
 	br = 125 << CAN_BR_BRP_Pos;
@@ -11,7 +10,7 @@ void init_can() {
 	br |= 3 << CAN_BR_PROPAG_Pos;
 	br |= 4 << CAN_BR_PHASE2_Pos;
 	uint8_t test = can_init_def_tx_rx_mb(br);
-	
+
 	if(test) {
 		printf("CAN initialization failed\n\r");
 	}
@@ -45,7 +44,6 @@ void can_decode_message(void) {
 	if(can_receive(&message,0)){
 		//printf("no message");
 	}
-	
 	
 	//Controller data
 	if (message.id == controller_id) {  
