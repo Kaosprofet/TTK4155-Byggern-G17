@@ -83,7 +83,7 @@ void testChipSelect(void) {
 	}
 }
 
-void can_controller_test(void) {
+void can_controller_test(void) { //Test for CAN_controller
 	CAN_controller_init(CAN_LOOPBACK);
 	while (1) {
 		CAN_controller_write(0b00001111, 0b11111111);

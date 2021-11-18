@@ -4,7 +4,6 @@
 
 #define adc_address 0x1400
 #define adc_num_channels 4
-//#define adc_config 0b10010000 // Brukes om vi vil hente single verdier
 
 // Starts by pointing to the first ADC channel
 volatile uint8_t *adcVal = (uint8_t *)adc_address;
