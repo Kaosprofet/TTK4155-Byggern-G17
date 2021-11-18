@@ -19,6 +19,7 @@ void init_can() {
 	}
 }
 
+// Creates messages based on selected ID and sends over CAN
 void can_encode_message(uint8_t ID) {
 	CAN_MESSAGE message;
 	if (ID == controller_id) {
@@ -40,6 +41,7 @@ void can_encode_message(uint8_t ID) {
 	can_send(&message, 0);
 }
 
+// Fetches message from CAN controller and allocates values based on ID
 void can_decode_message(void) {
 	CAN0_Handler();
 
@@ -50,6 +52,8 @@ void can_decode_message(void) {
 		controller.button_state = rx_message.data[2];
 		controller.slider_1_val = rx_message.data[3];
 		controller.slider_2_val = rx_message.data[4];
+		
+		// Test print
 		//printf("Joystick: X = %4d Y = %4d Sliders: 1 = %3d 2 = %3d  Buttons: 1 = %d\n\r", controller.x, controller.y, controller.slider_1_val, controller.slider_2_val,  controller.button_state);
 	}
 	else if (rx_message.id == status_id) {
