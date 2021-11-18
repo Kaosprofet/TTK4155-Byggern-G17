@@ -19,6 +19,7 @@ void initHighscore(void);
 void highscore(void);			// Highscore
 void input_highscore(uint8_t score);
 void set_highscore(char name[], uint8_t value);
-void resetGame(void);									
+void resetGame(void);	
+void mode_select_menu(void);								
 
 #endif

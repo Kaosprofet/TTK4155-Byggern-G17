@@ -97,6 +97,8 @@ void menuSelection(void) {
 		game.game_status = 1;
 		game.score = 0;
 		
+		mode_select_menu();
+		
 		CAN_send_game_status();
 		_delay_ms(100);
 		playMenu();
@@ -346,4 +348,10 @@ void changeChar(void) {
 	else if(controller.y_val < 0 && letters[letterSelected]<'Z') {
 		letters[letterSelected]++;
 	}
+}
+
+
+void mode_select_menu() {
+	
+	
 }
