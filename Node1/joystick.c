@@ -3,7 +3,7 @@
 #endif
 
 void initButton(void) {
-	clearBit(DDRD,PD3);
+	clearBit(DDRD,PD3); //Defines PD3 and PD4 as input
 	clearBit(DDRD,PD4);
 }
 
