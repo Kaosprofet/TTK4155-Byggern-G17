@@ -133,7 +133,14 @@ void position_servo(int8_t position) {
 
 // Position servo based on slide-potmeter position
 void servo_slider_controll(void){
-	int8_t angle = map(controller.slider_2_val,255,0,-100,100);
+	uint8_t slider;
+	if(game.mode == 1){
+		 slider = controller.slider_1_val;
+	}
+	else{
+		 slider = controller.slider_2_val;
+	}
+	int8_t angle = map(slider,255,0,-100,100);
 	position_servo(angle);
 }
 
