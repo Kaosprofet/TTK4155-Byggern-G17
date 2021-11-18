@@ -2,4 +2,6 @@
 #include "includes.h"
 #endif
 
-void play_music(const int* melody, int tempo);
+void play_music(const int* melody, int tempo, int amount_of_notes);
+
+void song_select(void);

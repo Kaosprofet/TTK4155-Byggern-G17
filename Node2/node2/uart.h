@@ -9,12 +9,12 @@
  * A simple interface for receiving and transmitting characters to a computer using UART via the on board USB-connector
  */ 
 
-
 #ifndef UART_H_
 #define UART_H_
 
 #include <stdint.h>
 #define UART_RINGBUFFER_SIZE 64
+
 /*
  * Ringbuffer for receiving characters from  
  */
@@ -30,7 +30,5 @@ int uart_getchar(uint8_t *c);
 int uart_putchar(const uint8_t c);
 
 void UART_Handler( void );
-
-
 
 #endif /* UART_H_ */

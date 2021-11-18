@@ -16,12 +16,11 @@ typedef struct{
 	uint8_t length; 
 	uint8_t data[8];
 } can_message;
-	
 
 void CAN_send_message(can_message* message); // sends message-struct
 can_message CAN_receive_message(void); //receives data
 void CAN_send_game_status(void);
-
+void CAN_send_music_status(uint8_t play, uint8_t melody);
 
 // Test functions
 void CAN_test(void); //Sends a message in LOOPBACK mode

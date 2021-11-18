@@ -32,7 +32,7 @@ void can_encode_message(uint8_t ID) {
 		message.data[4] = controller.slider_2_val;
 	}
 	else if (ID == status_id) {
-		message.id = controller_id;
+		message.id = status_id;
 		message.data_length = 2;
 		message.data[0] = game.game_status;
 		message.data[1] = game.score;
@@ -60,5 +60,9 @@ void can_decode_message(void) {
 		game.game_status = rx_message.data[0];
 		game.score = rx_message.data[1];
 		printf("Got game status: %d\n\r",game.game_status);
+	}
+	else if(rx_message.id == music_id) {
+		music.play = rx_message.data[0];
+		music.melody = rx_message.data[1];
 	}
 }

@@ -24,12 +24,15 @@ int main(void) {
 	//IR_test();
 	//can_test();
 	//game.game_status=0;
-	while(!game.game_status){
-		CAN0_Handler();
-		//printf("Status: %d \n\r", game.game_status);
-	} //Wait to start game
-	printf("Starting game\n\r");
-	start_game();
+	while(1) {
+		while(!game.game_status){
+			CAN0_Handler();
+			song_select();
+			//printf("Status: %d \n\r", game.game_status);
+		} //Wait to start game
+		printf("Starting game\n\r");
+		start_game();
+	}
 	//can_com_status_test();
 }
 
