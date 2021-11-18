@@ -9,7 +9,7 @@ void start_game(void) {
 
 	game.score = calculate_score(score);
 	can_encode_message(status_id);
-	delay_ms(10);
+	delay_ms(20);
 	printf("8bit score: %d\n\r", game.score);
 }
 
