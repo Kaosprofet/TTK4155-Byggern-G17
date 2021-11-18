@@ -5,12 +5,11 @@
 #ifndef SONGS_H
 #define SONGS_H
 
-#define zelda_tempo 40
 #define rick_astely_tempo 40
-#define MII_THEME_TEMPO 40
 #define key_board_cat_tempo 40
 #define game_over_music_tempo 30
 
+// Notes from https://github.com/robsoncouto/arduino-songs/blob/master/pacman/pacman.ino
 #define NOTE_B0  31
 #define NOTE_C1  33
 #define NOTE_CS1 35
@@ -102,42 +101,6 @@
 #define NOTE_DS8 4978
 #define REST 0
 
-const static int zelda_melody[] = {
-
-  //Based on the arrangement at https://www.flutetunes.com/tunes.php?id=169
-  
-  NOTE_AS4,-2,  NOTE_F4,8,  NOTE_F4,8,  NOTE_AS4,8,//1
-  NOTE_GS4,16,  NOTE_FS4,16,  NOTE_GS4,-2,
-  NOTE_AS4,-2,  NOTE_FS4,8,  NOTE_FS4,8,  NOTE_AS4,8,
-  NOTE_A4,16,  NOTE_G4,16,  NOTE_A4,-2,
-  REST,1, 
-
-  NOTE_AS4,4,  NOTE_F4,-4,  NOTE_AS4,8,  NOTE_AS4,16,  NOTE_C5,16, NOTE_D5,16, NOTE_DS5,16,//7
-  NOTE_F5,2,  NOTE_F5,8,  NOTE_F5,8,  NOTE_F5,8,  NOTE_FS5,16, NOTE_GS5,16,
-  NOTE_AS5,-2,  NOTE_AS5,8,  NOTE_AS5,8,  NOTE_GS5,8,  NOTE_FS5,16,
-  NOTE_GS5,-8,  NOTE_FS5,16,  NOTE_F5,2,  NOTE_F5,4, 
-
-  NOTE_DS5,-8, NOTE_F5,16, NOTE_FS5,2, NOTE_F5,8, NOTE_DS5,8, //11
-  NOTE_CS5,-8, NOTE_DS5,16, NOTE_F5,2, NOTE_DS5,8, NOTE_CS5,8,
-  NOTE_C5,-8, NOTE_D5,16, NOTE_E5,2, NOTE_G5,8, 
-  NOTE_F5,16, NOTE_F4,16, NOTE_F4,16, NOTE_F4,16,NOTE_F4,16,NOTE_F4,16,NOTE_F4,16,NOTE_F4,16,NOTE_F4,8, NOTE_F4,16,NOTE_F4,8,
-
-  NOTE_AS4,4,  NOTE_F4,-4,  NOTE_AS4,8,  NOTE_AS4,16,  NOTE_C5,16, NOTE_D5,16, NOTE_DS5,16,//15
-  NOTE_F5,2,  NOTE_F5,8,  NOTE_F5,8,  NOTE_F5,8,  NOTE_FS5,16, NOTE_GS5,16,
-  NOTE_AS5,-2, NOTE_CS6,4,
-  NOTE_C6,4, NOTE_A5,2, NOTE_F5,4,
-  NOTE_FS5,-2, NOTE_AS5,4,
-  NOTE_A5,4, NOTE_F5,2, NOTE_F5,4,
-
-  NOTE_FS5,-2, NOTE_AS5,4,
-  NOTE_A5,4, NOTE_F5,2, NOTE_D5,4,
-  NOTE_DS5,-2, NOTE_FS5,4,
-  NOTE_F5,4, NOTE_CS5,2, NOTE_AS4,4,
-  NOTE_C5,-8, NOTE_D5,16, NOTE_E5,2, NOTE_G5,8, 
-  NOTE_F5,16, NOTE_F4,16, NOTE_F4,16, NOTE_F4,16,NOTE_F4,16,NOTE_F4,16,NOTE_F4,16,NOTE_F4,16,NOTE_F4,8, NOTE_F4,16,NOTE_F4,8
-  
-};
-
 const static int Never_gonna_give_u_up_melody[] = {
 
   // Never Gonna Give You Up - Rick Astley
@@ -210,81 +173,6 @@ const static int Never_gonna_give_u_up_melody[] = {
   NOTE_D5,4, NOTE_E5,8, NOTE_CS5,-8, NOTE_B4,16, NOTE_A4,4, NOTE_A4,8, 
 
   NOTE_E5,4, NOTE_D5,2, REST,4
-};
-
-static const int mii_theme_notes[] = {
-    // Mii Channel theme 
-    // Score available at https://musescore.com/user/16403456/scores/4984153
-    // Uploaded by Catalina Andrade 
-    // Copied from https://github.com/robsoncouto/arduino-songs/blob/master/miichannel/miichannel.ino
-    // Creds Robson Couto, 2019
-    NOTE_FS4, 8, REST,     8, NOTE_A4,  8, NOTE_CS5, 8, REST,    8, NOTE_A4,  8, REST,     8, NOTE_FS4, 8, //1
-    NOTE_D4,  8, NOTE_D4,  8, NOTE_D4,  8, REST,     8, REST,    4, REST,     8, NOTE_CS4, 8,
-    NOTE_D4,  8, NOTE_FS4, 8, NOTE_A4,  8, NOTE_CS5, 8, REST,    8, NOTE_A4,  8, REST,     8, NOTE_F4,  8,
-    NOTE_E5, -4, NOTE_DS5, 8, NOTE_D5,  8, REST,     8, REST,    4,
-    
-    NOTE_GS4, 8, REST,     8, NOTE_CS5, 8, NOTE_FS4, 8, REST,    8, NOTE_CS5, 8, REST,     8, NOTE_GS4, 8, //5
-    REST,     8, NOTE_CS5, 8, NOTE_G4,  8, NOTE_FS4, 8, REST,    8, NOTE_E4,  8, REST,     8,
-    NOTE_E4,  8, NOTE_E4,  8, NOTE_E4,  8, REST,     8, REST,    4, NOTE_E4,  8, NOTE_E4,  8,
-    NOTE_E4,  8, REST,     8, REST,     4, NOTE_DS4, 8, NOTE_D4, 8, 
-
-    NOTE_CS4, 8, REST,     8, NOTE_A4,  8, NOTE_CS5, 8, REST,    8,NOTE_A4,   8, REST,     8, NOTE_FS4, 8, //9
-    NOTE_D4,  8, NOTE_D4,  8, NOTE_D4,  8, REST,     8, NOTE_E5, 8, NOTE_E5,  8, NOTE_E5,  8, REST,     8,
-    REST,     8, NOTE_FS4, 8, NOTE_A4,  8, NOTE_CS5, 8, REST,    8, NOTE_A4,  8, REST,     8, NOTE_F4,  8,
-    NOTE_E5,  2, NOTE_D5,  8, REST,     8, REST,     4,
-
-    NOTE_B4,  8, NOTE_G4,  8, NOTE_D4,  8, NOTE_CS4, 4, NOTE_B4, 8, NOTE_G4,  8, NOTE_CS4, 8, //13
-    NOTE_A4,  8, NOTE_FS4, 8, NOTE_C4,  8, NOTE_B3,  4, NOTE_F4, 8, NOTE_D4,  8, NOTE_B3,  8,
-    NOTE_E4,  8, NOTE_E4,  8, NOTE_E4,  8, REST,     4, REST,    4, NOTE_AS4, 4,
-    NOTE_CS5, 8, NOTE_D5,  8, NOTE_FS5, 8, NOTE_A5,  8, REST,    8, REST,     4, 
-
-    REST,     2, NOTE_A3,  4, NOTE_AS3, 4, //17 
-    NOTE_A3, -4, NOTE_A3,  8, NOTE_A3,  2,
-    REST,     4, NOTE_A3,  8, NOTE_AS3, 8, NOTE_A3,  8, NOTE_F4, 4, NOTE_C4,  8,
-    NOTE_A3, -4, NOTE_A3,  8, NOTE_A3,  2,
-
-    REST,     2, NOTE_B3,  4, NOTE_C4,  4, //21
-    NOTE_CS4,-4, NOTE_C4,  8, NOTE_CS4, 2,
-    REST,     4, NOTE_CS4, 8, NOTE_C4,  8, NOTE_CS4, 8, NOTE_GS4,4, NOTE_DS4, 8,
-    NOTE_CS4,-4, NOTE_DS4, 8, NOTE_B3,  1,
-    
-    NOTE_E4,  4, NOTE_E4,  4, NOTE_E4,  4, REST,     8, //25
-
-
-    // repeat 1-25
-    NOTE_FS4, 8, REST,     8, NOTE_A4,  8, NOTE_CS5, 8, REST,    8, NOTE_A4,  8, REST,     8, NOTE_FS4, 8, //1
-    NOTE_D4,  8, NOTE_D4,  8, NOTE_D4,  8, REST,     8, REST,    4, REST,     8, NOTE_CS4, 8,
-    NOTE_D4,  8, NOTE_FS4, 8, NOTE_A4,  8, NOTE_CS5, 8, REST,    8, NOTE_A4,  8, REST,     8, NOTE_F4,  8,
-    NOTE_E5, -4, NOTE_DS5, 8, NOTE_D5,  8, REST,     8, REST,    4,
-    
-    NOTE_GS4, 8, REST,     8, NOTE_CS5, 8, NOTE_FS4, 8, REST,    8, NOTE_CS5, 8, REST,     8, NOTE_GS4, 8, //5
-    REST,     8, NOTE_CS5, 8, NOTE_G4,  8, NOTE_FS4, 8, REST,    8, NOTE_E4,  8, REST,     8,
-    NOTE_E4,  8, NOTE_E4,  8, NOTE_E4,  8, REST,     8, REST,    4, NOTE_E4,  8, NOTE_E4,  8,
-    NOTE_E4,  8, REST,     8, REST,     4, NOTE_DS4, 8, NOTE_D4, 8, 
-
-    NOTE_CS4, 8, REST,     8, NOTE_A4,  8, NOTE_CS5, 8, REST,    8,NOTE_A4,   8, REST,     8, NOTE_FS4, 8, //9
-    NOTE_D4,  8, NOTE_D4,  8, NOTE_D4,  8, REST,     8, NOTE_E5, 8, NOTE_E5,  8, NOTE_E5,  8, REST,     8,
-    REST,     8, NOTE_FS4, 8, NOTE_A4,  8, NOTE_CS5, 8, REST,    8, NOTE_A4,  8, REST,     8, NOTE_F4,  8,
-    NOTE_E5,  2, NOTE_D5,  8, REST,     8, REST,     4,
-
-    NOTE_B4,  8, NOTE_G4,  8, NOTE_D4,  8, NOTE_CS4, 4, NOTE_B4, 8, NOTE_G4,  8, NOTE_CS4, 8, //13
-    NOTE_A4,  8, NOTE_FS4, 8, NOTE_C4,  8, NOTE_B3,  4, NOTE_F4, 8, NOTE_D4,  8, NOTE_B3,  8,
-    NOTE_E4,  8, NOTE_E4,  8, NOTE_E4,  8, REST,     4, REST,    4, NOTE_AS4, 4,
-    NOTE_CS5, 8, NOTE_D5,  8, NOTE_FS5, 8, NOTE_A5,  8, REST,    8, REST,     4, 
-
-    REST,     2, NOTE_A3,  4, NOTE_AS3, 4, //17 
-    NOTE_A3, -4, NOTE_A3,  8, NOTE_A3,  2,
-    REST,     4, NOTE_A3,  8, NOTE_AS3, 8, NOTE_A3,  8, NOTE_F4, 4, NOTE_C4,  8,
-    NOTE_A3, -4, NOTE_A3,  8, NOTE_A3,  2,
-
-    REST,     2, NOTE_B3,  4, NOTE_C4,  4, //21
-    NOTE_CS4,-4, NOTE_C4,  8, NOTE_CS4, 2,
-    REST,     4, NOTE_CS4, 8, NOTE_C4,  8, NOTE_CS4, 8, NOTE_GS4,4, NOTE_DS4, 8,
-    NOTE_CS4,-4, NOTE_DS4, 8, NOTE_B3,  1,
-    
-    NOTE_E4,  4, NOTE_E4,  4, NOTE_E4,  4, REST,     8, //25
-
-    NOTE_FS4, 8, NOTE_A4,  8, NOTE_CS5, 8, REST,     8, NOTE_A4, 8, REST,     8, NOTE_FS4, 8 //26
 };
 
 static const int key_board_cat_melody[] = {
