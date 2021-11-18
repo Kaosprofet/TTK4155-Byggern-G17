@@ -2,67 +2,33 @@
 #include "includes.h"
 #endif
 
-//---------OUTPUT-MJ1----------
+//Motorbox
 #define mDIR PIO_PD10 //MJ1 DIR - PIN32 - PD10
 #define mEN PIO_PD9  //EN - PIN30 - PD9
 #define mSEL PIO_PD2 //SEL - PIN27 - PD2
 #define mNOT_RST PIO_PD1 //NOT_RST - PIN26 - PD1
 #define mNOT_OE PIO_PD0 //NOT_OE - PIN25 - PD0
-//---------INPUT-MJ2----------
-//DO0 to DO7 - PIN33 to PIN40 - PC1-PC8
 #define encoderDataMask (0xFF<<1)
-#define ENCODER_MAX 4000
-#define MOTOR_MAX 4000
+
 //PI controller
-#define N 10
-#define N2 100
-int16_t error_vec[N];
-int16_t error_vec2[N2];
+#define Slider_Kp 1
+#define Slider_Ti 1
+#define Joystick_Kp 1
+#define Joystick_Ti 1
+#define TimeStep 1
+int16_t error_sum;
 
-int16_t PI_controller_position(int16_t r, int16_t y){
-	int16_t e=r-y;
-	float Kp =1;
-	float Ti = 1;
-	for(int i = 0; i<N-1;i++){
-		error_vec[i+1] = error_vec[i];
-	}
-	error_vec[0]= e; 
-	int32_t e_sum = 0;
-	for(int j=0; j<N;j++){
-		e_sum += error_vec[j];
-	}
-	
-	//if(e<10){
-	//	Kp = 3;
-	//	if (e<5){
-	//		Kp = 10;
-	//	}
-	//}
-		
-	return (Kp*e+Ti*e_sum);
-}
+//Encoder
+#define Encoder_min 0
+#define Encoder_max 9000
+
+//Motor
+#define MOTOR_MAX 2000
+
+//Define joystick controll
+#define Joystick_sample_step 30
 
 
-
-int16_t PI_controller_speed(int16_t r, int16_t y, uint16_t position){
-		int16_t e=r-y;
-		float Kp =0.01;
-		float Ti = 0.02;
-		float Td = 0.0001;
-		for(int i = 0; i<N2-1;i++){
-			error_vec2[i+1] = error_vec2[i];
-		}
-		
-		error_vec2[0]= e;
-		int32_t e_sum = 0;
-		for(int j=0; j<N2;j++){
-			e_sum += error_vec2[j];
-		}
-		if (e_sum > ENCODER_MAX){e_sum = ENCODER_MAX;}
-		else if(e_sum < 0){e_sum = 0;} 
-		delay_ms(100);
-		return (Kp*e+Ti*e_sum);
-}
 
 void motor_controll_init(void){
 	//Enable PIO to controll the pins of the motor controller box MJ1
@@ -78,7 +44,6 @@ void motor_controll_init(void){
 	//Enable clock on PIOC
 	PMC->PMC_PCR |= PMC_PCR_EN |PMC_PCR_DIV_PERIPH_DIV_MCK|(ID_PIOC <<PMC_PCR_PID_Pos);
 	PMC->PMC_PCER0 |= 1<<(ID_PIOC);
-	
 }
 
 int encoder_read(void){
@@ -127,55 +92,35 @@ void encoder_reset(void){
 }
 
 
-uint8_t MotorRef = 0;
-#define MOTOR_MAX 2000
-uint16_t encoder_prev = 0;
-uint16_t encoder = 0;
 
-#define joy_filter_N 50
-int8_t joystickvalues[joy_filter_N];
-
-uint16_t joystick_filter(void){
-		for(int i = 0; i<joy_filter_N-1;i++){ joystickvalues[i+1] = joystickvalues[i];}
-		
-		//Adding the latest value
-		joystickvalues[0] = controller.x;
-		
-		//Summarizes the the last values and returns the average
-		uint32_t sum = 0;
-		for(int j=0; j<joy_filter_N;j++){ sum += joystickvalues[j];}
-}
-
-int16_t ref = 0;
+int16_t pos_ref = 0;
 
 void motor_controll(difficulty diff){
-	//Regulator
-	//int32_t r = controller.slider_2_val; 
 	int16_t PI_out = 0;
 	int16_t joystick = (int16_t)(controller.x);
-	encoder_prev = encoder;
 	int16_t encoder = encoder_read();
 	
 	
-	//int16_t y = map(encoder,0,10000,0,255);
-	//int32_t PI_out = PI_controller(r,y);
-	//printf("Reference: %d, encoder: %d, PI Output: %d\n\r",r,y,PI_out);
-	
 	if(diff == HARD){
 		//Uses PI-regulated position
-		ref = JoystickSpeedControll(ref);
-		PI_out = PI_controller_position(ref,encoder);
+		pos_ref = JoystickSpeedControll(pos_ref);
+		PI_out = PI_controller_position(pos_ref,encoder,Joystick_Kp,Joystick_Ti);
 	}
 	else if(diff == EASY){
 		//Joystick sets motor voltage. Prohibits it from running into walls.  
 		uint8_t gain = 10;
 		PI_out = joystick*10;
-		if(encoder>8000 && PI_out>0){
+		if(encoder>Encoder_max && PI_out>0){
 			PI_out = 0;
 		}
-		else if(encoder <= 0 && PI_out<0){
+		else if(encoder <= Encoder_min && PI_out<0){
 			PI_out = 0; 
 		}
+	}
+	else if(diff == SLIDER){
+		int16_t r = controller.slider_2_val;
+		int16_t y = map(encoder,0,Encoder_max,0,255);
+		PI_out = PI_controller_position(r,y,Slider_Kp,Slider_Ti);
 		
 	}
 	
@@ -197,32 +142,27 @@ void motor_controll(difficulty diff){
 	setBit(PIOD,mEN);
 	DAC_set_output(DAC_out);
 	//printf("Encoder: %d, Joystick: %d, ref: %d, PI_output %d, DAC_out: %d \n\r", encoder,joystick,ref, PI_out, DAC_out);
-	//printf("Slider %d, Reference: %d, encoder: %d, PI Output: %d, DAC Output: %d\n\r",controller.slider_2_val,MotorRef,y,PI_out,DAC_out);
-	//printf("Val: %d\n\r", controller.slider_2_val);
 }
 
 
 
-uint32_t joy_counter = 0;
-
-uint32_t JoystickSpeedControll(int16_t r){
+uint16_t joy_counter = 0;
+int16_t JoystickSpeedControll(int16_t r){
 	joy_counter +=1;
-	
-	
 	int16_t joystickVal = (int16_t)controller.x;
-	
-	if(joy_counter >= 50){
+	if(joy_counter >= 20){
 		r += joystickVal;
 		joy_counter = 0;
 	}
-	
-	//if(r>MotorRef_max){
-	//	r= MotorRef_max;
-	//	printf("Ref at max right \n\r");
-	//}
-	//if(r<0){
-	//	r=0;
-	//	printf("Ref at max left \n\r");
-	//}
 	return r;
 }
+
+int16_t PI_controller_position(int16_t r, int16_t y, int Kp, int Ti){
+	int16_t e=r-y;
+	error_sum += e;
+	int16_t P = Kp*e;
+	int16_t I = TimeStep*Ti*error_sum;
+	int16_t output = P+I;
+	return output;
+}
+
