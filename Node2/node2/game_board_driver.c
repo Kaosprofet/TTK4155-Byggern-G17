@@ -2,6 +2,15 @@
 #include "includes.h"
 #endif
 
+//IR-diode
+#define IR_BLOCK_THRESHOLD 250 //Defines the threshold for which IR_blocked returns 1
+#define filterLength 100 //Defines the length of RA-filter
+uint16_t IR_raf[filterLength];
+uint8_t filter_charge = 0;
+
+
+
+
 void init_game_board(void) {
 	IR_init();
 	init_servo();
@@ -33,11 +42,7 @@ void solenoidControll(void){
 
 // -----------------------------------------------IR---------------------------------------------
 //Pin 44 at PC19
-#define IR_BLOCK_THRESHOLD 500 //Defines the threshold for which IR_blocked returns 1
-#define filterLength 100 //Defines the length of RA-filter
 
-uint16_t IR_raf[filterLength];
-uint8_t filter_charge = 0;
 
 void ADC_init(void){
 	ADC->ADC_MR=ADC_MR_FREERUN;//Set ADC mode freerun (no clock prescaler)
