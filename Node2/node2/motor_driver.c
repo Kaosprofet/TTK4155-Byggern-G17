@@ -21,8 +21,8 @@ int16_t error_vec2[N2];
 
 int16_t PI_controller_position(int16_t r, int16_t y){
 	int16_t e=r-y;
-	uint8_t Kp =1;
-	uint8_t Ti = 2;
+	float Kp =1;
+	float Ti = 1;
 	for(int i = 0; i<N-1;i++){
 		error_vec[i+1] = error_vec[i];
 	}
@@ -32,12 +32,12 @@ int16_t PI_controller_position(int16_t r, int16_t y){
 		e_sum += error_vec[j];
 	}
 	
-	if(e<10){
-		Kp = 3;
-		if (e<5){
-			Kp = 10;
-		}
-	}
+	//if(e<10){
+	//	Kp = 3;
+	//	if (e<5){
+	//		Kp = 10;
+	//	}
+	//}
 		
 	return (Kp*e+Ti*e_sum);
 }
@@ -128,7 +128,7 @@ void encoder_reset(void){
 
 
 uint8_t MotorRef = 0;
-#define MotorRef_max 255
+#define MOTOR_MAX 2000
 uint16_t encoder_prev = 0;
 uint16_t encoder = 0;
 
@@ -146,22 +146,21 @@ uint16_t joystick_filter(void){
 		for(int j=0; j<joy_filter_N;j++){ sum += joystickvalues[j];}
 }
 
-uint16_t ref = 0;
+int16_t ref = 0;
 
 void motor_controll(difficulty diff){
 	//Regulator
 	//int32_t r = controller.slider_2_val; 
-	uint16_t PI_out = 0;
-	
+	int16_t PI_out = 0;
+	int16_t joystick = (int16_t)(controller.x);
 	encoder_prev = encoder;
-	uint16_t encoder = encoder_read();
-	printf("Encoder: %d\n\r", encoder);
-	uint16_t speed = encoder_prev - encoder;
+	int16_t encoder = encoder_read();
+	
 	
 	//int16_t y = map(encoder,0,10000,0,255);
 	//int32_t PI_out = PI_controller(r,y);
 	//printf("Reference: %d, encoder: %d, PI Output: %d\n\r",r,y,PI_out);
-	int8_t joystick = joystick_filter();
+	
 	if(diff == HARD){
 		//Uses PI-regulated position
 		ref = JoystickSpeedControll(ref);
@@ -197,6 +196,7 @@ void motor_controll(difficulty diff){
 	//Writing output
 	setBit(PIOD,mEN);
 	DAC_set_output(DAC_out);
+	//printf("Encoder: %d, Joystick: %d, ref: %d, PI_output %d, DAC_out: %d \n\r", encoder,joystick,ref, PI_out, DAC_out);
 	//printf("Slider %d, Reference: %d, encoder: %d, PI Output: %d, DAC Output: %d\n\r",controller.slider_2_val,MotorRef,y,PI_out,DAC_out);
 	//printf("Val: %d\n\r", controller.slider_2_val);
 }
@@ -209,20 +209,20 @@ uint32_t JoystickSpeedControll(int16_t r){
 	joy_counter +=1;
 	
 	
-	int16_t joystickVal = controller.x;
+	int16_t joystickVal = (int16_t)controller.x;
 	
 	if(joy_counter >= 50){
 		r += joystickVal;
 		joy_counter = 0;
 	}
 	
-	if(r>MotorRef_max){
-		r= MotorRef_max;
-		printf("Ref at max right \n\r");
-	}
-	if(r<0){
-		r=0;
-		printf("Ref at max left \n\r");
-	}
+	//if(r>MotorRef_max){
+	//	r= MotorRef_max;
+	//	printf("Ref at max right \n\r");
+	//}
+	//if(r<0){
+	//	r=0;
+	//	printf("Ref at max left \n\r");
+	//}
 	return r;
 }
