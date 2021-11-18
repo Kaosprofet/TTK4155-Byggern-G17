@@ -93,8 +93,9 @@ void CAN_send_music_status(uint8_t play, uint8_t melody) {
 			 game.game_status = message.data[0];
 			 printf("node2 game mode: %d, ", game.game_status);
 			 game.score = message.data[1];
+			 game.mode = message.data[2];
 		 }
-		 printf("Message ID: %d, Length: %d, Data 1: %d, Data 2: %d\n\r", message.ID, message.length, message.data[0], message.data[1]);
+		 printf("Message ID: %d, Length: %d, Data 1: %d, Data 2: %d, Data 3: %d\n\r", message.ID, message.length, message.data[0], message.data[1], message.data[2]);
 		 _delay_ms(30);
 		 can_interrupt_flag = 0;
 	 }
