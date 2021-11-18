@@ -12,7 +12,7 @@
 #include "includes.h"
 #endif
 
-#define DEBUG_INTERRUPT 1
+#define DEBUG_INTERRUPT 0
 
 /**
  * \brief CAN0 Interrupt handler for RX, TX and bus error interrupts
@@ -25,10 +25,8 @@
 
 
 void CAN0_Handler(void) {
+	//if(DEBUG_INTERRUPT)printf("CAN0 interrupt\n\r");
 	if(DEBUG_INTERRUPT)printf("CAN0 interrupt\n\r");
-	while(1){
-	play_music(mii_theme_notes,MII_THEME_TEMPO);
-	}
 	char can_sr = CAN0->CAN_SR; 
 	//RX interrupt
 	//Only mailbox 1 and 2 specified for receiving
@@ -61,7 +59,7 @@ void CAN0_Handler(void) {
 			controller.slider_2_val = message.data[4];
 			//printf("Joystick: X = %4d Y = %4d Sliders: 1 = %3d 2 = %3d  Buttons: 1 = %d\n\r", controller.x, controller.y, controller.slider_1_val, controller.slider_2_val,  controller.button_state);
 		}
-		else if (rx_message.id == status_id) {
+		else if (message.id == status_id) {
 			game.game_status = message.data[0];
 			game.score = message.data[1];
 			printf("Got game status: %d\n\r",game.game_status);
@@ -71,14 +69,14 @@ void CAN0_Handler(void) {
 	}
 	
 	if(can_sr & CAN_SR_MB0) {
-		if(DEBUG_INTERRUPT) printf("CAN0 MB0 ready to send \n\r");
+		//if(DEBUG_INTERRUPT) printf("CAN0 MB0 ready to send \n\r");
 		
 	//Disable interrupt
 		CAN0->CAN_IDR = CAN_IER_MB0;
 	}
 
 	if(can_sr & CAN_SR_ERRP) {
-		if(DEBUG_INTERRUPT)printf("CAN0 ERRP error\n\r");
+		//if(DEBUG_INTERRUPT)printf("CAN0 ERRP error\n\r");
 	}
 	
 	if(can_sr & CAN_SR_TOVF) {
