@@ -33,9 +33,10 @@ void can_encode_message(uint8_t ID) {
 	}
 	else if (ID == status_id) {
 		message.id = status_id;
-		message.data_length = 2;
+		message.data_length = 3;
 		message.data[0] = game.game_status;
 		message.data[1] = game.score;
+		message.data[2] = game.mode;
 		printf("Sending game status: %d, Message ID: %d, Length: %d, Data 1: %d, Data 2: %d\n\r", game.game_status, message.id, message.data_length, message.data[0], message.data[1]);
 	}
 	can_send(&message, 0);
@@ -59,6 +60,7 @@ void can_decode_message(void) {
 	else if (rx_message.id == status_id) {
 		game.game_status = rx_message.data[0];
 		game.score = rx_message.data[1];
+		game.mode = rx_message.data[2];
 		printf("Got game status: %d\n\r",game.game_status);
 	}
 	else if(rx_message.id == music_id) {
