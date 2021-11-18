@@ -64,7 +64,7 @@ int divider = 0, noteDuration = 0, note_pause = 0, thisNote = 0;
 
 void song_select(void){
   while (music.play){
-    int amount_of_notes = sizeof(mii_theme_notes)/sizeof(mii_theme_notes[0])/2;
-    play_music(mii_theme_notes, MII_THEME_TEMPO,amount_of_notes);
+    int amount_of_notes = sizeof(key_board_cat_melody)/sizeof(key_board_cat_melody[0])/2;
+    play_music(key_board_cat_melody, key_board_cat_tempo,amount_of_notes);
   }
 }

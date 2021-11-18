@@ -8,7 +8,7 @@
 #define zelda_tempo 40
 #define rick_astely_tempo 40
 #define MII_THEME_TEMPO 40
-#define key_board_cat_tempo 50
+#define key_board_cat_tempo 40
 
 #define NOTE_B0  31
 #define NOTE_C1  33
@@ -291,8 +291,6 @@ static const int key_board_cat_melody[] = {
   // Keyboard cat
   // Score available at https://musescore.com/user/142788/scores/147371
 
-    REST,1,
-    REST,1,
     NOTE_C4,4, NOTE_E4,4, NOTE_G4,4, NOTE_E4,4, 
     NOTE_C4,4, NOTE_E4,8, NOTE_G4,-4, NOTE_E4,4,
     NOTE_A3,4, NOTE_C4,4, NOTE_E4,4, NOTE_C4,4,
