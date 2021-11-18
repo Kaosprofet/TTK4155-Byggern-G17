@@ -7,7 +7,7 @@
 
 #define zelda_tempo 40
 #define rick_astely_tempo 40
-#define MII_THEME_TEMPO 114
+#define MII_THEME_TEMPO 40
 #define key_board_cat_tempo 50
 
 #define NOTE_B0  31

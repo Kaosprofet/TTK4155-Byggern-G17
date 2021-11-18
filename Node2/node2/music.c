@@ -40,7 +40,10 @@ int divider = 0, noteDuration = 0, note_pause = 0, thisNote = 0;
   // Remember, the array is twice the number of notes (notes + durations)
       	
   for (thisNote = 0; thisNote < notes*2; thisNote = thisNote + 2) {
-
+    can_decode_message();
+    if (!music.play){
+      break;
+    }
     // calculates the duration of each note
     divider = melody[thisNote + 1];
     if (divider > 0) {
@@ -59,6 +62,9 @@ int divider = 0, noteDuration = 0, note_pause = 0, thisNote = 0;
   }
 }
 
-void song_select(void)
-  switch(music.melody)
-
+void song_select(void){
+  while (music.play){
+    int amount_of_notes = sizeof(mii_theme_notes)/sizeof(mii_theme_notes[0])/2;
+    play_music(mii_theme_notes, MII_THEME_TEMPO,amount_of_notes);
+  }
+}

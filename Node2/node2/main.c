@@ -26,6 +26,8 @@ int main(void) {
 	//game.game_status=0;
 	while(!game.game_status){
 		CAN0_Handler();
+		printf("%d\n\r",music.play);
+		song_select();
 		//printf("Status: %d \n\r", game.game_status);
 	} //Wait to start game
 	printf("Starting game\n\r");
