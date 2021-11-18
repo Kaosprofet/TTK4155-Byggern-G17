@@ -80,7 +80,10 @@ void bootStartMenu(void) {
 		}
 		
 		// Menu selection 
-		if (bitIsSet(PIND, PD4)) {break;}
+		if (bitIsSet(PIND, PD4)) {
+			break;
+			_delay_ms(100);
+		}
 		
 		// update last joystick value
 		lastJoystickYVal = controller.y_val;
@@ -93,6 +96,7 @@ void menuSelection(void) {
 		case(0):
 		game.game_status = 1;
 		game.score = 0;
+		
 		CAN_send_game_status();
 		_delay_ms(100);
 		playMenu();
