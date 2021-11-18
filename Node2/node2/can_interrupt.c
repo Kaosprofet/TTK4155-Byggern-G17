@@ -62,6 +62,7 @@ void CAN0_Handler(void) {
 		else if (message.id == status_id) {
 			game.game_status = message.data[0];
 			game.score = message.data[1];
+			game.mode = message.data[2];
 			printf("Got game status: %d\n\r",game.game_status);
 		}
 		else if(message.id == music_id) {

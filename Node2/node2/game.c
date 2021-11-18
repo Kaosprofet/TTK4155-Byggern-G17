@@ -4,7 +4,7 @@
 
 void start_game(void) {
 	uint32_t score = 0;
-
+	
 	score = run_game();
 
 	game.score = calculate_score(score);
@@ -24,7 +24,7 @@ uint32_t run_game(void) {
 		delay_ms(10);
 		servo_slider_controll();
 		solenoidControll();
-		motor_controll(HARD);                           
+		motor_controll();                           
 		
 		if(RTT->RTT_VR<time_start){		// If RTT has overflowed recalculate time elapsed
 			time_elapsed = 4294967296-time_start+RTT->RTT_VR;

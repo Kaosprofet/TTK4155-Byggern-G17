@@ -12,21 +12,26 @@
 
 //PI controller
 #define Slider_Kp 1
-#define Slider_Ti 1
-#define Joystick_Kp 1
-#define Joystick_Ti 1
-#define TimeStep 1
-int16_t error_sum;
+#define Slider_Ti 0.12
+#define Joystick_Kp 20
+#define Joystick_Ti 0.1
+#define TimeStep 0.0001
+float error_sum;
+
+//Correction for motor hystersis
+#define leftGain 1
+#define rightGain 1.2
 
 //Encoder
 #define Encoder_min 0
-#define Encoder_max 9000
+#define Encoder_max 8500
+#define Encoder_negative
 
 //Motor
 #define MOTOR_MAX 2000
 
 //Define joystick controll
-#define Joystick_sample_step 30
+#define Joystick_sample_step 50
 
 
 
@@ -95,20 +100,19 @@ void encoder_reset(void){
 
 int16_t pos_ref = 0;
 
-void motor_controll(difficulty diff){
+void motor_controll(void){
 	int16_t PI_out = 0;
 	int16_t joystick = (int16_t)(controller.x);
 	int16_t encoder = encoder_read();
 	
 	
-	if(diff == HARD){
+	if(game.mode == HARD){
 		//Uses PI-regulated position
 		pos_ref = JoystickSpeedControll(pos_ref);
 		PI_out = PI_controller_position(pos_ref,encoder,Joystick_Kp,Joystick_Ti);
 	}
-	else if(diff == EASY){
+	else if(game.mode == EASY){
 		//Joystick sets motor voltage. Prohibits it from running into walls.  
-		uint8_t gain = 10;
 		PI_out = joystick*10;
 		if(encoder>Encoder_max && PI_out>0){
 			PI_out = 0;
@@ -117,7 +121,7 @@ void motor_controll(difficulty diff){
 			PI_out = 0; 
 		}
 	}
-	else if(diff == SLIDER){
+	else if(game.mode == SLIDER){
 		int16_t r = controller.slider_2_val;
 		int16_t y = map(encoder,0,Encoder_max,0,255);
 		PI_out = PI_controller_position(r,y,Slider_Kp,Slider_Ti);
@@ -127,11 +131,11 @@ void motor_controll(difficulty diff){
 	uint16_t DAC_out = 0;
 	//Changing direction
 	if(PI_out>=0){ 
-		clearBit(PIOD,mDIR);
+		setBit(PIOD,mDIR);
 		DAC_out = PI_out;
 	}
-	else{ 
-		setBit(PIOD,mDIR); 
+	else if (PI_out<0){ 
+		clearBit(PIOD,mDIR); 
 		DAC_out = -PI_out;
 	}
 	
@@ -149,7 +153,7 @@ void motor_controll(difficulty diff){
 uint16_t joy_counter = 0;
 int16_t JoystickSpeedControll(int16_t r){
 	joy_counter +=1;
-	int16_t joystickVal = (int16_t)controller.x;
+	int16_t joystickVal = -controller.x;
 	if(joy_counter >= 20){
 		r += joystickVal;
 		joy_counter = 0;
@@ -157,6 +161,7 @@ int16_t JoystickSpeedControll(int16_t r){
 	return r;
 }
 
+/*
 int16_t PI_controller_position(int16_t r, int16_t y, int Kp, int Ti){
 	int16_t e=r-y;
 	error_sum += e;
@@ -165,4 +170,30 @@ int16_t PI_controller_position(int16_t r, int16_t y, int Kp, int Ti){
 	int16_t output = P+I;
 	return output;
 }
+*/
+int16_t PI_controller_position(int16_t r, int16_t y, float Kp, float Ti){
+	float real_r = (float) r/10;
+	float real_y = (float) y/10;
+	float e=r-y;
+	//printf("Error: %d\n\r",(int)e*10);
+	error_sum += e;
+	if(error_sum>(MOTOR_MAX/10)){
+		error_sum = MOTOR_MAX/10;
+	}
+	float P =0;
+	float I =0;
+	if(e<0){
+		P=Kp*e*leftGain;
+		I = TimeStep*Ti*error_sum*leftGain;
+	}
+	else{
+		P = Kp*e*rightGain;
+		I = TimeStep*Ti*error_sum*rightGain;
+	}
+	int16_t output = (int16_t)(P+I)*10;
+	
+	printf("Error: %d, P: %d, I: %d\n\r",(int)e*10,(int)P*10,(int)I*10);
+	return output;
+}
+
 
