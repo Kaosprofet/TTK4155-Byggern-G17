@@ -28,6 +28,13 @@ typedef struct Game {
 
 Game game;
 
+typedef struct Music {
+	uint8_t play;
+	uint8_t melody;
+} Music;
+
+Music music;
+
 #include "sam.h"
 #include "functions.h"
 #include "uart.h"
