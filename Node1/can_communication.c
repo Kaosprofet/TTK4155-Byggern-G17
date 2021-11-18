@@ -67,7 +67,8 @@ void CAN_send_game_status(void) {
 	gameStatus.ID = CAN_ID_GameStatus;
 	gameStatus.data[0] = game.game_status;
 	gameStatus.data[1] = game.score;
-	gameStatus.length = 2;
+	gameStatus.data[2] = game.mode;
+	gameStatus.length = 3;
 	printf("Sending game status\n\r");
 	CAN_send_message(&gameStatus);
 }

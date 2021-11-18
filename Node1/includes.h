@@ -54,6 +54,7 @@ Controller controller;
 typedef struct Game {
 	uint8_t game_status;
 	uint8_t score;
+	uint8_t mode;
 } Game;
 
 Game game;
