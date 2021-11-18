@@ -4,9 +4,6 @@
 
 void start_game(void) {
 	uint32_t score = 0;
-		 
-	//can_encode_message(status_id);
-	//delay_ms(20);
 
 	score = run_game();
 
@@ -50,8 +47,8 @@ uint32_t run_game(void) {
 	return time_elapsed;
 }
 
+// Calculates score based on time elapsed and returns a value between 0 and 255
 uint8_t calculate_score(uint32_t raw_score) {
-	// Calibrate better!
 	raw_score = map(raw_score, 0, 60000, 0, 255); 
 	return (uint8_t)raw_score;
 }
