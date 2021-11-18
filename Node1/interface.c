@@ -13,6 +13,7 @@ char letters[4] = {'A', 'A', 'A', '\0'};
 
 uint8_t menuSelected;
 uint8_t letterSelected;
+uint8_t modeSelected;
 
 uint8_t lastJoystickYVal = 0;
 uint8_t lastJoystickXVal = 0;
@@ -94,11 +95,15 @@ void bootStartMenu(void) {
 void menuSelection(void) {
 	switch(menuSelected){
 		case(0):
+		_delay_ms(200);
 		game.game_status = 1;
 		game.score = 0;
-		
 		mode_select_menu();
-		
+		game.mode = modeSelected;
+		if(modeSelected == 3){
+			rickRoll();
+			game.mode = 0;
+		}
 		CAN_send_game_status();
 		_delay_ms(100);
 		playMenu();
@@ -119,7 +124,7 @@ void playMenu(void) {
 	oled_reset();
 	oled_pos(3,0);
 	
-	oled_print_centered("GOGOGO");
+	oled_print_centered("GO! GO! GO!");
 	
 	// Playing the game, Break on back button or game
 	while (!bitIsSet(PIND, PD3)) { //  || game.game_status
@@ -350,8 +355,100 @@ void changeChar(void) {
 	}
 }
 
+//Mode selection menu
+void mode_select_menu(void) {
+	modeSelected = 0;
+	oled_reset();
+	oled_set_font(LARGE);
+	oled_home();
+	oled_print_centered("DIFFICULTY");
+	oled_pos(1,0);
+	oled_draw_hline(128,0b00111100);
+	while (1) {
+		oled_set_font(NORMAL);
+		oled_pos(3,0);
+		switch(modeSelected) {
+			case(0):
+			oled_print_left("> Easy (Really?)", menu_offset);
+			oled_pos(4,0);
+			oled_print_left("  Slider", menu_offset);
+			oled_pos(5,0);
+			oled_print_left("  Hard", menu_offset);
+			oled_pos(6,0);
+			oled_print_left("  Click me", menu_offset);
+			break;
+			case(1):
+			oled_print_left("  Easy          ", menu_offset);
+			oled_pos(4,0);
+			oled_print_left("> Slider        ", menu_offset);
+			oled_pos(5,0);
+			oled_print_left("  Hard           ", menu_offset);
+			oled_pos(6,0);
+			oled_print_left("  Click me          ", menu_offset);
+			break;
+			case(2):
+			oled_print_left("  Easy           ", menu_offset);
+			oled_pos(4,0);
+			oled_print_left("  Slider         ", menu_offset);
+			oled_pos(5,0);
+			oled_print_left("> Hard           ", menu_offset);
+			oled_pos(6,0);
+			oled_print_left("  Click me       ", menu_offset);
+			break;
+			case(3):
+			oled_print_left("  Easy           ", menu_offset);
+			oled_pos(4,0);
+			oled_print_left("  Slider         ", menu_offset);
+			oled_pos(5,0);
+			oled_print_left("  Hard            ", menu_offset);
+			oled_pos(6,0);
+			oled_print_left("> Click me         ", menu_offset);
+			break;
+			
+		}
+		
+		updateController();
+		
+		if (abs(controller.y_val) > joystickMenuTreshold && abs(lastJoystickYVal) < joystickMenuTreshold) {
+			moveArrowMode();
+		}
+		
+		// Menu selection
+		if (bitIsSet(PIND, PD4)) {
+			break;
+			_delay_ms(100);
+		}
+		
+		// update last joystick value
+		lastJoystickYVal = controller.y_val;
+	}
+}
 
-void mode_select_menu() {
+//Special rick-roll menu
+void rickRoll(void){
+	CAN_send_music_status(1,2);
+	_delay_ms(500);
+	oled_reset();
+	oled_pos(3,0);
+	oled_print_centered("LMAO");
+	_delay_ms(2000);
+	oled_walkingDeletesAPage(3);
 	
+	while(1){
+		if(bitIsSet(PIND,PD4)){
+			CAN_send_music_status(0,2);
+			break;
+			_delay_ms(200);
+		}
+		
+	}
 	
+}
+void moveArrowMode(void) {
+	if(controller.y_val > 0 && modeSelected>0) {
+		modeSelected--;
+	}
+	else if(controller.y_val < 0 && modeSelected<3) {
+		modeSelected++;
+	}
 }

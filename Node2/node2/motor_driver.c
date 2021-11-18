@@ -30,7 +30,7 @@ float error_sum;
 //Motor
 #define MOTOR_MAX 2000
 
-//Define joystick controll
+//Joystick controll
 #define Joystick_sample_step 50
 
 
@@ -192,7 +192,7 @@ int16_t PI_controller_position(int16_t r, int16_t y, float Kp, float Ti){
 	}
 	int16_t output = (int16_t)(P+I)*10;
 	
-	printf("Error: %d, P: %d, I: %d\n\r",(int)e*10,(int)P*10,(int)I*10);
+	//printf("Error: %d, P: %d, I: %d\n\r",(int)e*10,(int)P*10,(int)I*10);
 	return output;
 }
 
