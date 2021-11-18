@@ -21,13 +21,14 @@ void init_timer_us(uint8_t unit){
 	SysTick->CTRL |= (1<<SysTick_CTRL_ENABLE_Pos)&SysTick_CTRL_ENABLE_Msk;
 }
 
-
+// Micro second delay
 void delay_us(uint16_t delay_time){
 	SysTick_wait = delay_time;
 	init_timer_us(1); //Sets the timer
 	while(SysTick_wait>0){}
 }
 
+// Milli second delay
 void delay_ms(uint16_t delay_time){
 	SysTick_wait = delay_time;
 	init_timer_us(1000);

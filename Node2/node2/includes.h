@@ -11,7 +11,6 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-
 typedef struct Controller {
 	int8_t x;
 	int8_t y;
@@ -36,8 +35,6 @@ Game game;
 #include "can_interrupt.h"
 #include "can_message.h"
 #include "printf.h"
-#include "servo.h"
-#include "solenoid.h"
 #include "game.h"
 #include "game_board_driver.h"
 #include "DAC.h"

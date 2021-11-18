@@ -21,6 +21,4 @@ void servo_slider_controll(void);
 void solenoid_init(void);
 void solenoidControll(void); //Uses the button
 
-
-
 #endif	

@@ -17,12 +17,11 @@ https://www.programming-electronics-diy.xyz/2021/02/playing-music-and-tones-usin
 // !!negative numbers are used to represent dotted notes,
 // so -4 means a dotted quarter note, that is, a quarter plus an eighteenth!
 
-void music_set_melody_values(int frequency){
+static void music_set_melody_values(int frequency){
   pwm_select_frequency(frequency); //Must run frequency first as duty uses frequency in calculation
-  pwm_selct_duty_cycle(0.5);
 }
 
-void music_buzzer(int frequency, int duration){
+static void tone(int frequency, int duration){
   music_set_melody_values(frequency);
   delay_ms(duration);
 }
@@ -36,7 +35,7 @@ int notes=sizeof(melody)/sizeof(melody[0])/2;
 // this calculates the duration of a whole note in ms (60s/tempo)*4 beats
 int wholenote = 240000 / tempo;
 
-int divider = 0, noteDuration = 0;
+int divider = 0, noteDuration = 0, note_pause = 0;
   // iterate over the notes of the melody. 
   // Remember, the array is twice the number of notes (notes + durations)
   for (int thisNote = 0; thisNote < notes*2; thisNote = thisNote + 2) {
@@ -52,11 +51,11 @@ int divider = 0, noteDuration = 0;
       noteDuration *= 1.5; // increases the duration in half for dotted notes
     }
       // we only play the note for 90% of the duration, leaving 10% as a pause
-    music_buzzer(melody[thisNote], noteDuration*0.9);
+    tone(melody[thisNote], noteDuration*0.9);
     // Wait for the specief duration before playing the next note.
-    int note_pause = noteDuration*0.10;
+    note_pause = noteDuration*0.10;
     // stop the waveform generation before the next note.
-    music_buzzer(0, note_pause);
+    tone(0, note_pause);
   }
 }
 
