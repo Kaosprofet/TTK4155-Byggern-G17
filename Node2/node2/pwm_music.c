@@ -5,7 +5,7 @@
 #endif
 
 #define MCK 84E6
-#define DIVB 84
+#define DIVB 17
 #define CLK_B 1E6
 
 void music_pwm_init(void){
@@ -18,28 +18,26 @@ void music_pwm_init(void){
 	PMC->PMC_PCER1 |= 1 << (ID_PWM - 32);
 	
 	//Enable PWM for PIN 44
-	PWM->PWM_ENA = PWM_ENA_CHID6;
+	PWM->PWM_ENA |= PWM_ENA_CHID6;
 
+    //Set PWM clock B to 
     PWM->PWM_CLK |= PWM_CLK_PREB(0) | PWM_CLK_DIVB(DIVB);
 
     //Set pwm on pin 44 to be left allined so formulas applies
     PWM->PWM_CH_NUM[6].PWM_CMR = PWM_CMR_CPRE_CLKB;
 	
 	//Intialize channel number 6 to zero so it does not play at the beginning
-    PWM->PWM_CH_NUM[6].PWM_CPRD = PWM_CPRD_CPRD(0);
+    PWM->PWM_CH_NUM[6].PWM_CPRD = 1000;
+
+    PWM->PWM_CH_NUM[6].PWM_CDTY = 800;
 }
 
     void pwm_select_frequency(int frequency){ //Period is (CPRD*DIVB/MCK) and freq is 1/Period
         if (frequency == 0){ //If frequency set is less than 0, set it as 0
-           PWM->PWM_CH_NUM[6].PWM_CPRD = PWM_CPRD_CPRD(0); 
+           PWM->PWM_CH_NUM[6].PWM_CPRD = 0;
         }
         else { //Else sets the correct period based on frequency
             int period_music = (MCK/(frequency * DIVB)); //Calculate period for given frequency
-            PWM->PWM_CH_NUM[6].PWM_CPRD = PWM_CPRD_CPRD(period_music); //Set period to PWM       
+            PWM->PWM_CH_NUM[6].PWM_CPRD = period_music; //Set period to PWM       
         }
-    }
-
-    void pwm_selct_duty_cycle(float duty_cycle){ //Duty cycle = (period - 1/fchannel*clock*CDTY)/period
-		int duty_cycle_value = (int) (PWM->PWM_CH_NUM[6].PWM_CPRD*(1 - duty_cycle));
-        PWM->PWM_CH_NUM[6].PWM_CDTY = PWM_CDTY_CDTY(duty_cycle_value); //Sets duty cycle to duty register
     }
