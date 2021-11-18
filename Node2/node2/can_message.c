@@ -61,7 +61,7 @@ void can_decode_message(void) {
 		game.score = rx_message.data[1];
 		printf("Got game status: %d\n\r",game.game_status);
 	}
-	else if(ID == music_id) {
+	else if(rx_message.id == music_id) {
 		music.play = rx_message.data[0];
 		music.melody = rx_message.data[1];
 	}
