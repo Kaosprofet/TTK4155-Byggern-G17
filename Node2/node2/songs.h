@@ -9,6 +9,7 @@
 #define rick_astely_tempo 40
 #define MII_THEME_TEMPO 40
 #define key_board_cat_tempo 40
+#define game_over_music_tempo 30
 
 #define NOTE_B0  31
 #define NOTE_C1  33
@@ -143,16 +144,16 @@ const static int Never_gonna_give_u_up_melody[] = {
   // Score available at https://musescore.com/chlorondria_5/never-gonna-give-you-up_alto-sax
   // Arranged by Chlorondria
 
-  NOTE_D5,-4, NOTE_E5,-4, NOTE_A4,4, //1
-  NOTE_E5,-4, NOTE_FS5,-4, NOTE_A5,16, NOTE_G5,16, NOTE_FS5,8,
-  NOTE_D5,-4, NOTE_E5,-4, NOTE_A4,2,
-  NOTE_A4,16, NOTE_A4,16, NOTE_B4,16, NOTE_D5,8, NOTE_D5,16,
-  NOTE_D5,-4, NOTE_E5,-4, NOTE_A4,4, //repeat from 1
-  NOTE_E5,-4, NOTE_FS5,-4, NOTE_A5,16, NOTE_G5,16, NOTE_FS5,8,
-  NOTE_D5,-4, NOTE_E5,-4, NOTE_A4,2,
-  NOTE_A4,16, NOTE_A4,16, NOTE_B4,16, NOTE_D5,8, NOTE_D5,16,
-  REST,4, NOTE_B4,8, NOTE_CS5,8, NOTE_D5,8, NOTE_D5,8, NOTE_E5,8, NOTE_CS5,-8,
-  NOTE_B4,16, NOTE_A4,2, REST,4, 
+  // NOTE_D5,-4, NOTE_E5,-4, NOTE_A4,4, //1
+  // NOTE_E5,-4, NOTE_FS5,-4, NOTE_A5,16, NOTE_G5,16, NOTE_FS5,8,
+  // NOTE_D5,-4, NOTE_E5,-4, NOTE_A4,2,
+  // NOTE_A4,16, NOTE_A4,16, NOTE_B4,16, NOTE_D5,8, NOTE_D5,16,
+  // NOTE_D5,-4, NOTE_E5,-4, NOTE_A4,4, //repeat from 1
+  // NOTE_E5,-4, NOTE_FS5,-4, NOTE_A5,16, NOTE_G5,16, NOTE_FS5,8,
+  // NOTE_D5,-4, NOTE_E5,-4, NOTE_A4,2,
+  // NOTE_A4,16, NOTE_A4,16, NOTE_B4,16, NOTE_D5,8, NOTE_D5,16,
+  // REST,4, NOTE_B4,8, NOTE_CS5,8, NOTE_D5,8, NOTE_D5,8, NOTE_E5,8, NOTE_CS5,-8,
+  // NOTE_B4,16, NOTE_A4,2, REST,4, 
 
   REST,8, NOTE_B4,8, NOTE_B4,8, NOTE_CS5,8, NOTE_D5,8, NOTE_B4,4, NOTE_A4,8, //7
   NOTE_A5,8, REST,8, NOTE_A5,8, NOTE_E5,-4, REST,4, 
@@ -309,6 +310,13 @@ static const int key_board_cat_melody[] = {
 
     NOTE_G3,-1, 
   
+};
+
+static const int game_over_melody[] = { //Self componated
+  NOTE_A1,8, NOTE_C1,8, NOTE_CS1,8,
+  REST,8, 
+  NOTE_C1,8, NOTE_C1,8,
+  REST,8, 
 };
 
 #endif
