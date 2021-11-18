@@ -149,6 +149,10 @@ void initHighscore(void) {
 }
 
 void highscore(void) {
+	// Start music
+	CAN_send_music_status(1,1);
+	_delay_ms(20);
+	
 	// Screen candy
 	oled_reset();
 	oled_set_font(LARGE);
@@ -180,6 +184,8 @@ void highscore(void) {
 	oled_print("back");
 	while (!bitIsSet(PIND, PD3)) {
 	}
+	CAN_send_music_status(0,1);
+	_delay_ms(20);
 }
 
 void input_highscore(uint8_t score) {

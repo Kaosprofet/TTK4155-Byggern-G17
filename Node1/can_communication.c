@@ -52,8 +52,6 @@ int CAN_buffer_rx0_clear(void) {
 	if(!bitIsSet(interrupt_flags,check_bit)) { return 0;}
 	return 1;
 }
-
-
 //checks for errorflags
 int CAN_error_check(void) {
 	uint8_t byte = CAN_controller_read(CANInterruptFlags);
@@ -72,6 +70,16 @@ void CAN_send_game_status(void) {
 	gameStatus.length = 2;
 	printf("Sending game status\n\r");
 	CAN_send_message(&gameStatus);
+}
+
+void CAN_send_music_status(uint8_t play, uint8_t melody) {
+	can_message music_status;
+	music_status.ID = CAN_ID_Music;
+	music_status.data[0] = play;
+	music_status.data[1] = melody;
+	music_status.length = 2;
+	printf("Sending music status\n\r");
+	CAN_send_message(&music_status);
 }
 
 //----------------------------------RECEIVING---------------------------------------------

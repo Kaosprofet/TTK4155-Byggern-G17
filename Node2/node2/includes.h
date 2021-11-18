@@ -11,7 +11,6 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-
 typedef struct Controller {
 	int8_t x;
 	int8_t y;
@@ -28,6 +27,13 @@ typedef struct Game {
 } Game;
 
 Game game;
+
+typedef struct Music {
+	uint8_t play;
+	uint8_t melody;
+} Music;
+
+Music music;
 
 #include "sam.h"
 #include "functions.h"

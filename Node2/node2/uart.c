@@ -75,7 +75,7 @@ void configure_uart(void) {
 	UART->UART_CR = UART_CR_RXEN | UART_CR_TXEN;
 }
 
-/**
+/*
  * \brief Get character from UART
  *
  * \param *c location of character 
@@ -130,6 +130,5 @@ void UART_Handler(void) {
 		}
 		rx_buffer.data[rx_buffer.tail] = UART->UART_RHR;
 		rx_buffer.tail = (rx_buffer.tail + 1) % UART_RINGBUFFER_SIZE;
-		
 	}
 }

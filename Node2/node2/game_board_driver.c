@@ -6,10 +6,7 @@ void init_game_board(void) {
 	IR_init();
 	init_servo();
 	solenoid_init();
-	//motor_controll_init();
 }
-
-//------------------------PI CONTROLLER --------------------------
 
 //-------------------------SOLENOID-----------------------------------
 
@@ -25,10 +22,10 @@ void solenoidControll(void){
 	static uint32_t kick_time = 0;
 
 	if(controller.button_state > 9) {
-		//Extend
+		//Extend kicker
 		clearBit(PIOC, PIO_PC13);
 		kick_time = RTT->RTT_VR+200;
-		// wait 
+		// wait to stabilise system
 		while (RTT->RTT_VR < kick_time){}
 	}
 	else {setBit(PIOC, PIO_PC13);}
@@ -49,7 +46,6 @@ void ADC_init(void){
 	PMC->PMC_PCER1 |= 1 << (ID_ADC -32);
 	ADC->ADC_CR = ADC_CR_START; //Starts ADC conversion
 }
-
 
 uint16_t ADC_read(void) { 
 	uint16_t val = ADC->ADC_CDR[0];
@@ -92,6 +88,7 @@ int IR_blocked(void) {
 	else {return 0;}
 }
 
+// Printing function fo testing
 void IR_print(void){
 	printf("_IR_ Raw value: %d  Filtered value: %d   Blocked: %d \n\r",ADC_read(),IR_filteredValue(),IR_blocked());
 }
@@ -118,10 +115,11 @@ void init_servo(void) {
 	PWM->PWM_CH_NUM[5].PWM_CPRD = 52500;
 	//Center pos
 	PWM->PWM_CH_NUM[5].PWM_CDTY = pwm_center;
-	//Enable PWM (Vet ikke hva vi har definert som enable)
+	//Enable PWM
 	PWM->PWM_ENA = PWM_ENA_CHID5;
 }
 
+// Position servo based on joystick input signal
 void position_servo(int8_t position) {
 	position = position + servo_offset;
 	//printf("Position is %d\n\r",position);
@@ -133,6 +131,7 @@ void position_servo(int8_t position) {
 	//printf("Value of pwm_center - position is %d\n\r",(PWM->PWM_CH_NUM[5].PWM_CDTY));
 }
 
+// Position servo based on slide-potmeter position
 void servo_slider_controll(void){
 	int8_t angle = map(controller.slider_2_val,255,0,-100,100);
 	position_servo(angle);
