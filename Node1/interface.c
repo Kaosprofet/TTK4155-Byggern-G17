@@ -440,9 +440,7 @@ void rickRoll(void){
 			break;
 			_delay_ms(200);
 		}
-		
 	}
-	
 }
 void moveArrowMode(void) {
 	if(controller.y_val > 0 && modeSelected>0) {
