@@ -96,6 +96,7 @@ void menuSelection(void) {
 		CAN_send_game_status();
 		_delay_ms(100);
 		playMenu();
+		_delay_ms(200);
 		check_score();
 		break;
 		case(1):
@@ -185,7 +186,7 @@ void highscore(void) {
 	while (!bitIsSet(PIND, PD3)) {
 	}
 	CAN_send_music_status(0,1);
-	_delay_ms(20);
+	_delay_ms(200);
 }
 
 void input_highscore(uint8_t score) {
@@ -310,6 +311,7 @@ void set_highscore(char name[], uint8_t value) {
 // Reset highscore
 void resetGame(void) {
 	initHighscore();
+	_delay_ms(200);
 }
 
 // Determine movement direction
