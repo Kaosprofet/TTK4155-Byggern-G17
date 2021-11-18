@@ -1,7 +1,3 @@
-#ifndef INCLUDES_H
-#include "includes.h"
-#endif
-
 /*Code and inspiration used from ILiviu at
 https://www.programming-electronics-diy.xyz/2021/02/playing-music-and-tones-using-piezo.html
 
@@ -11,8 +7,14 @@ https://www.programming-electronics-diy.xyz/2021/02/playing-music-and-tones-usin
                                               
                                               Robson Couto, 2019
 */
+#ifndef INCLUDES_H
+#include "includes.h"
+#endif
 
-// notes of the moledy followed by the duration.
+int game_over_value = 0;
+
+
+// notes of the melody followed by the duration.
 // a 4 means a quarter note, 8 an eighteenth , 16 sixteenth, so on
 // !!negative numbers are used to represent dotted notes,
 // so -4 means a dotted quarter note, that is, a quarter plus an eighteenth!
@@ -41,7 +43,7 @@ int divider = 0, noteDuration = 0, note_pause = 0, thisNote = 0;
       	
   for (thisNote = 0; thisNote < notes*2; thisNote = thisNote + 2) {
     can_decode_message();
-    if (!music.play){
+    if (!music.play && game_over_value == 0){
       break;
     }
     // calculates the duration of each note
@@ -64,7 +66,21 @@ int divider = 0, noteDuration = 0, note_pause = 0, thisNote = 0;
 
 void song_select(void){
   while (music.play){
-    int amount_of_notes = sizeof(key_board_cat_melody)/sizeof(key_board_cat_melody[0])/2;
-    play_music(key_board_cat_melody, key_board_cat_tempo,amount_of_notes);
+    if (music.melody == 1){
+      int amount_of_notes = sizeof(key_board_cat_melody)/sizeof(key_board_cat_melody[0])/2; //Calculates size of notesheet
+	  game_over_value = 0; //Used to seperate between high score and game over 
+      play_music(key_board_cat_melody, key_board_cat_tempo,amount_of_notes);//Plays the song
+	}
+    else if (music.melody == 2){ //Plays rick roll
+      int amount_of_notes = sizeof(Never_gonna_give_u_up_melody)/sizeof(Never_gonna_give_u_up_melody[0])/2; //Calculates size of notesheet
+	    game_over_value = 0; //Used to seperate between high score and game over 
+      play_music(Never_gonna_give_u_up_melody, rick_astely_tempo,amount_of_notes);//Plays the song
+    }
   }
+}
+
+void game_over_music(void){ //Plays game over music
+  int amount_of_notes = sizeof(game_over_melody)/sizeof(game_over_melody[0])/2; //Calculates size of notesheet
+  game_over_value = 1; //Used to seperate between high score and game over 
+  play_music(game_over_melody, game_over_music_tempo,amount_of_notes); //Plays the song
 }

@@ -53,16 +53,13 @@ void can_decode_message(void) {
 		controller.button_state = rx_message.data[2];
 		controller.slider_1_val = rx_message.data[3];
 		controller.slider_2_val = rx_message.data[4];
-		
-		// Test print
-		//printf("Joystick: X = %4d Y = %4d Sliders: 1 = %3d 2 = %3d  Buttons: 1 = %d\n\r", controller.x, controller.y, controller.slider_1_val, controller.slider_2_val,  controller.button_state);
-	}
+	} //Game status
 	else if (rx_message.id == status_id) {
 		game.game_status = rx_message.data[0];
 		game.score = rx_message.data[1];
 		game.mode = rx_message.data[2];
 		printf("Got game status: %d\n\r",game.game_status);
-	}
+	} //Music status
 	else if(rx_message.id == music_id) {
 		music.play = rx_message.data[0];
 		music.melody = rx_message.data[1];

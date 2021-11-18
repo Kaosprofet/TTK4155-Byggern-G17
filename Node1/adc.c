@@ -18,13 +18,11 @@ void initADC(void) {
 	// PWM output pin
 	setBit(DDRD, PD5);
 	
-	// Setts output pin to toggle
+	// Sets output pin to toggle
 	clearBit(TCCR1A, COM1A1);
 	setBit(TCCR1A, COM1A0);
 
 	// CTC PWM enabled
-	//setBit(TCCR0, WGM01);
-	//clearBit(TCCR0, WGM00);
 	clearBit(TCCR1B, WGM13);
 	setBit(TCCR1B, WGM12);
 	clearBit(TCCR1A, WGM11);

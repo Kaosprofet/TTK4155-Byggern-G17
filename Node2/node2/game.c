@@ -44,6 +44,7 @@ uint32_t run_game(void) {
 			break;
 		}
 	}
+	game_over_music();
 	return time_elapsed;
 }
 
