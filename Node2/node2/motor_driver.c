@@ -42,20 +42,18 @@ int16_t PI_controller_position(int16_t r, int16_t y){
 	return (Kp*e+Ti*e_sum);
 }
 
-
-
 int16_t PI_controller_speed(int16_t r, int16_t y, uint16_t position){
 		int16_t e=r-y;
 		float Kp =0.01;
 		float Ti = 0.02;
 		float Td = 0.0001;
-		for(int i = 0; i<N2-1;i++){
+		for(int i = 0; i<N2-1;i++) {
 			error_vec2[i+1] = error_vec2[i];
 		}
 		
 		error_vec2[0]= e;
 		int32_t e_sum = 0;
-		for(int j=0; j<N2;j++){
+		for(int j = 0; j < N2; j++) {
 			e_sum += error_vec2[j];
 		}
 		if (e_sum > ENCODER_MAX){e_sum = ENCODER_MAX;}
@@ -200,8 +198,6 @@ void motor_controll(difficulty diff){
 	//printf("Slider %d, Reference: %d, encoder: %d, PI Output: %d, DAC Output: %d\n\r",controller.slider_2_val,MotorRef,y,PI_out,DAC_out);
 	//printf("Val: %d\n\r", controller.slider_2_val);
 }
-
-
 
 uint32_t joy_counter = 0;
 
