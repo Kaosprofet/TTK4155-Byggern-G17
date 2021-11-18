@@ -35,7 +35,7 @@ int notes=sizeof(melody)/sizeof(melody[0])/2;
 // this calculates the duration of a whole note in ms (60s/tempo)*4 beats
 int wholenote = 240000 / tempo;
 
-int divider = 0, noteDuration = 0;
+int divider = 0, noteDuration = 0, note_pause = 0;
   // iterate over the notes of the melody. 
   // Remember, the array is twice the number of notes (notes + durations)
   for (int thisNote = 0; thisNote < notes*2; thisNote = thisNote + 2) {
@@ -53,7 +53,7 @@ int divider = 0, noteDuration = 0;
       // we only play the note for 90% of the duration, leaving 10% as a pause
     tone(melody[thisNote], noteDuration*0.9);
     // Wait for the specief duration before playing the next note.
-    int note_pause = noteDuration*0.10;
+    note_pause = noteDuration*0.10;
     // stop the waveform generation before the next note.
     tone(0, note_pause);
   }
