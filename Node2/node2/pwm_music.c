@@ -9,7 +9,7 @@
 #define CLK_B 1E6
 
 void music_pwm_init(void){
-	//PIOC->PIO_IDR |= PIO_PC18B_PWMH6; 	// Disable interrupts
+	PIOC->PIO_IDR |= PIO_PC18B_PWMH6; 	// Disable interrupts
 	PIOC->PIO_ABSR |= PIO_PC18B_PWMH6; 	// select timer 0
 	PIOC->PIO_PDR |= PIO_PC18B_PWMH6; 	//Disable parallel io
 	
@@ -27,9 +27,10 @@ void music_pwm_init(void){
     PWM->PWM_CH_NUM[6].PWM_CMR = PWM_CMR_CPRE_CLKB;
 	
 	//Intialize channel number 6 to zero so it does not play at the beginning
-    PWM->PWM_CH_NUM[6].PWM_CPRD = 1000;
+    PWM->PWM_CH_NUM[6].PWM_CPRD = 0;
 
-    PWM->PWM_CH_NUM[6].PWM_CDTY = 800;
+    //Set duty cycle to a known value
+    PWM->PWM_CH_NUM[6].PWM_CDTY = 1000;
 }
 
     void pwm_select_frequency(int frequency){ //Period is (CPRD*DIVB/MCK) and freq is 1/Period
@@ -38,6 +39,6 @@ void music_pwm_init(void){
         }
         else { //Else sets the correct period based on frequency
             int period_music = (MCK/(frequency * DIVB)); //Calculate period for given frequency
-            PWM->PWM_CH_NUM[6].PWM_CPRD = period_music; //Set period to PWM       
+            PWM->PWM_CH_NUM[6].PWM_CPRD = period_music; //Set period to PWM  
         }
     }
