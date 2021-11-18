@@ -5,9 +5,10 @@
 #ifndef SONGS_H
 #define SONGS_H
 
-#define zelda_tempo 88
-#define rick_astely_tempo 114
-#define MII_THEME_TEMPO     114
+#define zelda_tempo 40
+#define rick_astely_tempo 40
+#define MII_THEME_TEMPO 114
+#define key_board_cat_tempo 50
 
 #define NOTE_B0  31
 #define NOTE_C1  33
@@ -283,6 +284,33 @@ static const int mii_theme_notes[] = {
     NOTE_E4,  4, NOTE_E4,  4, NOTE_E4,  4, REST,     8, //25
 
     NOTE_FS4, 8, NOTE_A4,  8, NOTE_CS5, 8, REST,     8, NOTE_A4, 8, REST,     8, NOTE_FS4, 8 //26
+};
+
+static const int key_board_cat_melody[] = {
+
+  // Keyboard cat
+  // Score available at https://musescore.com/user/142788/scores/147371
+
+    REST,1,
+    REST,1,
+    NOTE_C4,4, NOTE_E4,4, NOTE_G4,4, NOTE_E4,4, 
+    NOTE_C4,4, NOTE_E4,8, NOTE_G4,-4, NOTE_E4,4,
+    NOTE_A3,4, NOTE_C4,4, NOTE_E4,4, NOTE_C4,4,
+    NOTE_A3,4, NOTE_C4,8, NOTE_E4,-4, NOTE_C4,4,
+    NOTE_G3,4, NOTE_B3,4, NOTE_D4,4, NOTE_B3,4,
+    NOTE_G3,4, NOTE_B3,8, NOTE_D4,-4, NOTE_B3,4,
+
+    NOTE_G3,4, NOTE_G3,8, NOTE_G3,-4, NOTE_G3,8, NOTE_G3,4, 
+    NOTE_G3,4, NOTE_G3,4, NOTE_G3,8, NOTE_G3,4,
+    NOTE_C4,4, NOTE_E4,4, NOTE_G4,4, NOTE_E4,4, 
+    NOTE_C4,4, NOTE_E4,8, NOTE_G4,-4, NOTE_E4,4,
+    NOTE_A3,4, NOTE_C4,4, NOTE_E4,4, NOTE_C4,4,
+    NOTE_A3,4, NOTE_C4,8, NOTE_E4,-4, NOTE_C4,4,
+    NOTE_G3,4, NOTE_B3,4, NOTE_D4,4, NOTE_B3,4,
+    NOTE_G3,4, NOTE_B3,8, NOTE_D4,-4, NOTE_B3,4,
+
+    NOTE_G3,-1, 
+  
 };
 
 #endif
