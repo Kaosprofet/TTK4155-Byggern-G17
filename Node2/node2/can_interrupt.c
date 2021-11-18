@@ -25,14 +25,8 @@
 
 
 void CAN0_Handler(void) {
-<<<<<<< HEAD
 	//if(DEBUG_INTERRUPT)printf("CAN0 interrupt\n\r");
-=======
 	if(DEBUG_INTERRUPT)printf("CAN0 interrupt\n\r");
-	while(1){
-	play_music(mii_theme_notes,MII_THEME_TEMPO);
-	}
->>>>>>> d136cb25560e832ea11dc6a3378e0f8ff60e6f5d
 	char can_sr = CAN0->CAN_SR; 
 	//RX interrupt
 	//Only mailbox 1 and 2 specified for receiving
