@@ -12,7 +12,6 @@
 #include "includes.h"
 #endif
 
-
 /**
  * \brief Initialize can bus with predefined number of rx and tx mailboxes, 
  * CAN0->CAN_MB[0] is used for transmitting
@@ -38,7 +37,6 @@ uint8_t can_init_def_tx_rx_mb(uint32_t can_br) {
  * \retval Success(0) or failure(1)
  */
 
-
 uint8_t can_init(uint32_t can_br, uint8_t num_tx_mb, uint8_t num_rx_mb) {
 	
 	//Make sure num_rx_mb and num_tx_mb is valid
@@ -46,14 +44,12 @@ uint8_t can_init(uint32_t can_br, uint8_t num_tx_mb, uint8_t num_rx_mb) {
 		return 1; //Too many mailboxes is configured
 	}
 
-
 	uint32_t ul_status; 
 	
 	//Disable can
 	CAN0->CAN_MR &= ~CAN_MR_CANEN; 
 	//Clear status register on read
 	ul_status = CAN0->CAN_SR; 
-	
 	
 	// Disable interrupts on CANH and CANL pins
 	PIOA->PIO_IDR = PIO_PA8A_URXD | PIO_PA9A_UTXD;
@@ -68,22 +64,20 @@ uint8_t can_init(uint32_t can_br, uint8_t num_tx_mb, uint8_t num_rx_mb) {
 	// Enable pull up on CANH and CANL pin
 	PIOA->PIO_PUER = (PIO_PA1A_CANRX0 | PIO_PA0A_CANTX0);
 	
-	
 	//Enable Clock for CAN0 in PMC
 	PMC->PMC_PCR = PMC_PCR_EN | (0 << PMC_PCR_DIV_Pos) | PMC_PCR_CMD | (ID_CAN0 << PMC_PCR_PID_Pos); // DIV = 1(can clk = MCK/2), CMD = 1 (write), PID = 2B (CAN0)
 	PMC->PMC_PCER1 |= 1 << (ID_CAN0 - 32);
 	
 	//Set baudrate, Phase1, phase2 and propagation delay for can bus. Must match on all nodes!
 	CAN0->CAN_BR = can_br; 
-	
 
 	/****** Start of mailbox configuration ******/
 
 	uint32_t can_ier = 0;
 
 	/* Configure receive mailboxes */
-	for (int n = num_tx_mb; n <= num_rx_mb + num_tx_mb; n++)  //Simply one mailbox setup for all messages. You might want to apply filter for them.
-	{
+	for (int n = num_tx_mb; n <= num_rx_mb + num_tx_mb; n++) {  //Simply one mailbox setup for all messages. You might want to apply filter for them.
+	
 		CAN0->CAN_MB[n].CAN_MAM = 0; //Accept all messages
 		CAN0->CAN_MB[n].CAN_MID = CAN_MID_MIDE;
 		CAN0->CAN_MB[n].CAN_MMR = (CAN_MMR_MOT_MB_RX);
@@ -93,8 +87,7 @@ uint8_t can_init(uint32_t can_br, uint8_t num_tx_mb, uint8_t num_rx_mb) {
 	}
 	
 	/*Configure transmit mailboxes */
-	for (int n = 0; n < num_tx_mb; n++)
-	{
+	for (int n = 0; n < num_tx_mb; n++) {
 		CAN0->CAN_MB[n].CAN_MID = CAN_MID_MIDE;
 		CAN0->CAN_MB[n].CAN_MMR = (CAN_MMR_MOT_MB_TX);
 	}
@@ -122,16 +115,14 @@ uint8_t can_init(uint32_t can_br, uint8_t num_tx_mb, uint8_t num_rx_mb) {
  *
  * \retval Success(0) or failure(1)
  */
-uint8_t can_send(CAN_MESSAGE* can_msg, uint8_t tx_mb_id)
-{
+uint8_t can_send(CAN_MESSAGE* can_msg, uint8_t tx_mb_id) {
 	//Check that mailbox is ready
-	if(CAN0->CAN_MB[tx_mb_id].CAN_MSR & CAN_MSR_MRDY)
-	{
+	if(CAN0->CAN_MB[tx_mb_id].CAN_MSR & CAN_MSR_MRDY) {
 		//Set message ID and use CAN 2.0B protocol
 		CAN0->CAN_MB[tx_mb_id].CAN_MID = CAN_MID_MIDvA(can_msg->id) | CAN_MID_MIDE ;
 		
 		//Make sure message is not to long
-		if(can_msg->data_length > 7){
+		if(can_msg->data_length > 7) {
 			can_msg->data_length = 7;
 			//Message is to long, sending only the first 8 bytes
 		}
@@ -143,12 +134,7 @@ uint8_t can_send(CAN_MESSAGE* can_msg, uint8_t tx_mb_id)
 		CAN0->CAN_MB[tx_mb_id].CAN_MCR = (can_msg->data_length << CAN_MCR_MDLC_Pos) | CAN_MCR_MTCR;
 		return 0;
 	}
-	
-	else //Mailbox busy
-	{
-		return 1;
-	}
-	
+	else {return 1;} //Mailbox busy
 }
 
 /**
@@ -160,11 +146,9 @@ uint8_t can_send(CAN_MESSAGE* can_msg, uint8_t tx_mb_id)
  *
  * \retval Success(0) or failure(1)
  */
-uint8_t can_receive(CAN_MESSAGE* can_msg, uint8_t rx_mb_id)
-{
+uint8_t can_receive(CAN_MESSAGE* can_msg, uint8_t rx_mb_id) {
 	//Check that mailbox is ready
-	if(CAN0->CAN_MB[rx_mb_id].CAN_MSR & CAN_MSR_MRDY)
-	{
+	if(CAN0->CAN_MB[rx_mb_id].CAN_MSR & CAN_MSR_MRDY) {
 		//Get data from CAN mailbox
 		uint32_t data_low = CAN0->CAN_MB[rx_mb_id].CAN_MDL;
 		uint32_t data_high = CAN0->CAN_MB[rx_mb_id].CAN_MDH;
@@ -176,15 +160,12 @@ uint8_t can_receive(CAN_MESSAGE* can_msg, uint8_t rx_mb_id)
 		can_msg->data_length = (uint8_t)((CAN0->CAN_MB[rx_mb_id].CAN_MSR & CAN_MSR_MDLC_Msk) >> CAN_MSR_MDLC_Pos);
 		
 		//Put data in CAN_MESSAGE object
-		for(int i = 0; i < can_msg->data_length;i++)
-		{
-			if(i < 4)
-			{
+		for(int i = 0; i < can_msg->data_length;i++) {
+			if(i < 4) {
 				can_msg->data[i] = (char)(data_low & 0xff);
 				data_low = data_low >> 8;
 			}
-			else
-			{
+			else {
 				can_msg->data[i] = (uint8_t)(data_high & 0xff);
 				data_high = data_high >> 8;
 			}
@@ -195,9 +176,5 @@ uint8_t can_receive(CAN_MESSAGE* can_msg, uint8_t rx_mb_id)
 		CAN0->CAN_MB[rx_mb_id].CAN_MCR |= CAN_MCR_MTCR;
 		return 0;
 	}
-	else //Mailbox busy
-	{
-		return 1;
-	}
+	else {return 1;} //Mailbox busy
 }
-
