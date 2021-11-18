@@ -37,7 +37,7 @@ void solenoidControll(void){
 // -----------------------------------------------IR---------------------------------------------
 //Pin 44 at PC19
 #define IR_BLOCK_THRESHOLD 500 //Defines the threshold for which IR_blocked returns 1
-#define filterLength 20 //Defines the length of RA-filter
+#define filterLength 100 //Defines the length of RA-filter
 
 uint16_t IR_raf[filterLength];
 uint8_t filter_charge = 0;
@@ -85,7 +85,10 @@ uint16_t IR_filteredValue(void) {
 
 int IR_blocked(void) {
 	uint16_t ir_value = IR_filteredValue();
-	if(ir_value < IR_BLOCK_THRESHOLD) {return 1;}
+	if(ir_value < IR_BLOCK_THRESHOLD) {
+		printf("IR value: %d\n\r",ir_value );
+		return 1;
+		}
 	else {return 0;}
 }
 
