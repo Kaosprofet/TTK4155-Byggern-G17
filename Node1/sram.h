@@ -8,8 +8,7 @@
 void initSRAM(void);
 
 uint8_t readSRAM(uint16_t address);
-void writeSRAM(uint16_t address, char data);
 
-void SRAM_test(void);
+void writeSRAM(uint16_t address, char data);
 
 #endif
