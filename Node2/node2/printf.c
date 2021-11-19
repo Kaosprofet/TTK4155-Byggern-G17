@@ -23,9 +23,8 @@ Edited 2020 by Eivind H. Jølsgard and Gustav O. Often for use in course TTK4155
 #include "includes.h"
 #endif
 
-//insert function to print to here
 static void printchar(char **str, int c) {
-	(void) uart_putchar(c);  //Send characters to UART
+	(void) uart_putchar(c);  // Send characters to UART
 }
 
 #define PAD_RIGHT 1

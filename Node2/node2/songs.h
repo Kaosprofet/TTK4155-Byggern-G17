@@ -200,7 +200,7 @@ static const int key_board_cat_melody[] = {
   
 };
 
-static const int game_over_melody[] = { //Self componated
+static const int game_over_melody[] = { // Self componated
   NOTE_A1,8, NOTE_C1,8, NOTE_CS1,8,
   REST,8, 
   NOTE_C1,8, NOTE_C1,8,
