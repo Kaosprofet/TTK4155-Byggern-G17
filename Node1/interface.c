@@ -34,7 +34,6 @@ void bootStartupScreen(void) {
 	oled_draw_hline(128,0b00111100);
 }
 
-
 // Print start menu
 void bootStartMenu(void) {
 	menuSelected = 0;
@@ -86,7 +85,7 @@ void bootStartMenu(void) {
 			_delay_ms(100);
 		}
 		
-		// update last joystick value
+		// Update last joystick value
 		lastJoystickYVal = controller.y_val;
 	}
 }
@@ -127,7 +126,7 @@ void playMenu(void) {
 	oled_print_centered("GO! GO! GO!");
 	
 	// Playing the game, Break on back button or game
-	while (!bitIsSet(PIND, PD3)) { //  || game.game_status
+	while (!bitIsSet(PIND, PD3)) {
 		updateController();
 		
 		CAN_send_inputData();
@@ -149,8 +148,7 @@ void check_score(void) {
 	}
 }
 
-// Highscore
-// Initierer til AAA 0 poeng
+// Highscore - Initierer til AAA 0 poeng
 void initHighscore(void) {
 	for (uint8_t i = 0; i < num_highscores*4; i = i + 4) {
 		writeSRAM(highscore_address+i, 0b00000000);
@@ -194,8 +192,9 @@ void highscore(void) {
 		
 	oled_pos(7,0);
 	oled_print("back");
-	while (!bitIsSet(PIND, PD3)) {
-	}
+
+	while (!bitIsSet(PIND, PD3)) {} // Wait loop until back button is pressed
+
 	CAN_send_music_status(0,1);
 	_delay_ms(200);
 }
@@ -285,9 +284,8 @@ void set_highscore(char name[], uint8_t value) {
 	// Reorder highscore list for new highscore
 	
 	for (int8_t i = num_highscores-1; i >= 0; i--) {
-		// printf("highscore[i]: %d, new value: %d\n\r", highscore[i], value);
 		if ((uint8_t)highscore[i]<value) {
-			if (i==num_highscores-1) {			// If last name in high score discard old "last" place
+			if (i==num_highscores-1) { // If last name in high score discard old "last" place
 				highscore[i] = value;
 				for (uint8_t j = 0; j < num_highscore_char; j++) {
 					names[i][j] = name[j];
@@ -309,7 +307,8 @@ void set_highscore(char name[], uint8_t value) {
 	}
 
 	// Updates highscore threshold
-    lowHighScore = highscore[num_highscores-1];                                                                                                                                                                                                                                                                  
+    lowHighScore = highscore[num_highscores-1];
+
 	// Write new highscore to SRAM
 	for (uint8_t i = 0; i < num_highscores; i++) {
 		writeSRAM(highscore_address+i*4, highscore[i]);
@@ -325,37 +324,7 @@ void resetGame(void) {
 	_delay_ms(200);
 }
 
-// Determine movement direction
-void moveArrow(void) {
-	if(controller.y_val > 0 && menuSelected>0) {
-		menuSelected--;
-	}
-	else if(controller.y_val < 0 && menuSelected<2) {
-		menuSelected++;
-	}
-}
-
-// Change the selected letter in highscore
-void changeLetter(void) {
-	if(controller.x_val > 0 && letterSelected<2) {
-		letterSelected++;
-	}
-	else if(controller.x_val < 0 && letterSelected>0) {
-		letterSelected--;
-	}
-}
-
-// Change the selected letters character
-void changeChar(void) {
-	if(controller.y_val > 0 && letters[letterSelected]>'A') {
-		letters[letterSelected]--;
-	}
-	else if(controller.y_val < 0 && letters[letterSelected]<'Z') {
-		letters[letterSelected]++;
-	}
-}
-
-//Mode selection menu
+// Mode selection menu
 void mode_select_menu(void) {
 	modeSelected = 0;
 	oled_reset();
@@ -419,12 +388,12 @@ void mode_select_menu(void) {
 			_delay_ms(100);
 		}
 		
-		// update last joystick value
+		// Update last joystick value
 		lastJoystickYVal = controller.y_val;
 	}
 }
 
-//Special rick-roll menu
+// Special rick-roll menu
 void rickRoll(void){
 	CAN_send_music_status(1,2);
 	_delay_ms(500);
@@ -442,6 +411,38 @@ void rickRoll(void){
 		}
 	}
 }
+
+// Determine movement direction
+void moveArrow(void) {
+	if(controller.y_val > 0 && menuSelected>0) {
+		menuSelected--;
+	}
+	else if(controller.y_val < 0 && menuSelected<2) {
+		menuSelected++;
+	}
+}
+
+// Change the selected letter in highscore
+void changeLetter(void) {
+	if(controller.x_val > 0 && letterSelected<2) {
+		letterSelected++;
+	}
+	else if(controller.x_val < 0 && letterSelected>0) {
+		letterSelected--;
+	}
+}
+
+// Change the selected letters character
+void changeChar(void) {
+	if(controller.y_val > 0 && letters[letterSelected]>'A') {
+		letters[letterSelected]--;
+	}
+	else if(controller.y_val < 0 && letters[letterSelected]<'Z') {
+		letters[letterSelected]++;
+	}
+}
+
+// Change selected mode
 void moveArrowMode(void) {
 	if(controller.y_val > 0 && modeSelected>0) {
 		modeSelected--;

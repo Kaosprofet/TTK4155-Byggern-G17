@@ -4,7 +4,7 @@
 #endif
 
 #ifndef BAUD
-#define BAUD 9600 //Baudrate for UART comunication
+#define BAUD 9600 // Baudrate for UART comunication
 #endif
 
 // All external libraries used in node 1
@@ -48,7 +48,7 @@ typedef struct Controller {
 	volatile uint8_t slider2_val;
 } Controller;
 
-Controller controller;
+Controller controller; // Global controller struct for simpler code
 
 // Struct for game values
 typedef struct Game {
@@ -57,4 +57,4 @@ typedef struct Game {
 	uint8_t mode;
 } Game;
 
-Game game;
+Game game; // Global game status struct for simpler code

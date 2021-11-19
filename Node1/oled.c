@@ -4,13 +4,14 @@
 #include "fonts.h"
 
 #ifndef OLED_CMD
-#define OLED_CMD 0x1000 //The address room for OLED command
+#define OLED_CMD 0x1000 // The address room for OLED command
 #endif
 
 #ifndef OLED_DATA
-#define OLED_DATA 0x1200 //The address room for OLED data
+#define OLED_DATA 0x1200 // The address room for OLED data
 #endif
 
+// Oled dimensions and values
 #define height 64
 #define width 128
 #define num_pages 8
@@ -24,7 +25,7 @@ volatile char * OLED_DATA_val = (char *) OLED_DATA;
 uint8_t selected_font = 5;
 
 typedef enum{PAGE, HORIZONTAL, VERTICAL} modes;
-volatile oled_position position; //Defines the row/col position of the writer
+volatile oled_position position; // Defines the row/col position of the writer
 
 void oled_test(void){
 		oled_reset();
@@ -32,12 +33,12 @@ void oled_test(void){
 		oled_penis();
 }
 
-//Writes the input command to the command register of the OLED
+// Writes the input command to the command register of the OLED
 void writeCMD(uint8_t cmd){
 	OLED_CMD_val[0] = cmd;
 }
 
-//Writes the input data to the data register of the OLED
+// Writes the input data to the data register of the OLED
 void writeDATA(uint8_t data){
 	OLED_DATA_val[0] = data;
 }
@@ -57,28 +58,28 @@ void printFromSRAM(void) {
 	}
 }
 
-//Initialization
+// Initialization
 void initOLED(void){
 	setBit(MCUCR, SRE);	
 	uint8_t RecInitCommands[] = { //From the OLED manual page 15 (Recommended initialization commands)
-		0xae, //Display off
-		0xa1, //Segment remap
-		0xda, //Common pads hardware: alternative
-		0x12, 0xc8, //common output scan direction:com63~com0
-		0xa8, //multiplex ration mode:63
-		0x3f, 0xd5, //display divide ratio/osc. freq. mode
-		0x80, 0x81, //contrast control
-		0x50, 0xd9, //set pre-charge period
-		0x21, 0x20, //Set Memory Addressing Mode
-		0x02, 0xdb, //VCOM deselect level mode
-		0x30, 0xad, //master configuration
-		0x00, 0xa4, //out follows RAM content
-		0xa6, //set normal display
-		0xaf, // display on
+		0xae, // Display off
+		0xa1, // Segment remap
+		0xda, // Common pads hardware: alternative
+		0x12, 0xc8, // Common output scan direction:com63~com0
+		0xa8, // Multiplex ration mode:63
+		0x3f, 0xd5, // Display divide ratio/osc. freq. mode
+		0x80, 0x81, // Contrast control
+		0x50, 0xd9, // Set pre-charge period
+		0x21, 0x20, // Set Memory Addressing Mode
+		0x02, 0xdb, // VCOM deselect level mode
+		0x30, 0xad, // Master configuration
+		0x00, 0xa4, // Out follows RAM content
+		0xa6, // Set normal display
+		0xaf, // Display on
 	};
 	uint8_t num_commands = 22;
 	
-	//Writes all the commands
+	// Writes command list to oled
 	for(uint8_t i=0; i <(num_commands); i++){
 		writeCMD(RecInitCommands[i]);
 	}
@@ -124,6 +125,7 @@ void oled_type(uint8_t c){
 			break;		
 	}
 }
+
 void oled_printf(char* data, ...){
 	va_list args;
 	va_start(args, data);
@@ -131,14 +133,14 @@ void oled_printf(char* data, ...){
 	va_end(args);
 }
 
-//Printing a string
+// Printing a string
 void oled_print(char string[]){
 	for(int i=0; i<strlen(string);i++){
 		oled_type(string[i]);
 	}
 }
 
-//Prints the string centered column wise on the current page
+// Prints the string centered column wise on the current page
 void oled_print_centered(char string[]){
 	int half = (strlen(string)*selected_font)/2;
 	uint8_t column = 64 - half;
@@ -146,20 +148,20 @@ void oled_print_centered(char string[]){
 	oled_print(string);
 }	
 
-//Prints left-adjusted
+// Prints left-adjusted
 void oled_print_left(char string[], int column){
 	oled_goto_col(column);
 	oled_print(string);
 }
 
-//Print right-adjusted
+// Print right-adjusted
 void oled_print_right(char string[], int column){
 	uint8_t place = strlen(string)*selected_font;
 	oled_goto_col(column-place);
 	oled_print(string);
 }
 
-//Writing special characters. 
+// Writing special characters. 
 void oled_elektra(void){for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&specialSymbols[1][i]));} position.col +=8;}
 void oled_penis(void){for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&specialSymbols[0][i]));} position.col +=8;}
 void oled_rightarrow(void){for(int i = 0; i<8; i++){writeDATA(pgm_read_word(&specialSymbols[2][i]));} position.col +=8;}
@@ -187,21 +189,21 @@ void oled_draw_box(uint8_t xpos, uint8_t ypos, uint8_t w, uint8_t h, uint8_t thi
 		}
 	}
 	
-	//filling the square
+	// Filling the square
 	for(int h2 = extra_top; h2<(total_height-extra_bottomn); h2++){
 		for(int w2 = 0; w2 < w; w2++){
 			raw_square[h2][w2]=1;
 		}
 	}
 	
-	//Removing the insides
+	// Removing the insides
 	for(int h3 = extra_top + thickness; h3 < (total_height-extra_bottomn-thickness); h3++){
 		for(int w3 = thickness; w3 <(w-thickness); w3++){
 			raw_square[h3][w3]=0;
 		}
 	}
 	
-	//Converting raw_sqare writable bytes.
+	// Converting raw_sqare writable bytes.
 	uint8_t out_square[needed_pages][w];
 	for(int p0 = 0; p0<needed_pages; p0++){
 		for(int c0 = 0; c0<w; c0++){
@@ -218,7 +220,7 @@ void oled_draw_box(uint8_t xpos, uint8_t ypos, uint8_t w, uint8_t h, uint8_t thi
 		}
 	}
 		
-	//Writing it to the oled;
+	// Writing it to the oled;
 	uint8_t writebyte;
 	for(int p1=0;p1<needed_pages; p1++){
 		oled_pos(start_page+p1,xpos);
@@ -229,7 +231,7 @@ void oled_draw_box(uint8_t xpos, uint8_t ypos, uint8_t w, uint8_t h, uint8_t thi
 	}
 }
 
-//Prints 6 frames of legs walking
+// Prints 6 frames of legs walking
 void oled_walking(uint8_t row, uint8_t col){
 	for(int a=0; a<6; a++){
 		oled_pos(row,col);
@@ -240,6 +242,7 @@ void oled_walking(uint8_t row, uint8_t col){
 	}
 }
 
+// Walking figure deletes page
 void oled_walkingDeletesAPage(uint8_t page){
 	int col=0;
 	oled_goto_page(page);
@@ -257,7 +260,7 @@ void oled_walkingDeletesAPage(uint8_t page){
 	}
 }
 
-//Draws a line between two coordinates
+// Draws a line between two coordinates
 void oled_draw_line(uint8_t startx,uint8_t starty,uint8_t endx,uint8_t endy){
 	uint8_t length_x = endx - startx;
 	uint8_t length_y = endy - endy;
@@ -268,7 +271,7 @@ void oled_draw_line(uint8_t startx,uint8_t starty,uint8_t endx,uint8_t endy){
 	}
 }
 
-//Draws a pixel in the OLED coordinate space
+// Draws a pixel in the OLED coordinate space
 void oled_draw_pixel(uint8_t x,uint8_t y){
 	uint8_t pagenumber = y/8; //The page the pixel is on
 	uint8_t bitnumber = y-pagenumber*8; //the bit on the page pixel is on;
@@ -280,34 +283,33 @@ void oled_draw_pixel(uint8_t x,uint8_t y){
 	
 // ----------------------------------------- Cleaning the screen ------------------------------------------------
 
-//Clear the current page
+// Clear the current page
 void oled_clear_page(void){
-	oled_goto_col(0); //Moves to the 0 collumn
-	for(int i=0; i<128; i++){writeDATA(0x00);} //Writes a 0 in every column
+	oled_goto_col(0); // Moves to the 0 collumn
+	for(int i=0; i<128; i++){writeDATA(0x00);} // Writes a 0 in every column
 }
 
-//Clear a specific page
+// Clear a specific page
 void oled_clear_spage(int page){ oled_goto_page(page); oled_clear_page();}
 
-//Clear specific pixel
-
+// Clear specific pixel
 void oled_clear_specific(int row, int col){
 	oled_pos(row, col);
 	writeDATA(0x00);
 }
 
-//Reset the whole screen.
+// Reset the whole screen.
 void oled_reset(void){
-	for(int i=0; i<8; i++){ oled_clear_spage(i); } //Loops through all pages and clears them
-	oled_home(); //Sets the position to 0,0
+	for(int i=0; i<8; i++){ oled_clear_spage(i); } // Loops through all pages and clears them
+	oled_home(); // Sets the position to 0,0
 }
 
 
 //----------------------------------------------------- Position related -----------------------------------------------------
 
 void set_addressing_mode(modes mode){
-	writeCMD(0x20); //Tells the OLED that we are going to change the address mode
-	//next bit is the addressing mode (reference: manual page 27)
+	writeCMD(0x20); // Tells the OLED that we are going to change the address mode
+	// Next bit is the addressing mode (reference: manual page 27)
 	switch(mode){
 		case(PAGE):
 			writeCMD(0b00000010);
@@ -322,21 +324,20 @@ void set_addressing_mode(modes mode){
 }
 
 uint8_t oled_goto_page(uint8_t page){
-	if (page >  7 || page < 0){ //returns 0 if input is illegal
+	if (page >  7 || page < 0){ // Returns 0 if input is illegal
 		return 0;
 	}
 	else {
-		position.page = page; //stores the page position in the position struct
+		position.page = page; // Stores the page position in the position struct
 		set_addressing_mode(PAGE);
-		writeCMD(0xB0 + page); //Commands the OLED to change to the specified page
+		writeCMD(0xB0 + page); // Commands the OLED to change to the specified page
 		set_addressing_mode(HORIZONTAL);
 	}
-	return 0; // never reached
+	return 0; // Never reached
 }
 
 uint8_t oled_goto_col(uint8_t column){
 	if (column > 127 || column < 0){
-		return 0;
 	}
 	else {
 		position.col = column;
@@ -347,19 +348,19 @@ uint8_t oled_goto_col(uint8_t column){
 		writeCMD(0x10 + max);
 		set_addressing_mode(HORIZONTAL);
 	}
-	return 0; // never reached
+	return 0;
 }
 
 void oled_pos(uint8_t page, uint8_t col){
 	oled_goto_page(page);
 	oled_goto_col(col);
-} //combines the two functions above
+} // Combines the two functions above
 
 void oled_home(void){
-	oled_pos(0,0); //Move to page 0 column 0
+	oled_pos(0,0); // Move to page 0 column 0
 }
 
-void oled_nl(void){ //Moves the cursor to a new page
+void oled_nl(void){ // Moves the cursor to a new page
 	oled_pos(position.page + 1, 0);
 }
 

@@ -4,12 +4,13 @@
  * Library of fonts
  * Large: 8x8, normal: 5x7 and small: 4x7
  */
+
 #ifndef FONTS_H_
 #define FONTS_H_
 
 #include <avr/pgmspace.h>
 
-//For moonwalking man
+// For moonwalking man
 const unsigned char PROGMEM walking[6][10] = {
 	{0b11000000,0b11110000,0b01111111,0b00001111,0b00000011,0b00000011,0b00001111,0b00111111,0b11111100,0b11100000},
 	{0b00100000,0b01110000,0b00111111,0b00011111,0b00000011,0b00000011,0b11111111,0b11111111,0b00000000,0b00000000},
@@ -20,7 +21,7 @@ const unsigned char PROGMEM walking[6][10] = {
 };
 
 
-//Special characters
+// Special characters
 const unsigned char PROGMEM specialSymbols[4][8] = {
 	{0b01000000,0b10100010,0b10011101,0b01000001,0b10011101,0b10100010,0b01000000,0b00000000}, // Penis
 	{0b00111100,0b00100100,0b00100100,0b11100111,0b10000001,0b10000001,0b01000010,0b00111100}, // Elektra-e

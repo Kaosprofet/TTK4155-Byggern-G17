@@ -9,10 +9,6 @@
 #include "includes.h"
 #endif
 
-void exercise1(void);
-void exercise2(void);
-void exercise3(void);
-void exercise4(void);
 void testChipSelect(void);
 void can_controller_test(void);
 void testCanJoystick(void);
@@ -22,35 +18,9 @@ int main(void) {
 	playGame();
 }
 
-void exercise1(void) {
-	while (1) {
-		unsigned char data = receiveByte(); //Recives the inputted characters
-		transmitByte(data + 5);				//Transmits the inputted characters and moves it 5 characters down
-	}
-}
 
-void exercise2(void) {
-	//enableEMI(); //Enabeling external memory interface
-	setBit(DDRE, PE1); //Enabling PE1 for output
-	setBit(DDRA, PA0);
-	setBit(DDRA, PA1);
-	while (1) {
-		setBit(PORTE, PE1);
-		toggleBit(PORTA, PA0);
-		setBit(PORTA, PA1);
-		unsigned char data = receiveByte(); //Recives the inputted characters
-		transmitByte(data);					//Transmits the inputted characters and moves it 5 characters down
-	}
-}
-
-void exercise3(void) {
-	playGame();
-}
-
-void exercise4(void) {
-	oled_test();
-}
-
+//--------------------------Test functions--------------------------
+// Manually sets address pins to test address decoder
 void testChipSelect(void) {
 	//Disables EMI
 	clearBit(MCUCR, SRE);
@@ -83,7 +53,8 @@ void testChipSelect(void) {
 	}
 }
 
-void can_controller_test(void) { //Test for CAN_controller
+// Sends data to can bus and reads it back with loopback
+void can_controller_test(void) {
 	CAN_controller_init(CAN_LOOPBACK);
 	while (1) {
 		CAN_controller_write(0b00001111, 0b11111111);
@@ -92,6 +63,7 @@ void can_controller_test(void) { //Test for CAN_controller
 	}
 }
 
+// Sends controller values over CAN to node 2
 void testCanJoystick(void) {
 	initGame();
 	calibrateJoystick();
@@ -103,6 +75,7 @@ void testCanJoystick(void) {
 	}
 }
 
+// Test for CAN bus interupts 
 void interuptTest(void) {
 	initGame();
 	while(1) {
