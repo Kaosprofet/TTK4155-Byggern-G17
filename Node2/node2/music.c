@@ -66,9 +66,9 @@ int divider = 0, noteDuration = 0, note_pause = 0, thisNote = 0;
 
 void song_select(void){
   while (music.play){
-    if (music.melody == 1){
+    if (music.melody == 1){ //Plays key board cat
       int amount_of_notes = sizeof(key_board_cat_melody)/sizeof(key_board_cat_melody[0])/2; //Calculates size of notesheet
-	  game_over_value = 0; //Used to seperate between high score and game over 
+	    game_over_value = 0; //Used to seperate between high score and game over 
       play_music(key_board_cat_melody, key_board_cat_tempo,amount_of_notes);//Plays the song
 	}
     else if (music.melody == 2){ //Plays rick roll

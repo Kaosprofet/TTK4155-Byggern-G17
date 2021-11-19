@@ -9,14 +9,9 @@
 #include "includes.h"
 #endif
 
-#define LED_1 PIO_PA19
-#define LED_2 PIO_PA20
-
-void led_test(void);
 void IR_test(void);
 void can_test(void);
 void inits(void);
-
 
 int main(void) {
 	inits();
@@ -43,29 +38,16 @@ void inits(void) {
 	game.game_status = 0;
 }
 
-void led_test(void) {
-	PIOA->PIO_PER |= LED_1;
-	PIOA->PIO_OER |= LED_1;
-	PIOA->PIO_PUDR |= LED_1;
-	
-	PIOA->PIO_PER |= LED_2;
-	PIOA->PIO_OER |= LED_2;
-	PIOA->PIO_PUDR |= LED_2;
-	
-	setBit(PIOA, LED_1);
-	clearBit(PIOA,LED_2);
-	while(RTT->RTT_VR<RTT->RTT_VR+100){}
-	setBit(PIOA, LED_2);
-	clearBit(PIOA,LED_1);
-	while(RTT->RTT_VR<RTT->RTT_VR+100){}
-}
+//------------------------------------------- Tests -----------------------------------------------
 
+// Prints output from IR diode
 void IR_test(void) {
 	while(1){
 		IR_print();
 	}
 }
 
+// Tests CAN between node 1 and 2
 void can_test(void) {
 	can_encode_message(controller_id);
 	while (1) {

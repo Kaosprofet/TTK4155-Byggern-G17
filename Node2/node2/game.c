@@ -26,13 +26,13 @@ uint32_t run_game(void) {
 		solenoidControll();
 		motor_controll();                           
 		
-		if(RTT->RTT_VR<time_start){		// If RTT has overflowed recalculate time elapsed
+		if(RTT->RTT_VR<time_start){	// If RTT has overflowed recalculate time elapsed
 			time_elapsed = 4294967296-time_start+RTT->RTT_VR;
 		}
 		else {
 			time_elapsed = RTT->RTT_VR-time_start;
 		}
-		if (time_elapsed>60000){
+		if (time_elapsed>60000){ // Checks if time limit reached (1 min)
 			printf("Time limit reached \n\r");
 			game.game_status = 0;
 			break;
@@ -44,7 +44,7 @@ uint32_t run_game(void) {
 			break;
 		}
 	}
-	game_over_music();
+	game_over_music(); // Plays losing music
 	return time_elapsed;
 }
 

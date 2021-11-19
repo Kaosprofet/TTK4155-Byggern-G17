@@ -91,9 +91,9 @@ int encoder_read(void){
 }
 
 void encoder_reset(void){
-		//Toggle !RST to reset encoder
-		clearBit(PIOD,mNOT_RST);
-		setBit(PIOD,mNOT_RST);
+	//Toggle !RST to reset encoder
+	clearBit(PIOD,mNOT_RST);
+	setBit(PIOD,mNOT_RST);
 }
 
 
@@ -145,10 +145,7 @@ void motor_controll(void){
 	//Writing output
 	setBit(PIOD,mEN);
 	DAC_set_output(DAC_out);
-	//printf("Encoder: %d, Joystick: %d, ref: %d, PI_output %d, DAC_out: %d \n\r", encoder,joystick,ref, PI_out, DAC_out);
 }
-
-
 
 uint16_t joy_counter = 0;
 int16_t JoystickSpeedControll(int16_t r){
@@ -161,21 +158,10 @@ int16_t JoystickSpeedControll(int16_t r){
 	return r;
 }
 
-/*
-int16_t PI_controller_position(int16_t r, int16_t y, int Kp, int Ti){
-	int16_t e=r-y;
-	error_sum += e;
-	int16_t P = Kp*e;
-	int16_t I = TimeStep*Ti*error_sum;
-	int16_t output = P+I;
-	return output;
-}
-*/
 int16_t PI_controller_position(int16_t r, int16_t y, float Kp, float Ti){
 	float real_r = (float) r/10;
 	float real_y = (float) y/10;
 	float e=r-y;
-	//printf("Error: %d\n\r",(int)e*10);
 	error_sum += e;
 	if(error_sum>(MOTOR_MAX/10)){
 		error_sum = MOTOR_MAX/10;
@@ -192,7 +178,6 @@ int16_t PI_controller_position(int16_t r, int16_t y, float Kp, float Ti){
 	}
 	int16_t output = (int16_t)(P+I)*10;
 	
-	//printf("Error: %d, P: %d, I: %d\n\r",(int)e*10,(int)P*10,(int)I*10);
 	return output;
 }
 

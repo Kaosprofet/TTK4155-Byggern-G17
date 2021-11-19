@@ -84,6 +84,7 @@ uint16_t IR_filteredValue(void) {
 	}	
 }
 
+// Registers blocking of IR diode
 int IR_blocked(void) {
 	uint16_t ir_value = IR_filteredValue();
 	if(ir_value < IR_BLOCK_THRESHOLD) {
