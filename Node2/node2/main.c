@@ -56,6 +56,7 @@ void can_test(void) {
 	}
 }
 
+// Test CAN sending a specified message
 void can_test_send(void){
 	CAN_MESSAGE message;
 	message.id = 20;
@@ -64,6 +65,7 @@ void can_test_send(void){
 	can_send(&message,0);
 }
 
+// Test for CAN communication
 void can_com_status_test(void){
 	CAN_MESSAGE m1;
 	m1.id = 1;
@@ -82,11 +84,10 @@ void can_com_status_test(void){
 	printf("Sent first message \n\r ");
 	CAN_MESSAGE rx1;
 	
-	//venter p� ok
+	// Wait for O.K signal
 	uint8_t cond = 1;
 	while(cond){
 		CAN0_Handler();
-		//printf("ID: %d, DATA: %d\n\r", rx1.id, rx1.data);
 		if(rx_message.id == 1 && rx_message.data[0]==69){
 			cond =0;
 		}

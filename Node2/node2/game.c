@@ -10,7 +10,6 @@ void start_game(void) {
 	game.score = calculate_score(score);
 	can_encode_message(status_id);
 	delay_ms(20);
-	printf("8bit score: %d\n\r", game.score);
 }
 
 uint32_t run_game(void) {
@@ -18,7 +17,6 @@ uint32_t run_game(void) {
 	uint32_t time_elapsed;
 	uint32_t score = 0;
 	motor_controll_init();
-	printf("Running game \n\r");
 	while(1) {
 		CAN0_Handler(); //Listening for CAN messages. 
 		delay_ms(10);
