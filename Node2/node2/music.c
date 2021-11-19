@@ -31,16 +31,13 @@ static void tone(int frequency, int duration){
 
 void play_music(const int* melody, int tempo, int amount_of_notes){
 
-// sizeof gives the number of bytes, each int value is composed of two bytes (16 bits)
-// there are two values per note (pitch and duration), so for each note there are four byte
 int notes = amount_of_notes;
 // this calculates the duration of a whole note in ms (60s/tempo)*4 beats
 int wholenote = 240000 / tempo;
 
 int divider = 0, noteDuration = 0, note_pause = 0, thisNote = 0;
-  // iterate over the notes of the melody. 
-  // Remember, the array is twice the number of notes (notes + durations)
-      	
+  // Iterate over the notes of the melody. 
+
   for (thisNote = 0; thisNote < notes*2; thisNote = thisNote + 2) {
     can_decode_message();
     if (!music.play && game_over_value == 0){
