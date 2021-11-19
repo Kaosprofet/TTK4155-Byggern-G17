@@ -10,7 +10,6 @@ volatile uint8_t *adcVal = (uint8_t *)adc_address;
 // Storage for read ADC values
 volatile uint8_t adcData[adc_num_channels];
 
-
 void initADC(void) {
 	//Enabeling external memory interface
 	setBit(MCUCR, SRE);
@@ -38,7 +37,6 @@ void initADC(void) {
 }
 
 uint8_t * readADC(){
-	
 	// Trigger read
 	*adcVal = 0;
 	
@@ -51,6 +49,3 @@ uint8_t * readADC(){
 	}
 	return adcData;
 }	
-
-
-

@@ -8,7 +8,7 @@
 volatile char *ext_ram = (char *) sram_adress; // Pointer to start address for SRAM
 
 void initSRAM(void) {
-	//Enabling external memory interface
+	// Enabling external memory interface
 	setBit(MCUCR, SRE);	
 }
 

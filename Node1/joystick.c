@@ -3,7 +3,7 @@
 #endif
 
 void initButton(void) {
-	clearBit(DDRD,PD3); //Defines PD3 and PD4 as input
+	clearBit(DDRD,PD3); // Defines PD3 and PD4 as input
 	clearBit(DDRD,PD4);
 }
 
@@ -32,7 +32,7 @@ enum directions direction(signed int x_val, signed int y_val) {
 	signed int deadzone = 20;
 	signed int zero = 0;
 	
-	if (abs(x_val) > abs(y_val)) { //x>y -> left/right
+	if (abs(x_val) > abs(y_val)) { // x>y -> left/right
 		if (x_val > (zero + deadzone)) {
 			return RIGHT;
 		}
@@ -40,7 +40,7 @@ enum directions direction(signed int x_val, signed int y_val) {
 			return LEFT;
 		}
 	}
-	else {						//x<y -> up/down
+	else { // x<y -> up/down
 		if (y_val > (zero + deadzone)) {
 			return UP;
 		}
@@ -62,10 +62,9 @@ void calibrateJoystick(void) {
 
 signed int joystickPercent(uint8_t val) {
 	// This functions interpolates the measured value 0-255 into a -100-100 percent value. We currently assumes that the zero point
-	// remains equal between the two axis.
+	// Remains equal between the two axis.
 	signed int per_val;
 	if (val >= controller.x_zero) {
-					//(x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 		per_val = ((signed int)val - controller.x_zero) * 100.0/(255.0-controller.x_zero);
 		return per_val;
 	}

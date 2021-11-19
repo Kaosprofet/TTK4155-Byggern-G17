@@ -13,7 +13,7 @@ void initUart() {
 
 	UCSR0C = (1<<URSEL0)|(1<<USBS0)|(3<<UCSZ00);
 	
-	fdevopen(transmitByte,receiveByte); //enables printf function over uart
+	fdevopen(transmitByte,receiveByte); // Enables printf function over uart
 }
 
 void transmitByte(unsigned char byte) {
